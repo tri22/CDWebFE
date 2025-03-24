@@ -1,0 +1,21 @@
+
+spring:
+  application:
+    name: CDWeb
+  datasource:
+    url: jdbc:mysql://localhost:3306/cdweb
+    username: root
+    password: root
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+jpa:
+  hibernate:
+    ddl-auto: update
+  properties:
+    dialect: org.hibernate.dialect.MySQLDialect
+  show-sql: true
+jwt:
+  signerKey: ""
+
+server:
+  port: 8080
