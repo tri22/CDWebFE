@@ -1,14 +1,19 @@
 #footer {
-    background-color: #EEEFFB;
+    background-color: #2A2A2A;
     padding: 3rem 1rem;
-    color: #8a8fb9; // màu chữ mặc định
-
+    color: #ABABAB; // màu chữ mặc định
     font-size: 14px; // font-size nhỏ lại cho toàn bộ footer
+
+    .row {
+        .first {
+            margin-right: 80px;
+        }
+    }
 
     .footer-title {
         font-weight: bold;
         margin-bottom: 1rem;
-        color: #000; // màu đen cho h3
+        color: #e9e9e9; // màu đen cho h3
         font-size: 16px;
     }
 
@@ -24,9 +29,10 @@
         li {
             margin-bottom: 0.5rem;
             cursor: pointer;
+            transition: all 0.3s ease-in-out;
 
             &:hover {
-                color: #fb2e86; // màu hover mới
+                color: #e9e9e9; // màu hover mới
             }
         }
     }
@@ -38,24 +44,12 @@
 
         svg {
             cursor: pointer;
-            color: #8a8fb9;
-            transition: color 0.3s;
+            color: #ABABAB;
+            transition: color 0.3s ease-in-out;
 
             &:hover {
-                color: #fb2e86;
+                color: #e9e9e9;
             }
-        }
-    }
-
-    // Button and form styles
-    .btn-primary {
-        background-color: #fb2e86;
-        border-color: #fb2e86;
-
-        &:hover,
-        &:focus {
-            background-color: darken(#fb2e86, 5%);
-            border-color: darken(#fb2e86, 5%);
         }
     }
 
