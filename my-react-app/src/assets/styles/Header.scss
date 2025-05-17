@@ -1,69 +1,79 @@
 #header {
+    position: absolute;
+    width: 100%;
+    top: 0;
+    z-index: 100;
+
+    .transparent-navbar {
+        background-color: transparent !important;
+    }
+
     .label {
-        font-weight: 800;
-        color: #fb2e86;
+        font-weight: 700;
         font-size: 1.5rem;
+        color: white !important;
     }
 
     .nav-item-custom {
         padding-right: 1rem;
         font-weight: 500;
-        color: #333;
+        color: #fff !important;
 
         &:hover {
-            color: #fb2e86 !important;
+            color: #fff !important;
+            border-bottom: 2px solid #fff;
         }
 
         &.active {
-            color: #fb2e86 !important;
             font-weight: 600;
-            border-bottom: 2px solid #fb2e86;
+            color: #fff;
+            border-bottom: 2px solid #fff;
         }
     }
 
-    .navbar-nav .nav-link {
-        transition: color 0.3s ease;
-    }
-
-    .dropdown-menu {
+    .form-control {
+        background-color: white;
         border-radius: 0;
+        padding: 5px 10px;
     }
 
-    .btn-primary {
-        background-color: #fb2e86;
-        border-color: #fb2e86;
-
-        &:hover,
-        &:focus,
-        &:active {
-            background-color: darken(#fb2e86, 10%);
-            border-color: darken(#fb2e86, 10%);
-        }
-    }
-
-    .form-control:focus {
-        outline: none;
-        box-shadow: none;
-        border-color: #ccc;
-    }
-
-    // Toggle button custom
-    .custom-toggle {
+    .btn-outline-light {
         border: none;
-        outline: none !important;
-        box-shadow: none !important;
-        background-color: transparent;
-        transition: background-color 0.3s;
+        color: white;
 
         &:hover {
-            background-color: rgba(251, 46, 134, 0.1);
+            background-color: transparent;
+            color: white;
         }
+    }
+    .btn-menu-dropdown{
+        background-color: transparent;
+    }
 
-        &:focus,
-        &:active {
-            background-color: rgba(251, 46, 134, 0.2);
-            outline: none;
-            box-shadow: none;
+    .search-input-group {
+        transition: all 0.3s ease-in-out;
+        .form-control{
+            color: #fff;
+            background-color: transparent;
+            &::placeholder{
+                color: #fff;
+            }
+        }
+    }
+
+    .dropdown-menu{
+        &.show{
+            background-color: transparent;
+            border: none;
+        }
+        .dropdown-item{
+            color: #fff;
+            &:hover{
+                background-color: transparent;
+            }
+            &:active{
+                background-color: transparent;
+            }
         }
     }
 }
