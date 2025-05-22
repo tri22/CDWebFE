@@ -1,21 +1,29 @@
-import React from 'react';
-import { Button, Col, Container, Form, InputGroup, Nav, Navbar } from 'react-bootstrap';
+import React, { useState } from 'react';
+import { Button, Container, Dropdown, Form, InputGroup, Nav, Navbar } from 'react-bootstrap';
 import SearchIcon from '@mui/icons-material/Search';
-import { Link, useLocation } from 'react-router-dom';
+import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
+import MenuIcon from '@mui/icons-material/Menu';
+import LoginIcon from '@mui/icons-material/Login';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import '../assets/styles/Header.scss';
 import { BsHandbag } from "react-icons/bs";
 import { FaUserPen } from "react-icons/fa6";
 const Header = () => {
     const location = useLocation();
     const currentPath = location.pathname;
+    const navigate = useNavigate();
 
+    const [showSearch, setShowSearch] = useState(false);
     const isActive = (path) => currentPath === path;
+
+    const handleCartClick = () => navigate('/cart');
 
     return (
         <div id='header'>
             <Navbar expand="lg" bg="light" variant="light" className='fixed-top shadow-sm py-3'>
                 <Container>
                     <Navbar.Brand as={Link} to="/pages" className="label me-5">Furnix</Navbar.Brand>
+
                     <Navbar.Toggle aria-controls="basic-navbar-nav" className='custom-toggle' />
                     <Navbar.Collapse id="basic-navbar-nav" className="justify-content-between">
                         <Nav className="me-auto">
@@ -25,11 +33,31 @@ const Header = () => {
                             <Nav.Link as={Link} to="/contact" className={`nav-item-custom ${isActive("/contact") ? "active" : ""}`}>Contact</Nav.Link>
                             <Nav.Link as={Link} to="/About" className={`nav-item-custom ${isActive("/About") ? "active" : ""}`}>About Us</Nav.Link>
                         </Nav>
-                        <div className="search-box d-none d-lg-block me-5">
-                            <InputGroup>
-                                <Form.Control placeholder="Search" />
-                                <Button variant="primary"><SearchIcon /></Button>
-                            </InputGroup>
+                        <div className="d-flex align-items-center gap-3">
+                            <div className="search-box d-flex">
+                                <Button variant="outline-light" onClick={() => setShowSearch(!showSearch)}><SearchIcon /></Button>
+                                {showSearch && (
+                                    <InputGroup className="mt-2 d-none d-lg-flex search-input-group">
+                                        <Form.Control placeholder="Search..." />
+                                    </InputGroup>
+                                )}
+                            </div>
+
+                            <Button variant="outline-light" onClick={handleCartClick}>
+                                <ShoppingCartIcon />
+                            </Button>
+
+                            <Dropdown>
+                                <Dropdown.Toggle variant="outline-light" id="dropdown-basic" className='btn-menu-dropdown'>
+                                    <MenuIcon />
+                                </Dropdown.Toggle>
+                                <Dropdown.Menu>
+                                    <Dropdown.Item as={Link} to="/login">
+                                        <LoginIcon className="me-2" />
+                                        Login
+                                    </Dropdown.Item>
+                                </Dropdown.Menu>
+                            </Dropdown>
                         </div>
                         <div className='icon-group '>
                             <BsHandbag size={24} style={{ cursor: 'pointer', marginLeft: 16, marginRight: 16 }} />

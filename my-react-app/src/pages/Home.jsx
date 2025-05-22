@@ -1,15 +1,19 @@
 import React from 'react';
-import TopHeader from '../components/TopHeader';
 import Header from '../components/Header';
 import Slider from '../components/Slider';
 import Footer from '../components/Footer';
+import MainHome from '../components/MainHome/MainHome';
 
 const Home = () => {
     return (
         <div>
-            <TopHeader />
             <Header />
+<<<<<<< HEAD
             <Slider/>
+=======
+            <Slider />
+            <MainHome />
+>>>>>>> f83e99585e4a4713bc561b51a82afaf90fcbde0e
             <Footer />
         </div>
     );

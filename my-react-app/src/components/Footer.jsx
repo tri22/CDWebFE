@@ -9,17 +9,14 @@ const Footer = () => {
     return (
         <div id="footer">
             <Container>
+                <h3 className='footer-title'>Soudemy</h3>
                 <Row className="gy-4">
-                    <Col xs={12} md={6} lg={5} className='me-4'>
-                        <h3 className="footer-title">Hekto</h3>
-                        <InputGroup className="mb-3">
-                            <Form.Control type="email" placeholder="Enter email" />
-                            <Button variant="primary">Sign in</Button>
-                        </InputGroup>
-                        <p className="footer-contact">Contact info</p>
-                        <p>Khu phố 6, Phường Linh Trung, TP. Thủ Đức, TP. Hồ Chí Minh</p>
+                    <Col xs={12} md={6} lg={3} className='first'>
+                        <h3 className="footer-title">About Us</h3>
+
+                        <p className="footer-contact">Lorem ipsum dolor sit amet consectetur adipisicing elit. Praesentium, vero! Animi pariatur iure quo mollitia fugiat odit, doloremque quae cupiditate maxime distinctio. Repellat, tempore? Illum debitis rem voluptatum quasi quisquam!</p>
                     </Col>
-                    <Col xs={6} md={6} lg={2}>
+                    <Col xs={6} md={6} lg={3}>
                         <h3 className="footer-title">Categories</h3>
                         <ul className="footer-list">
                             <li>Category 1</li>
@@ -29,7 +26,7 @@ const Footer = () => {
                             <li>Category 5</li>
                         </ul>
                     </Col>
-                    <Col xs={6} md={6} lg={2}>
+                    <Col xs={6} md={6} lg={3}>
                         <h3 className="footer-title">Customer Care</h3>
                         <ul className="footer-list">
                             <li>My Account</li>

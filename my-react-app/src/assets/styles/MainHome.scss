@@ -1,0 +1,207 @@
+.feature-product {
+    margin: 30px 0px;
+
+    .title {
+        font-weight: 700;
+        color: #373737;
+        margin-bottom: 30px;
+        text-transform: uppercase;
+    }
+
+    .product-card {
+        text-align: center;
+        border: none;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        cursor: pointer;
+        transition: transform 0.3s;
+
+        .card-title {
+            color: #000;
+        }
+
+        .product-price {
+            color: #8c8c8c;
+        }
+
+        .card-img-wrapper {
+            position: relative;
+
+            .top-left-icons {
+                position: absolute;
+                top: 10px;
+                left: 10px;
+                display: flex;
+                gap: 10px;
+                opacity: 0;
+                pointer-events: none;
+                transition: opacity 0.3s ease;
+                z-index: 2;
+
+                .icon-wrapper {
+                    width: 35px;
+                    height: 35px;
+                    border-radius: 50%;
+                    background-color: transparent;
+                    color: #8c8c8c;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    transition: all 0.3s ease;
+                    cursor: pointer;
+                    pointer-events: auto;
+
+                    &:hover {
+                        background-color: #ccc;
+                        color: #888;
+                    }
+                }
+            }
+        }
+
+        .product-img {
+            transition: transform 0.3s ease;
+        }
+
+        &:hover {
+            .top-left-icons {
+                opacity: 1;
+                pointer-events: auto;
+            }
+        }
+    }
+
+    .swiper-pagination-bullet {
+        background-color: #fb2e86;
+        opacity: 1;
+    }
+
+    .swiper-pagination-bullet-active {
+        background-color: #fb2e86;
+        transform: scale(1.2);
+    }
+}
+
+.sub-main-1 {
+    padding: 20px 0px;
+
+    .row {
+        margin-bottom: 80px;
+
+        .custom-btn {
+            background-color: transparent;
+            border: 2px solid #373737;
+            color: #373737;
+            transition: all 0.5s ease;
+            padding: 10px 20px;
+            font-weight: bold;
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+
+            span {
+                position: relative;
+                z-index: 2;
+            }
+
+            &::before {
+                content: "";
+                position: absolute;
+                left: 0;
+                top: 0;
+                width: 100%;
+                height: 100%;
+                background-color: #373737;
+                z-index: 1;
+                transform: translateX(-100%);
+                transition: transform 0.5s ease;
+            }
+
+            &:hover::before,
+            &:active::before {
+                transform: translateX(0);
+            }
+
+            &:hover,
+            &:active {
+                color: #fff;
+            }
+        }
+    }
+
+    .sub-title {
+        color: #373737;
+        font-weight: 600;
+    }
+
+    .sub-description {
+        color: #ababab;
+        margin-bottom: 1rem;
+    }
+
+    img {
+
+        width: 100%;
+        height: auto;
+        display: block;
+    }
+}
+
+.sub-main-2 {
+    .icon-title-row {
+        .feature-icon svg {
+            font-size: 2.2rem;
+        }
+
+        .feature-icon,
+        .feature-title {
+            color: #373737;
+        }
+
+        .feature-title {
+            font-weight: bold;
+        }
+    }
+
+    .text-muted {
+        color: #ABABAB !important;
+    }
+}
+
+.sub-main-3 {
+    padding-top: 40px;
+    padding-bottom: 40px;
+
+    .sub-main-item {
+        margin: 20px 15px;
+
+        img {
+            width: 100%;
+            height: 250px;
+            object-fit: cover;
+            border-radius: 8px;
+        }
+
+        .sub-main-date {
+            color: #777777;
+            margin-top: 30px;
+            margin-bottom: 10px;
+            font-size: 0.9rem;
+        }
+
+        .sub-main-title {
+            color: #2d2d2d;
+            margin-top: 20px;
+            margin-bottom: 20px;
+            font-weight: 600;
+            font-size: 1.3rem;
+            width: 80%;
+        }
+
+        .sub-main-link {
+            color: #777777;
+            text-decoration: underline;
+            display: inline-block;
+            font-size: 0.95rem;
+        }
+    }
+}
