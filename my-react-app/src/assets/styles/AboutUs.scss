@@ -1,0 +1,29 @@
+.about-page {
+  background-color: #fff;
+  color: #222;
+
+  .hero-banner {
+    position: relative;
+    .hero-title {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      font-size: 3rem;
+      font-weight: bold;
+      color: #333;
+    }
+  }
+
+  .video-wrapper {
+    position: relative;
+    .play-button {
+      background: rgba(255, 255, 255, 0.9);
+      border: none;
+      font-size: 2rem;
+      padding: 10px 20px;
+      border-radius: 50%;
+      cursor: pointer;
+    }
+  }
+}

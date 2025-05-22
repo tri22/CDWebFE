@@ -1,0 +1,19 @@
+.shop-page {
+    background-color: #f8f9fa;
+    color: #000;
+
+    ul {
+        padding-left: 0;
+        li {
+            margin-bottom: 5px;
+            cursor: pointer;
+            &:hover {
+                text-decoration: underline;
+            }
+        }
+    }
+
+    h6 {
+        color: #ccc;
+    }
+}

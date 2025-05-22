@@ -1,0 +1,19 @@
+.product-card {
+    background-color: #f8f9fa; // hoặc màu bạn muốn
+    border-radius: 8px;
+    transition: all 0.3s ease;
+    cursor: pointer;
+
+    img {
+        border-radius: 6px;
+    }
+
+    .stars {
+        color: #f6b01e !important;
+        font-size: 16px;
+    }
+
+    .price {
+        color: #000;
+    }
+}
