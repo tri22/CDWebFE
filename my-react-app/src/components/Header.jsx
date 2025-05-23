@@ -7,6 +7,7 @@ import PersonIcon from '@mui/icons-material/Person';
 import LogoutIcon from '@mui/icons-material/Logout';
 import MenuIcon from '@mui/icons-material/Menu';
 import LoginIcon from '@mui/icons-material/Login';
+import PersonOutlineIcon from '@mui/icons-material/PersonOutline';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import '../assets/styles/Header.scss';
 import { useAuth } from '../api/AuthContext';
@@ -40,16 +41,16 @@ const Header = () => {
                             <Nav.Link as={Link} to="/About" className={`nav-item-custom ${isActive("/About") ? "active" : ""}`}>About Us</Nav.Link>
                         </Nav>
                         <div className="d-flex align-items-center gap-3">
-                            <div className="search-box d-flex">
-                                <Button variant="outline-light" onClick={() => setShowSearch(!showSearch)}><SearchIcon /></Button>
-                                {showSearch && (
-                                    <InputGroup className="mt-2 d-none d-lg-flex search-input-group">
-                                        <Form.Control placeholder="Search..." />
+                            <div className="search-box d-flex align-items-center gap-2">
+                                    <InputGroup  className="d-none d-lg-flex search-input-group">
+                                        <Form.Control className='text-dark' placeholder="Search..." />
                                     </InputGroup>
-                                )}
+                                <Button variant="outline-dark" onClick={() => setShowSearch(!showSearch)}>
+                                    <SearchIcon />
+                                </Button>
                             </div>
 
-                            <Button variant="outline-light" onClick={handleCartClick}>
+                            <Button variant="outline-dark" onClick={handleCartClick}>
                                 <ShoppingCartIcon />
                             </Button>
 

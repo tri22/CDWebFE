@@ -42,6 +42,7 @@
         }
     }
 
+
     .btn-outline-light {
         border: none;
         color: #373737;
@@ -51,6 +52,8 @@
             color: #373737;
         }
     }
+
+    .btn-menu-dropdown {
 
     .btn-menu-dropdown {
         background-color: transparent;
@@ -78,6 +81,7 @@
             }
         }
     }
+
 
     .dropdown-menu {
         &.show {
@@ -111,4 +115,4 @@
     .navbar {
         background-color: #fff !important;
     }
-}
+}}
