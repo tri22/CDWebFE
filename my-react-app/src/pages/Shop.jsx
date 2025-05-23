@@ -1,21 +1,32 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Container, Row, Col, Form, Button, InputGroup } from 'react-bootstrap';
-
+import PaginationCom from "../components/PaginationCom.jsx";
 import '../assets/styles/Shop.scss'; // bạn tạo riêng nếu có style riêng
 import ProductCard from '../components/ProductCard';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 
 const products = Array.from({ length: 9 }, (_, i) => ({
-  img: `/image/product/product${i + 1}.png`, 
+  img: `/image/product/product${i + 1}.png`,
   name: `Product ${i + 1}`,
   price: '$73.00',
   rating: 5
 }));
 
 const Shop = () => {
-  
-  
+
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemPerPage = 6;
+  const totalPages = Math.ceil(products.length / itemPerPage);
+  const indexOfLastBlog = currentPage * itemPerPage;
+  const indexOfFirstBlog = indexOfLastBlog - itemPerPage;
+
+
+  const handlePageChange = (pageNumber) => {
+    setCurrentPage(pageNumber);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
   return (
     <div className="shop-page ">
       <Header></Header>
@@ -28,7 +39,7 @@ const Shop = () => {
             <Form.Select className="w-auto">
               <option>Sort by popularity</option>
               <option>Sort by price</option>
-            </Form.Select>              
+            </Form.Select>
           </Col>
         </Row>
         <Row>
@@ -57,7 +68,7 @@ const Shop = () => {
           {/* Products */}
           <Col md={9}>
             <Row>
-              {products.map((product, index) => (
+              {products.slice(indexOfFirstBlog, indexOfLastBlog).map((product, index) => (
                 <Col md={4} sm={6} xs={12} className="mb-4" key={index}>
                   <ProductCard
                     img={product.img}
@@ -67,10 +78,9 @@ const Shop = () => {
                   />
                 </Col>
               ))}
+
             </Row>
-            <div className="d-flex justify-content-end">
-              <Button variant="link">View all &gt;</Button>
-            </div>
+            <PaginationCom totalPages={totalPages} currentPage={currentPage} onPageChange={handlePageChange} />
           </Col>
         </Row>
       </Container>

@@ -8,12 +8,9 @@ const Home = () => {
     return (
         <div>
             <Header />
-<<<<<<< HEAD
-            <Slider/>
-=======
+
             <Slider />
             <MainHome />
->>>>>>> f83e99585e4a4713bc561b51a82afaf90fcbde0e
             <Footer />
         </div>
     );

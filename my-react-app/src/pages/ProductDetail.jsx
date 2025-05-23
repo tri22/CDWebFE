@@ -1,4 +1,4 @@
-import React from 'react';
+import React ,{useState} from 'react';
 import { Container, Row, Col, Button, Tabs, Tab, Form } from 'react-bootstrap';
 import { useLocation } from 'react-router-dom';
 import { BsHeart, BsCart3 } from 'react-icons/bs';
@@ -11,14 +11,14 @@ const ProductDetail = () => {
   const { img, name, price, rating } = location.state || {};
 
   const products = Array.from({ length: 4 }, (_, i) => ({
-  img: `/image/product/product${i + 1}.png`, 
-  name: `Product ${i + 1}`,
-  price: '$73.00',
-  rating: 5
+    img: `/image/product/product${i + 1}.png`,
+    name: `Product ${i + 1}`,
+    price: '$73.00',
+    rating: 5
   }));
-
+  const [quantity, setQuantity] = useState(1);
   return (
-    <div className="product-detail-page bg-white text-dark ">
+    <div className="product-detail-page bg-white text-dark" style={{marginTop:'100px'}}>
       <Header></Header>
       <Container className='py-5'>
         <Row>
@@ -27,7 +27,7 @@ const ProductDetail = () => {
             {[...Array(4)].map((_, i) => (
               <img
                 key={i}
-                src= {img}
+                src={img}
                 alt="Thumbnail"
                 className="img-fluid border rounded"
               />
@@ -58,8 +58,12 @@ const ProductDetail = () => {
             </p>
 
             {/* Quantity + Add to Cart */}
-            <div className="d-flex align-items-center mb-3">
-              <Form.Control type="number" defaultValue={1} style={{ width: '80px' }} />
+            <div className="d-flex align-items-center my-3 ">
+              <div className="d-flex align-items-center gap-3 border  border-2">
+                <Button variant="white" onClick={() => setQuantity(q => Math.max(1, q - 1))}>-</Button>
+                <span className='px-2'>{quantity}</span>
+                <Button variant="white" onClick={() => setQuantity(q => q + 1)}>+</Button>
+              </div>
               <Button variant="dark" className="ms-3">
                 <BsCart3 className="me-2" />
                 Add to cart
@@ -67,8 +71,13 @@ const ProductDetail = () => {
             </div>
 
             <div className="mb-2">
-              <BsHeart className="me-2" />
-              <span className="text-muted">Add to wishlist</span>
+              <Button variant="dark" className="px-4">
+                Buy now
+              </Button>
+              <Button variant="white" className="ms-3">
+                <BsHeart className="me-2" />
+                <span className="text-muted">Add to wishlist</span>
+              </Button>
             </div>
 
             <div className="text-muted small">
@@ -100,14 +109,14 @@ const ProductDetail = () => {
         <h5 className="mt-5 fw-bold">Related products</h5>
         <Row className="mt-3">
           {products.map((product, index) => (
-                <Col md={3} sm={6} xs={12} className="mb-4" key={index}>
-                  <ProductCard
-                    img={product.img}
-                    name={product.name}
-                    price={product.price}
-                    rating={product.rating}
-                  />
-                </Col>
+            <Col md={3} sm={6} xs={12} className="mb-4" key={index}>
+              <ProductCard
+                img={product.img}
+                name={product.name}
+                price={product.price}
+                rating={product.rating}
+              />
+            </Col>
           ))}
         </Row>
       </Container>
