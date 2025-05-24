@@ -11,82 +11,104 @@
     .label {
         font-weight: 700;
         font-size: 1.5rem;
-        color: black !important;
+        color: #373737 !important;
     }
 
     .nav-item-custom {
         padding-right: 1rem;
         font-weight: 500;
-        color: black !important;
+        color: #373737 !important;
 
         &:hover {
-            color: black !important;
-            border-bottom: 2px solid black;
+            color: #373737 !important;
+            border-bottom: 2px solid #373737;
         }
 
         &.active {
             font-weight: 600;
-            color: black;
-            border-bottom: 2px solid black;
+            color: #373737;
+            border-bottom: 2px solid #373737;
         }
     }
 
     .form-control {
-        background-color: white;
-        color: black;
+        background-color: #fff;
         border-radius: 0;
         padding: 5px 10px;
+        color: #373737;
 
         &::placeholder {
-            color: #999;
+            color: #9a9a9a;
         }
     }
 
-
     .btn-outline-light {
         border: none;
-        color: white;
+        color: #373737;
 
         &:hover {
-            background-color: transparent;
-            color: white;
+            background-color: #f0f0f0;
+            color: #373737;
         }
     }
 
     .btn-menu-dropdown {
         background-color: transparent;
+        color: #373737;
+        border: none;
+
+        &::after {
+            display: none !important;
+        }
+
+        &:hover {
+            background-color: #f0f0f0;
+        }
     }
 
     .search-input-group {
+        transition: all 0.3s ease-in-out;
+
         .form-control {
-            color: black;
-            border: 1px solid black;
-            border-radius: 8px;
-            background-color: white;
+            color: #373737;
+            background-color: #fff;
 
             &::placeholder {
-                color: #666;
+                color: #9a9a9a;
             }
         }
     }
 
-
     .dropdown-menu {
-        background-color: #fff !important; // nền trắng
-        border: 1px solid #ddd; // viền nhẹ
+        &.show {
+            background-color: #fff;
+            border: 1px solid #e0e0e0;
+        }
 
         .dropdown-item {
-            color: #000 !important; // chữ đen
+            color: #373737;
 
             &:hover {
-                background-color: #f1f1f1; // hiệu ứng hover nhẹ
-                color: #000;
+                background-color: #f8f8f8;
             }
 
             &:active {
-                background-color: #e2e2e2;
+                background-color: #eaeaea;
             }
         }
     }
 
+    .icon-group {
+        svg {
+            color: #373737;
+
+            &:hover {
+                color: #1f1f1f;
+            }
+        }
+    }
+
+    .navbar {
+        background-color: #fff !important;
+    }
 }
