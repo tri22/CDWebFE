@@ -2,14 +2,11 @@
 import React, { useState, useEffect } from "react";
 import BlogContent from "../components/BlogContent";
 import Sidebar from "../components/BlogSideBar.jsx";
-import { Container, Row, Col, Pagination, Breadcrumb, Button } from "react-bootstrap";
+import { Container, Row, Col, Pagination, Breadcrumb } from "react-bootstrap";
 import Header from "../components/Header.jsx";
 import Footer from "../components/Footer.jsx";
-import PaginationCom from "../components/PaginationCom.jsx";
 import PostMeta from "../components/PostMeta.jsx";
 import { AiOutlineHome } from "react-icons/ai";
-import '../assets/styles/Blog.scss'
-
 const Blog = () => {
     const categories = [
         { name: "Ceiling", count: 25 },
@@ -86,17 +83,15 @@ const Blog = () => {
     const [currentPage, setCurrentPage] = useState(1);
     const blogsPerPage = 3;
     const totalPages = Math.ceil(blogs.length / blogsPerPage);
+    const [selectedBlog, setSelectedBlog] = useState(null);
     const indexOfLastBlog = currentPage * blogsPerPage;
     const indexOfFirstBlog = indexOfLastBlog - blogsPerPage;
-
+    const currentBlogs = blogs.slice(indexOfFirstBlog, indexOfLastBlog);
 
     const handlePageChange = (pageNumber) => {
         setCurrentPage(pageNumber);
-        window.scrollTo({ top: 0, behavior: 'smooth' });
     };
 
-    const currentBlogs = blogs.slice(indexOfFirstBlog, indexOfLastBlog);
-    const [selectedBlog, setSelectedBlog] = useState(null);
     const [showCreateForm, setShowCreateForm] = useState(false);
     const [newPost, setNewPost] = useState({
         title: "",
@@ -287,7 +282,28 @@ const Blog = () => {
                                             onClick={() => setSelectedBlog(blog)}
                                         />
                                     ))}
-                                    <PaginationCom totalPages={totalPages}  currentPage={currentPage} onPageChange={handlePageChange}/>
+
+                                    <div className="d-flex justify-content-end mt-4">
+                                        <Pagination>
+                                            <Pagination.Prev
+                                                onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
+                                                disabled={currentPage === 1}
+                                            />
+                                            {[...Array(totalPages)].map((_, i) => (
+                                                <Pagination.Item
+                                                    key={i + 1}
+                                                    active={i + 1 === currentPage}
+                                                    onClick={() => handlePageChange(i + 1)}
+                                                >
+                                                    {i + 1}
+                                                </Pagination.Item>
+                                            ))}
+                                            <Pagination.Next
+                                                onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
+                                                disabled={currentPage === totalPages}
+                                            />
+                                        </Pagination>
+                                    </div>
                                 </>
                             );
                         })()}
@@ -302,14 +318,13 @@ const Blog = () => {
                             recentPosts={blogs.slice(0, 3)}
                         />
                         <div className="px-5">
-                            <Button
-                                className=" mt-3 "
+                            <button
+                                className="btn btn-primary mt-3 "
                                 onClick={() => setShowCreateForm(!showCreateForm)}
                                 style={{ alignSelf: 'center' }}
-                                variant="outline-dark"
                             >
                                 Đăng bài viết
-                            </Button>
+                            </button>
                         </div>
 
                     </Col>
@@ -329,26 +344,5 @@ const styles = {
         fontSize: "16px",
         color: "#555",
     },
-    paginationItem: {
-        color: "#000",
-        border: "1px solid #000",
-        backgroundColor: "#fff",
-        transition: "all 0.2s ease-in-out",
-    },
-    paginationItemHover: {
-        backgroundColor: "#000",
-        color: "#fff",
-    },
-    paginationItemActive: {
-        backgroundColor: "#000",
-        borderColor: "#000",
-        color: "#fff",
-    },
-    paginationItemDisabled: {
-        color: "#ccc",
-        borderColor: "#ccc",
-        backgroundColor: "#f8f9fa",
-    },
 };
-
 export default Blog;

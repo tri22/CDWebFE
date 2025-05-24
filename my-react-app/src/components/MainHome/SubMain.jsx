@@ -1,28 +1,8 @@
 import React from 'react';
 import { Container, Row, Col, Card, Button, Image } from 'react-bootstrap';
-import { features } from '../../utils/Utils';
+import { features } from '../../utils/Data';
 import { useNavigate } from 'react-router-dom';
-
-const contentItems = [
-    {
-        image: 'public\\image\\HomePage\\img_2.png',
-        title: 'Stylish chairs',
-        description: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptate blanditiis aliquid soluta maxime temporibus voluptatibus. Accusamus ad illo aperiam error laborum est quisquam, harum magni aspernatur tenetur blanditiis hic quam.',
-        reverse: false
-    },
-    {
-        image: 'public\\image\\HomePage\\img_3.png',
-        title: 'Stylish chairs',
-        description: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptate blanditiis aliquid soluta maxime temporibus voluptatibus. Accusamus ad illo aperiam error laborum est quisquam, harum magni aspernatur tenetur blanditiis hic quam.',
-        reverse: true
-    },
-    {
-        image: 'public\\image\\HomePage\\img_4.png',
-        title: 'Stylish chairs',
-        description: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptate blanditiis aliquid soluta maxime temporibus voluptatibus. Accusamus ad illo aperiam error laborum est quisquam, harum magni aspernatur tenetur blanditiis hic quam.',
-        reverse: false
-    }
-];
+import { contentItems } from '../../utils/Data'
 
 export default function SubMain() {
     const navigate = useNavigate();

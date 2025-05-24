@@ -8,11 +8,10 @@ const Home = () => {
     return (
         <div>
             <Header />
-
             <Slider />
             <MainHome />
             <Footer />
-        </div>
+        </div >
     );
 };
 

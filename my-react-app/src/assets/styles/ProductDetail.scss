@@ -1,16 +1,17 @@
 .product-detail-page {
-  img {
-    object-fit: cover;
-  }
-
-  .nav-tabs {
-    .nav-link {
-      color: #555;
-
-      &.active {
-        color: #000;
-        border-bottom: 2px solid #000;
-      }
+    margin-top: 60px;
+    img {
+        object-fit: cover;
     }
-  }
+
+    .nav-tabs {
+        .nav-link {
+            color: #555;
+
+            &.active {
+                color: #000;
+                border-bottom: 2px solid #000;
+            }
+        }
+    }
 }

@@ -1,7 +1,7 @@
 import { Card } from 'react-bootstrap';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Autoplay, Pagination } from 'swiper/modules';
-import { formatPrice, featureProducts } from '../../utils/Utils.jsx';
+import { formatPrice, featureProducts } from '../../utils/Data.jsx';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import { useNavigate } from 'react-router-dom';
