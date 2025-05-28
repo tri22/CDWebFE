@@ -15,7 +15,6 @@ const Header = () => {
     const location = useLocation();
     const currentPath = location.pathname;
 
-
     const isActive = (path) => currentPath === path;
     const handleCartClick = () => navigate('/cart');
 
