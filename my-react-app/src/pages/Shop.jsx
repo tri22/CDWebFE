@@ -9,8 +9,6 @@ import Footer from '../components/Footer';
 import Slider from '../components/Slider';
 import { API_PRODUCTS } from '../utils/Config';
 
-const CATEGORIES = ['Ceiling', 'Floor', 'Led', 'Modern', 'Retro', 'Wood'];
-const COLORS = ['Black', 'Blue', 'Red', 'Green', 'Yellow', 'Grey'];
 
 const Shop = () => {
     const [products, setProducts] = useState([]);

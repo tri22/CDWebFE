@@ -1,4 +1,3 @@
-// src/pages/LoginPage.jsx
 import React, { useState } from 'react';
 import { login } from '../services/authService';
 import '../assets/styles/Login.scss'
@@ -8,6 +7,7 @@ const LoginPage = () => {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [email, setEmail] = useState('');
+    const [showPassword, setShowPassword] = useState(false);
     const [error, setError] = useState('');
 
     const handleSubmit = async (e) => {
@@ -17,11 +17,10 @@ const LoginPage = () => {
             const result = await login(username, password);
             if (result.authenticated) {
                 localStorage.setItem('token', result.token);
-                localStorage.setItem('user', JSON.stringify(result.user)); // Lưu user info
+                localStorage.setItem('user', JSON.stringify(result.user));
                 alert('Login successful!');
-                window.location.href = '/'; // Redirect về trang chủ
-            }
-            else {
+                window.location.href = '/';
+            } else {
                 setError('Login failed');
             }
         } catch {
@@ -32,7 +31,7 @@ const LoginPage = () => {
     return (
         <div className='auth-page'>
             <div className="auth-form">
-                <h2>{isLogin ? 'Login' : 'Register'}</h2>
+                <h2>{isLogin ? 'Login' : 'REGISTER'}</h2>
                 <form onSubmit={handleSubmit}>
                     {!isLogin && (
                         <input
@@ -50,13 +49,21 @@ const LoginPage = () => {
                         onChange={(e) => setUsername(e.target.value)}
                         required
                     />
-                    <input
-                        type="password"
-                        placeholder="Password"
-                        value={password}
-                        onChange={(e) => setPassword(e.target.value)}
-                        required
-                    />
+                    <div className="password-field">
+                        <input
+                            type={showPassword ? 'text' : 'password'}
+                            placeholder="Password"
+                            value={password}
+                            onChange={(e) => setPassword(e.target.value)}
+                            required
+                        />
+                        <span
+                            className="toggle-password"
+                            onClick={() => setShowPassword(!showPassword)}
+                        >
+                            {showPassword ? '🙈' : '👁️'}
+                        </span>
+                    </div>
                     <button type="submit">{isLogin ? 'Login' : 'Register'}</button>
                 </form>
 
@@ -64,10 +71,7 @@ const LoginPage = () => {
 
                 <div className="auth-options">
                     {isLogin && <button className="forgot">Forgot password?</button>}
-                    <button
-                        className="toggle"
-                        onClick={() => setIsLogin(!isLogin)}
-                    >
+                    <button className="toggle" onClick={() => setIsLogin(!isLogin)}>
                         {isLogin ? 'Create an account' : 'Already have an account?'}
                     </button>
                     <div className="google-login">
