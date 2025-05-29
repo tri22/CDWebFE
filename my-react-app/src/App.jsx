@@ -13,9 +13,11 @@ import Blog from './pages/Blog.jsx'
 import BlogDetail from './pages/BlogDetail.jsx';
 import Contact from './pages/Contact.jsx'
 import Login from './pages/Login.jsx';
+import {AuthProvider} from './api/AuthContext.jsx'
 function App() {
     return (
         <Router>
+            <AuthProvider>
             <Routes>
                 <Route path="/" element={<Home />} />
 
@@ -32,6 +34,7 @@ function App() {
 
                 <Route path="*" element={<Navigate to="/" replace />} />
             </Routes>
+            </AuthProvider>
         </Router>
     );
 }

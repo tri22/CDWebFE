@@ -9,14 +9,20 @@ import MenuIcon from '@mui/icons-material/Menu';
 import LoginIcon from '@mui/icons-material/Login';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import '../assets/styles/Header.scss';
+import { useAuth } from '../api/AuthContext';
 const Header = () => {
     const [showSearch, setShowSearch] = useState(false);
     const navigate = useNavigate();
     const location = useLocation();
     const currentPath = location.pathname;
+    const { user, isLoggedIn, resetAuth } = useAuth();
 
     const isActive = (path) => currentPath === path;
     const handleCartClick = () => navigate('/cart');
+    const logout = () => {
+        resetAuth(); // Gọi đúng hàm resetAuth
+        navigate("/login"); // Optional: chuyển hướng sau khi logout
+    };
 
     return (
         <div id='header'>
@@ -52,12 +58,25 @@ const Header = () => {
                                     <AccountCircleIcon />
                                     <MenuIcon />
                                 </Dropdown.Toggle>
-                                <Dropdown.Menu>
-                                    <Dropdown.Item as={Link} to="/login">
-                                        <LoginIcon className="me-2" />
-                                        Login
-                                    </Dropdown.Item>
-                                </Dropdown.Menu>
+                                {isLoggedIn ? (
+                                    <Dropdown.Menu>
+                                        <Dropdown.Item as={Link} to="/profile">
+                                            {/* Hiển thị thông tin người dùng */}
+                                            Profile
+                                        </Dropdown.Item>
+                                        <Dropdown.Item onClick={logout}>
+                                            Logout
+                                        </Dropdown.Item>
+                                    </Dropdown.Menu>
+                                ) : (
+                                    <Dropdown.Menu>
+                                        <Dropdown.Item as={Link} to="/login">
+                                            <LoginIcon className="me-2" />
+                                            Login
+                                        </Dropdown.Item>
+                                    </Dropdown.Menu>
+                                )}
+
                             </Dropdown>
                         </div>
                     </Navbar.Collapse>
