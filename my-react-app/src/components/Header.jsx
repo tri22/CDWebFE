@@ -11,6 +11,7 @@ import PersonOutlineIcon from '@mui/icons-material/PersonOutline';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import '../assets/styles/Header.scss';
 import { useAuth } from '../api/AuthContext';
+
 const Header = () => {
     const [showSearch, setShowSearch] = useState(false);
     const navigate = useNavigate();
@@ -19,7 +20,10 @@ const Header = () => {
     const { user, isLoggedIn, resetAuth } = useAuth();
 
     const isActive = (path) => currentPath === path;
-    const handleCartClick = () => navigate('/cart');
+    const handleCartClick = async () => {
+        navigate('/cart'); 
+    };
+
     const logout = () => {
         resetAuth(); // Gọi đúng hàm resetAuth
         navigate("/login"); // Optional: chuyển hướng sau khi logout
