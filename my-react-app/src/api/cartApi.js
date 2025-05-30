@@ -13,5 +13,9 @@ const cartApi = {
     getCart: () => {
         return axiosInstance.get(`/cart`)
     },
+
+    updateItemQuantity:(data)=>{
+        return axiosInstance.put(`/cart/update-item`,data)
+    },
 }
 export default cartApi;

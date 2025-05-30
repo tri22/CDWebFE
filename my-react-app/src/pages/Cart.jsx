@@ -61,15 +61,36 @@ const Cart = () => {
   }, []);
 
 
-  const handleQuantityChange = (id, delta) => {
-    setCart((prev) =>
-      prev.map((item) =>
-        item.id === id
-          ? { ...item, quantity: Math.max(1, item.quantity + delta) }
-          : item
-      )
-    );
+  const handleQuantityChange = async (id, delta) => {
+    setCart((prevCart) => {
+      const updatedCart = prevCart.map((item) => {
+        if (item.id === id) {
+          const newQuantity = Math.max(1, item.quantity + delta);
+          return { ...item, quantity: newQuantity };
+        }
+        return item;
+      });
+      return updatedCart;
+    });
+
+    // Lấy item mới nhất sau khi setCart để truyền vào API
+    const currentItem = cart.find(item => item.id === id);
+    const updatedQuantity = Math.max(1, currentItem.quantity + delta);
+
+    const itemData = {
+      quantity: updatedQuantity,
+      cartItemId: id
+    };
+
+    try {
+      const response = await cartApi.updateItemQuantity(itemData);
+      toast.success(response.data.message);
+    } catch (error) {
+      toast.error("Cập nhật số lượng thất bại.");
+      console.error(error);
+    }
   };
+
 
   const handleRemove = async (id) => {
     const response = await cartApi.removeCartItem(id);
@@ -78,7 +99,7 @@ const Cart = () => {
   };
 
   const handleOrder = () => {
-      navigate('/order');
+    navigate('/order');
   }
 
   const subtotal = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
