@@ -19,7 +19,7 @@ const ProductDetail = () => {
             .catch(err => console.error('Error fetching product:', err));
 
         axios.get(API_PRODUCTS)
-            .then(res => setRelatedProducts(res.data.filter(p => p.pdId !== parseInt(id)).slice(0, 4)))
+            .then(res => setRelatedProducts(res.data.filter(p => p.id !== parseInt(id)).slice(0, 4)))
             .catch(err => console.error('Error fetching related products:', err));
     }, [id]);
     if (!product) return <p className="text-center mt-5">Loading...</p>;
@@ -34,7 +34,7 @@ const ProductDetail = () => {
                         {[...Array(4)].map((_, i) => (
                             <img
                                 key={i}
-                                src={product.pdImage}
+                                src={product.image}
                                 alt={`Thumbnail ${i + 1}`}
                                 className="img-fluid border rounded"
                             />
@@ -44,23 +44,23 @@ const ProductDetail = () => {
                     {/* Main image */}
                     <Col md={6}>
                         <img
-                            src={product.pdImage}
-                            alt={product.pdName}
+                            src={product.image}
+                            alt={product.name}
                             className="img-fluid rounded"
                         />
                     </Col>
 
                     {/* Product Info */}
                     <Col md={5}>
-                        <h5 className="fw-bold">{product.pdName}</h5>
+                        <h5 className="fw-bold">{product.name}</h5>
                         <div className="mb-2">
-                            {'★'.repeat(product.pdRating)}{'☆'.repeat(5 - product.pdRating)}
-                            <span className="text-muted ms-2">({product.pdRating} stars)</span>
+                            {'★'.repeat(product.rating)}{'☆'.repeat(5 - product.rating)}
+                            <span className="text-muted ms-2">({product.rating} stars)</span>
                         </div>
                         <p>
-                            <span className="text-danger fw-bold">${product.pdPrice.toFixed(2)}</span>
+                            <span className="text-danger fw-bold">${product.price.toFixed(2)}</span>
                         </p>
-                        <p className="text-muted">{product.pdDescribe}</p>
+                        <p className="text-muted">{product.description}</p>
 
                         <div className="d-flex align-items-center mb-3">
                             <Form.Control type="number" defaultValue={1} style={{ width: '80px' }} />
@@ -70,23 +70,23 @@ const ProductDetail = () => {
                             </Button>
                         </div>
 
-                        <div className="mb-2">
+                        <div className="mb-2">PropTypes.node
                             <BsHeart className="me-2" />
                             <span className="text-muted">Add to wishlist</span>
                         </div>
 
                         <div className="text-muted small">
-                            <p>Sku: {product.pdId.toString().padStart(2, '0')}</p>
-                            <p>Category: {product.pdCategory}</p>
-                            <p>Color: {product.pdColor}</p>
+                            <p>Sku: {product.id.toString().padStart(2, '0')}</p>
+                            <p>Category: {product.category.name}</p>
+                            <p>Color: {product.color}</p>
                         </div>
 
                         <Tabs defaultActiveKey="description" className="mt-4">
                             <Tab eventKey="description" title="Description">
-                                <p className="mt-3 text-muted">{product.pdDescribe}</p>
+                                <p className="mt-3 text-muted">{product.description}</p>
                             </Tab>
                             <Tab eventKey="additional" title="Additional information">
-                                <p className="mt-3 text-muted">Color: {product.pdColor}</p>
+                                <p className="mt-3 text-muted">Color: {product.color}</p>
                             </Tab>
                             <Tab eventKey="preview" title="Preview">
                                 <p className="mt-3 text-muted">Preview not available.</p>
@@ -99,13 +99,13 @@ const ProductDetail = () => {
                 <h5 className="mt-5 fw-bold">Related products</h5>
                 <Row className="mt-3">
                     {relatedProducts.map((product, index) => (
-                        <Col md={3} sm={6} xs={12} className="mb-4" key={product.pdId}>
+                        <Col md={3} sm={6} xs={12} className="mb-4" key={product.id}>
                             <ProductCard
-                                img={product.pdImage}
-                                name={product.pdName}
-                                price={`$${product.pdPrice}`}
-                                rating={product.pdRating}
-                                id={product.pdId}
+                                img={product.image}
+                                name={product.name}
+                                price={`$${product.price}`}
+                                rating={product.rating}
+                                id={product.id}
                             />
                         </Col>
                     ))}

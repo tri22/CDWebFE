@@ -3,8 +3,6 @@ import { Button, Container, Dropdown, Form, InputGroup, Nav, Navbar } from 'reac
 import SearchIcon from '@mui/icons-material/Search';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
-import PersonIcon from '@mui/icons-material/Person';
-import LogoutIcon from '@mui/icons-material/Logout';
 import MenuIcon from '@mui/icons-material/Menu';
 import LoginIcon from '@mui/icons-material/Login';
 import PersonOutlineIcon from '@mui/icons-material/PersonOutline';
@@ -21,7 +19,7 @@ const Header = () => {
 
     const isActive = (path) => currentPath === path;
     const handleCartClick = async () => {
-        navigate('/cart'); 
+        navigate('/cart');
     };
 
     const logout = () => {
@@ -46,9 +44,9 @@ const Header = () => {
                         </Nav>
                         <div className="d-flex align-items-center gap-3">
                             <div className="search-box d-flex align-items-center gap-2">
-                                    <InputGroup  className="d-none d-lg-flex search-input-group">
-                                        <Form.Control className='text-dark' placeholder="Search..." />
-                                    </InputGroup>
+                                <InputGroup className="d-none d-lg-flex search-input-group">
+                                    <Form.Control className='text-dark' placeholder="Search..." />
+                                </InputGroup>
                                 <Button variant="outline-dark" onClick={() => setShowSearch(!showSearch)}>
                                     <SearchIcon />
                                 </Button>

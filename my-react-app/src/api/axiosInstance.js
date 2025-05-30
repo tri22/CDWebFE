@@ -14,9 +14,9 @@ const axiosInstance = axios.create({
 
 axiosInstance.interceptors.request.use(
     async (config) => {
-        const token =  localStorage.getItem("token"); // Lấy token từ AsyncStorage
+        const token = localStorage.getItem("token"); // Lấy token từ AsyncStorage
         if (token) {
-        config.headers.Authorization = `Bearer ${token}`;
+            config.headers.Authorization = `Bearer ${token}`;
         }
         return config;
     },
@@ -26,11 +26,11 @@ axiosInstance.interceptors.request.use(
 axiosInstance.interceptors.response.use(
     (response) => response,
     (error) => {
-      if (error.response?.status === 401) {
-        Alert.alert("Session Expired", "Please log in again.");
-        // Có thể điều hướng người dùng tới màn hình đăng nhập
-      }
-      return Promise.reject(error);
+        if (error.response?.status === 401) {
+            Alert.alert("Session Expired", "Please log in again.");
+            // Có thể điều hướng người dùng tới màn hình đăng nhập
+        }
+        return Promise.reject(error);
     }
 );
 
