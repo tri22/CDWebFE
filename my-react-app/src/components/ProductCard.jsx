@@ -1,13 +1,30 @@
-import React   from 'react';
+import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import '../assets/styles/ProductCard.scss';
 import { Button } from 'react-bootstrap';
+import cartApi from '../api/cartApi';
+import { toast } from 'react-toastify';
 
 const ProductCard = ({ id, img, name, price, rating }) => {
     const navigate = useNavigate();
 
     const viewDetailHandler = () => {
         navigate(`/product/${id}`);
+    };
+
+    const addToCartlHandler = async () => {
+        const productData = {
+            productId: id,
+            quantity: 1
+        }
+        try {
+            const response = await cartApi.addToCart(productData)
+            const message = response.data.message;
+            toast.success(message); // hiển thị thông báo từ backend
+        }
+        catch {
+            alert("Error while adding this product!");
+        }
     };
 
     return (
@@ -24,14 +41,15 @@ const ProductCard = ({ id, img, name, price, rating }) => {
                     <Button
                         className=" mt-3 "
                         onClick={(e) => {
-                            e.stopPropagation(); // ❗ Ngăn chặn click lan lên div cha
-                            console.log("add to cart");
+                            e.stopPropagation();
+                            addToCartlHandler();
                         }}
                         style={{ alignSelf: 'center' }}
                         variant="outline-dark"
                     >
                         ADD TO CART
                     </Button>
+
                     <Button
                         className=" mt-3 "
                         onClick={(e) => {
@@ -46,9 +64,7 @@ const ProductCard = ({ id, img, name, price, rating }) => {
                 </div>
             </div>
         </div>
-      </div>
-    </div>
-  );
+    );
 };
 
 export default ProductCard;

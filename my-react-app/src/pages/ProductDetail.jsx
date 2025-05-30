@@ -76,7 +76,7 @@ const ProductDetail = () => {
                         </div>
 
                         <div className="text-muted small">
-                            <p>Sku: {product.id.toString().padStart(2, '0')}</p>
+                            <p>Sku: {product.id}</p>
                             <p>Category: {product.category.name}</p>
                             <p>Color: {product.color}</p>
                         </div>
