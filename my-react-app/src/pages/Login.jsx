@@ -1,6 +1,8 @@
-import React, { useState } from 'react';
-import { login } from '../services/authService';
+import React, { useState, useEffect, useContext } from 'react';
+import { useNavigate } from 'react-router-dom';
 import '../assets/styles/Login.scss'
+import { loginApi } from '../api/authApi';
+import { useAuth } from '../api/AuthContext.jsx';
 
 const LoginPage = () => {
     const [isLogin, setIsLogin] = useState(true);
@@ -9,24 +11,49 @@ const LoginPage = () => {
     const [email, setEmail] = useState('');
     const [showPassword, setShowPassword] = useState(false);
     const [error, setError] = useState('');
+    const navigate = useNavigate();
+    const { login, role } = useAuth();
 
     const handleSubmit = async (e) => {
         e.preventDefault();
         setError('');
+        const userLogin = {
+            username: username.trim(),
+            password: password.trim(),
+        };
+
+        console.log(userLogin)
         try {
-            const result = await login(username, password);
-            if (result.authenticated) {
-                localStorage.setItem('token', result.token);
-                localStorage.setItem('user', JSON.stringify(result.user));
-                alert('Login successful!');
-                window.location.href = '/';
+            const data = await loginApi(userLogin); // Gọi API đăng nhập
+            if (data.token) {
+                login(data); // Cập nhật role và token ngay lập tức
+                setIsLogin(true)
             } else {
-                setError('Login failed');
+                alert("Login failed! Check your username and password.");
             }
-        } catch {
-            setError('Invalid credentials');
+        } catch (error) {
+            alert("Login failed! Check your username and password.");
+            console.error("Login Error:", error);
         }
     };
+
+    useEffect(() => {
+        if (role) { // Kiểm tra nếu role đã được cập nhật
+            switch (role) {
+                case 'ADMIN':
+                    navigate('/ADMIN')
+                    break;
+                case 'USER':
+                    navigate('/');
+                    break;
+                default:
+                    alert("Login failed! Check your username and password.");
+                    break;
+            }
+        }
+    }, [role, navigate]);
+
+
 
     return (
         <div className='auth-page'>

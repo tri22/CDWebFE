@@ -5,6 +5,7 @@ import FeatureProduct from './FeatureProduct.jsx';
 import SubMain from './SubMain.jsx';
 
 const MainHome = () => {
+
     return (
         <div id='mainHome'>
             <Container>

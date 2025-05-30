@@ -2,15 +2,18 @@ import React from "react";
 import SearchIcon from '@mui/icons-material/Search';
 import { Button, Form, InputGroup } from 'react-bootstrap';
 
-const BlogSidebar = ({ bestBlog ,categories,recentPosts}) => {
+const BlogSidebar = ({ bestBlog, categories, recentPosts }) => {
     return (
         <div className="px-5">
             {/* Search Box */}
             <div className="mb-4 pe-5">
                 <InputGroup>
                     <Form.Control placeholder="Search" />
-                    <Button variant="primary"><SearchIcon /></Button>
+                    <Button variant="outline-dark" onClick={() => setShowSearch(!showSearch)}>
+                        <SearchIcon />
+                    </Button>
                 </InputGroup>
+
             </div>
 
             {/* Featured Post */}

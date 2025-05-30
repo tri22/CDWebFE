@@ -9,87 +9,76 @@ import Footer from '../components/Footer';
 import Slider from '../components/Slider';
 import { API_PRODUCTS } from '../utils/Config';
 
-
 const Shop = () => {
     const [products, setProducts] = useState([]);
-    const [filteredProducts, setFilteredProducts] = useState([]); // Mảng sản phẩm lọc
+    const [filteredProducts, setFilteredProducts] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
-    const productsPerPage = 9;
-
-    // Các filter state
     const [selectedCategory, setSelectedCategory] = useState(null);
     const [selectedColor, setSelectedColor] = useState(null);
-    const [priceRange, setPriceRange] = useState([0, 0]); // min max price selected
-    const [priceLimits, setPriceLimits] = useState([0, 0]); // min max price có trong data
+    const [priceRange, setPriceRange] = useState([0, 0]);
+    const [priceLimits, setPriceLimits] = useState([0, 0]);
+
+    const productsPerPage = 9;
 
     useEffect(() => {
         axios.get(API_PRODUCTS)
-            .then(res => {
-                setProducts(res.data);
-                setFilteredProducts(res.data);
+            .then(({ data }) => {
+                setProducts(data);
+                setFilteredProducts(data);
 
-                // Tính min và max price từ data
-                if (res.data.length > 0) {
-                    const prices = res.data.map(p => p.pdPrice);
-                    const minPrice = Math.min(...prices);
-                    const maxPrice = Math.max(...prices);
-                    setPriceLimits([minPrice, maxPrice]);
-                    setPriceRange([minPrice, maxPrice]);
+                if (data.length) {
+                    const prices = data.map(p => p.price);
+                    const min = Math.min(...prices), max = Math.max(...prices);
+                    setPriceLimits([min, max]);
+                    setPriceRange([min, max]);
                 }
             })
             .catch(err => console.error('Error fetching products:', err));
     }, []);
 
-    // Tính phân trang trên filteredProducts
-    const totalPages = Math.ceil(filteredProducts.length / productsPerPage);
-    const start = (currentPage - 1) * productsPerPage;
-    const currentProducts = filteredProducts.slice(start, start + productsPerPage);
-
-    // Tính count category, color dựa trên filteredProducts hoặc products?
-    // Nếu muốn count dựa trên toàn bộ products thì giữ nguyên như cũ
-    const categoryCounts = {};
-    const colorCounts = {};
-    products.forEach(p => {
-        categoryCounts[p.pdCategory] = (categoryCounts[p.pdCategory] || 0) + 1;
-        colorCounts[p.pdColor] = (colorCounts[p.pdColor] || 0) + 1;
-    });
-
-    // const handlePriceChange = (values) => {
-    //     setPriceRange(values);
-    // };
-    // Hàm xử lý khi thay đổi thanh price range slider
-    const handlePriceChange = (e) => {
-        // Nếu là range 2 đầu thì bạn cần slider custom, còn đây bạn đang dùng Form.Range là 1 đầu, 
-        // mình sẽ giả sử chỉ có 1 slider max price, min giá tự min có trong data.
-        const maxSelected = Number(e.target.value);
-        setPriceRange([priceLimits[0], maxSelected]);
+    const paginate = () => {
+        const start = (currentPage - 1) * productsPerPage;
+        return filteredProducts.slice(start, start + productsPerPage);
     };
 
-    // Hàm filter khi nhấn nút filter
+    const countBy = (key) =>
+        products.reduce((acc, p) => {
+            const k = key === 'category' ? p.category.name : p[key];
+            acc[k] = (acc[k] || 0) + 1;
+            return acc;
+        }, {});
+
+    const handlePriceChange = e =>
+        setPriceRange([priceLimits[0], +e.target.value]);
+
     const handleFilter = () => {
         const filtered = products.filter(p => {
-            const matchCategory = selectedCategory ? p.pdCategory === selectedCategory : true;
-            const matchColor = selectedColor ? p.pdColor === selectedColor : true;
-            const matchPrice = p.pdPrice >= priceRange[0] && p.pdPrice <= priceRange[1];
+            const matchCategory = !selectedCategory || p.category.name === selectedCategory;
+            const matchColor = !selectedColor || p.color === selectedColor;
+            const matchPrice = p.price >= priceRange[0] && p.price <= priceRange[1];
             return matchCategory && matchColor && matchPrice;
         });
         setFilteredProducts(filtered);
         setCurrentPage(1);
     };
 
-    const renderFilterList = (items, onClickFilter, selected) => (
+    const renderFilterList = (items, setter, selected) => (
         <ul className="list-unstyled">
             {Object.entries(items).map(([key, count], i) => (
                 <li
                     key={i}
                     style={{ cursor: 'pointer', fontWeight: selected === key ? 'bold' : 'normal' }}
-                    onClick={() => onClickFilter(key === selected ? null : key)} // toggle
+                    onClick={() => setter(key === selected ? null : key)}
                 >
                     {key} ({count})
                 </li>
             ))}
         </ul>
     );
+
+    const currentProducts = paginate();
+    const totalPages = Math.ceil(filteredProducts.length / productsPerPage);
+    const [start] = [(currentPage - 1) * productsPerPage];
 
     return (
         <div className="shop-page">
@@ -111,10 +100,10 @@ const Shop = () => {
                 <Row>
                     <Col md={3}>
                         <h6 className="fw-bold mb-3">Category</h6>
-                        {renderFilterList(categoryCounts, setSelectedCategory, selectedCategory)}
+                        {renderFilterList(countBy('category'), setSelectedCategory, selectedCategory)}
 
                         <h6 className="fw-bold mt-4 mb-3">Color</h6>
-                        {renderFilterList(colorCounts, setSelectedColor, selectedColor)}
+                        {renderFilterList(countBy('color'), setSelectedColor, selectedColor)}
 
                         <h6 className="fw-bold mt-4 mb-3">Price</h6>
                         <Form.Range
@@ -130,14 +119,14 @@ const Shop = () => {
 
                     <Col md={9}>
                         <Row>
-                            {currentProducts.map(product => (
-                                <Col md={4} sm={6} xs={12} className="mb-4" key={product.pdId}>
+                            {currentProducts.map(({ id, image, name, price, rating }) => (
+                                <Col md={4} sm={6} xs={12} className="mb-4" key={id}>
                                     <ProductCard
-                                        id={product.pdId}
-                                        img={product.pdImage}
-                                        name={product.pdName}
-                                        price={`$${product.pdPrice}`}
-                                        rating={product.pdRating}
+                                        id={id}
+                                        img={image}
+                                        name={name}
+                                        price={`$${price}`}
+                                        rating={rating}
                                     />
                                 </Col>
                             ))}
