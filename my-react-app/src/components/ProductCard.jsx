@@ -1,4 +1,4 @@
-import React   from 'react';
+import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import '../assets/styles/ProductCard.scss';
 import { Button } from 'react-bootstrap';
@@ -46,9 +46,7 @@ const ProductCard = ({ id, img, name, price, rating }) => {
                 </div>
             </div>
         </div>
-      </div>
-    </div>
-  );
+    );
 };
 
 export default ProductCard;

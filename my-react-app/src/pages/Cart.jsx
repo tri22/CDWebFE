@@ -132,7 +132,7 @@ const Cart = () => {
                                 <span>Cart totals</span>
                                 <span>${cartTotal.toFixed(2)}</span>
                             </div>
-                            <Button className="w-100 mt-3" variant="outline-light" onClick={handleOrder}>Proceed to Checkout</Button>
+                            <Button className="w-100 mt-3" variant="outline-light" onClick={handleOrder}>Proceed to Order</Button>
                         </div>
                     </Col>
                 </Row>
