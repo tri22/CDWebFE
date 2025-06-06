@@ -21,6 +21,13 @@ import Login from './pages/Login.jsx';
 import { AuthProvider } from './api/AuthContext.jsx'
 import Order from './pages/Order.jsx';
 import OrderDetail from './pages/OrderDetail.jsx';
+import Profile from './pages/Profile.jsx';
+import AdminHome from './pages/AdminHome.jsx'
+import OrderManagement from './pages/OrderManagement.jsx'
+import UserManagement from './pages/UserManagement.jsx'
+import ProductManagement from './pages/ProductManagement.jsx'
+import ProductStock from './pages/ProductStock.jsx'
+import VoucherManagement from './pages/VoucherManagement.jsx'
 
 function App() {
     return (
@@ -39,6 +46,15 @@ function App() {
                         <Route path="/login" element={<Login />} />
                         <Route path="/order" element={<Order />} />
                         <Route path="/order/:id" element={<OrderDetail />} />
+                        <Route path="/Profile" element={<Profile />} />
+
+                        {/* Admin pages */}
+                        <Route path="/AdminHome" element={<AdminHome />} />
+                        <Route path="/OrderManagement" element={<OrderManagement />} />
+                        <Route path="/UserManagement" element={<UserManagement />} />
+                        <Route path="/ProductManagement" element={<ProductManagement />} />
+                        <Route path="/ProductStock" element={<ProductStock />} />
+                        <Route path="/VoucherManagement" element={<VoucherManagement />} />
                         <Route path="*" element={<Navigate to="/" replace />} />
                     </Routes>
                     <ToastContainer position="top-right" autoClose={3000} />

@@ -15,7 +15,7 @@ const ProductCard = ({ id, img, name, price, rating }) => {
     const addToCartlHandler = async () => {
         const productData = {
             productId: id,
-            quantity: 1
+            quantity: 1,
         }
         try {
             const response = await cartApi.addToCart(productData)
