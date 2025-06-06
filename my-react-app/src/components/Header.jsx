@@ -3,13 +3,12 @@ import { Button, Container, Dropdown, Form, InputGroup, Nav, Navbar } from 'reac
 import SearchIcon from '@mui/icons-material/Search';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
-import PersonIcon from '@mui/icons-material/Person';
-import LogoutIcon from '@mui/icons-material/Logout';
 import MenuIcon from '@mui/icons-material/Menu';
 import LoginIcon from '@mui/icons-material/Login';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import '../assets/styles/Header.scss';
 import { useAuth } from '../api/AuthContext';
+
 const Header = () => {
     const [showSearch, setShowSearch] = useState(false);
     const navigate = useNavigate();
@@ -18,7 +17,10 @@ const Header = () => {
     const { user, isLoggedIn, resetAuth } = useAuth();
 
     const isActive = (path) => currentPath === path;
-    const handleCartClick = () => navigate('/cart');
+    const handleCartClick = async () => {
+        navigate('/cart');
+    };
+
     const logout = () => {
         resetAuth(); // Gọi đúng hàm resetAuth
         navigate("/login"); // Optional: chuyển hướng sau khi logout
@@ -40,16 +42,16 @@ const Header = () => {
                             <Nav.Link as={Link} to="/About" className={`nav-item-custom ${isActive("/About") ? "active" : ""}`}>About Us</Nav.Link>
                         </Nav>
                         <div className="d-flex align-items-center gap-3">
-                            <div className="search-box d-flex">
-                                <Button variant="outline-light" onClick={() => setShowSearch(!showSearch)}><SearchIcon /></Button>
-                                {showSearch && (
-                                    <InputGroup className="mt-2 d-none d-lg-flex search-input-group">
-                                        <Form.Control placeholder="Search..." />
-                                    </InputGroup>
-                                )}
+                            <div className="search-box d-flex align-items-center gap-2">
+                                <InputGroup className="d-none d-lg-flex search-input-group">
+                                    <Form.Control className='text-dark' placeholder="Search..." />
+                                </InputGroup>
+                                <Button variant="outline-dark" onClick={() => setShowSearch(!showSearch)}>
+                                    <SearchIcon />
+                                </Button>
                             </div>
 
-                            <Button variant="outline-light" onClick={handleCartClick}>
+                            <Button variant="outline-dark" onClick={handleCartClick}>
                                 <ShoppingCartIcon />
                             </Button>
 
@@ -61,8 +63,10 @@ const Header = () => {
                                 {isLoggedIn ? (
                                     <Dropdown.Menu>
                                         <Dropdown.Item as={Link} to="/profile">
-                                            {/* Hiển thị thông tin người dùng */}
                                             Profile
+                                        </Dropdown.Item>
+                                        <Dropdown.Item as={Link} to="/order">
+                                            Order
                                         </Dropdown.Item>
                                         <Dropdown.Item onClick={logout}>
                                             Logout
