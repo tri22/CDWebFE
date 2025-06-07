@@ -67,7 +67,6 @@ const Header = () => {
                                 </Dropdown.Toggle>
                                 {isLoggedIn ? (
                                     <Dropdown.Menu>
-
                                         <Dropdown.Item as={Link} to="/Profile">
                                             {/* Hiển thị thông tin người dùng */}
                                             Profile
@@ -75,10 +74,7 @@ const Header = () => {
                                         <Dropdown.Item as={Link} to="/AdminHome">
                                             {/* Hiển thị thông tin người dùng */}
                                             Admin
-                                        </Dropdown.Item>
-                                        <Dropdown.Item as={Link} to="/profile">
-                                            Profile
-                                        </Dropdown.Item>
+                                        </Dropdown.Item>                            
                                         <Dropdown.Item as={Link} to="/order">
                                             Order
 

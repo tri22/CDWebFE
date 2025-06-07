@@ -5,7 +5,10 @@ import { FiMenu, FiSearch, FiBell, FiChevronDown } from 'react-icons/fi';
 import { FaFlagUsa } from 'react-icons/fa';
 import { Col, Row, Card, Form, Container, Button, Dropdown, InputGroup, Nav, Navbar } from 'react-bootstrap';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-const TopNavbar = ({ user, title }) => {
+import { useAuth } from '../api/AuthContext';
+const TopNavbar = ({ title }) => {
+  const { user, isLoggedIn, resetAuth } = useAuth();
+  const navigate = useNavigate();
   const logout = () => {
     resetAuth(); // Gọi đúng hàm resetAuth
     navigate("/login"); // Optional: chuyển hướng sau khi logout
@@ -23,10 +26,10 @@ const TopNavbar = ({ user, title }) => {
   return (
     <Row className="flex items-center justify-between px-4 py-2 bg-white shadow-sm pt-4">
       {/* Left: Menu + Search */}
-      <Col md={3}>
+      <Col md={4}>
         <h2 >{title}</h2>
       </Col>
-      <Col md={6}></Col>
+      <Col md={5}></Col>
       {/* Right: Notification, Language, User */}
       <Col md={3}>
         <Row className="justify-between">
