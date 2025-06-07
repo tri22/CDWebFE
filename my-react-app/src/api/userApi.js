@@ -9,6 +9,9 @@ const userApi ={
         return axiosInstance.put(`/users/"/update/${userId}`,data)
     },
 
+    getAllUser:()=>{
+        return axiosInstance.get(`/users/all`)
+    },
   
 }
 export default userApi;

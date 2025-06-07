@@ -7,6 +7,10 @@ const orderApi={
 
     cancelOrder:(id)=>{
         return axiosInstance.delete(`/order/delete/${id}`)
+    },
+
+    getAllOrder:()=>{
+        return axiosInstance.get(`/order/all`)
     }
 }
 export default orderApi;

@@ -4,83 +4,36 @@ import AdminNav from "../components/AdminNav";
 import { CiFilter } from "react-icons/ci";
 import { GrPowerReset } from "react-icons/gr";
 import { FaArrowDown } from "react-icons/fa";
+import { useEffect, useState } from "react";
+import orderApi from "../api/orderApi";
+import PaginationCom from "../components/PaginationCom";
 
 const OrderManagement = () => {
-  const orderData = [
-    {
-      date: "22/4/2003",
-      value: "40,689",
-      quantity: 10,
-      name: "Tom",
-      method: "Cash",
-      status: "Complete",
-    },
-    {
-      date: "22/4/2003",
-      value: "40,689",
-      quantity: 10,
-      name: "Tom",
-      method: "Cash",
-      status: "Complete",
-    },
-    {
-      date: "22/4/2003",
-      value: "40,689",
-      quantity: 10,
-      name: "Tom",
-      method: "Cash",
-      status: "Complete",
-    },
-    {
-      date: "22/4/2003",
-      value: "40,689",
-      quantity: 10,
-      name: "Tom",
-      method: "Cash",
-      status: "Complete",
-    },
-    {
-      date: "22/4/2003",
-      value: "40,689",
-      quantity: 10,
-      name: "Tom",
-      method: "Cash",
-      status: "Complete",
-    },
-    {
-      date: "22/4/2003",
-      value: "40,689",
-      quantity: 10,
-      name: "Tom",
-      method: "Cash",
-      status: "Complete",
-    },
-    {
-      date: "22/4/2003",
-      value: "40,689",
-      quantity: 10,
-      name: "Tom",
-      method: "Cash",
-      status: "Complete",
-    },
-    {
-      date: "22/4/2003",
-      value: "40,689",
-      quantity: 10,
-      name: "Tom",
-      method: "Cash",
-      status: "Complete",
-    },
-    {
-      date: "22/4/2003",
-      value: "40,689",
-      quantity: 10,
-      name: "Tom",
-      method: "Cash",
-      status: "Complete",
-    },
-    
-  ];
+  const [orderList, setOrderList] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemPerPage = 10;
+  const totalPages = Math.ceil(orderList.length / itemPerPage);
+  const indexOfLast= currentPage * itemPerPage;
+  const indexOfFirst = indexOfLast - itemPerPage;
+  const currentOrderList = orderList.slice(indexOfFirst, indexOfLast);
+
+  const handlePageChange = (pageNumber) => {
+    setCurrentPage(pageNumber);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+
+
+  useEffect(() => {
+    const fetchOrder = async () => {
+      const response = await orderApi.getAllOrder();
+      const data = response.data.result;
+      console.log(data)
+      setOrderList(data)
+    }
+    fetchOrder()
+  }, [])
+
 
   const filterData = [
     { value: "Date" },
@@ -108,7 +61,7 @@ const OrderManagement = () => {
           </Card>
         </Col>
       ))}
-      <Col md="1"className="p-0 me-1">
+      <Col md="1" className="p-0 me-1">
         <Card className="shadow-sm border-0 bg-white text-center p-2">
           <div className="d-flex flex-row align-items-center gap-2">
             <GrPowerReset size={18} />
@@ -119,13 +72,13 @@ const OrderManagement = () => {
     </Row>
   );
 
-  const OrderRender = ({orderData}) => (
+  const OrderRender = ({ orderData }) => (
     <div className="container mt-3">
       <div className="table-responsive rounded border bg-white shadow-sm">
         <table className="table table-hover align-middle mb-0 text-center">
           <thead className="table-light">
             <tr>
-              <th>NAME</th>
+              <th>USERNAME</th>
               <th>TOTAL VALUE</th>
               <th>DATE</th>
               <th>QUANTITY</th>
@@ -136,20 +89,19 @@ const OrderManagement = () => {
           <tbody>
             {orderData.map((row, index) => (
               <tr key={index}>
-                <td className="fw-semibold">{row.name}</td>
-                <td>${row.value}</td>
-                <td>{row.date}</td>
-                <td>{row.quantity}</td>
-                <td>{row.method}</td>
+                <td className="fw-semibold">{row.username}</td>
+                <td>${row.totalPrice}</td>
+                <td>{row.orderDate}</td>
+                <td>{row.totalQuantity}</td>
+                <td>{row.paymentMethod}</td>
                 <td>
                   <span
-                    className={`badge rounded-pill px-3 py-2 ${
-                      row.status === "Complete"
+                    className={`badge rounded-pill px-3 py-2 ${row.status === "Complete"
                         ? "bg-success-subtle text-success"
                         : row.status === "Processing"
-                        ? "bg-primary-subtle text-primary"
-                        : "bg-secondary-subtle text-secondary"
-                    }`}
+                          ? "bg-primary-subtle text-primary"
+                          : "bg-secondary-subtle text-secondary"
+                      }`}
                   >
                     {row.status}
                   </span>
@@ -166,13 +118,14 @@ const OrderManagement = () => {
     <div style={{ backgroundColor: "#F5F6FA", minHeight: "100vh" }}>
       <Container fluid>
         <Row>
-          <Col md={2} className="ps-0" style={{ minHeight: "100vh" }}>
+          <Col md={2} className="p-0" style={{ minHeight: "100vh" }}>
             <AdminSidebar />
           </Col>
           <Col md={10} style={{ minHeight: "100vh" }}>
             <AdminNav title="Order Management" />
             <Filter filterData={filterData} />
-            <OrderRender orderData={orderData} />
+            <OrderRender orderData={currentOrderList} />
+            <PaginationCom currentPage={currentPage} onPageChange={handlePageChange} totalPages={totalPages}></PaginationCom>
           </Col>
         </Row>
       </Container>
