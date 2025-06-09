@@ -5,6 +5,7 @@ const VoucherManagement = () => {
 
 
     const VoucherRender = ({data}) => {
+        return(
        <div className="container mt-3">
             <div className="table-responsive rounded border bg-white shadow-sm">
                 <table className="table table-hover align-middle mb-0 text-center">
@@ -44,18 +45,19 @@ const VoucherManagement = () => {
                 </table>
             </div>
         </div>
+        )
     }
 
     return (
         <div style={{ backgroundColor: '#F5F6FA' }}>
             <Container fluid>
                 <Row>
-                   <Col md={2} className='ps-0'>
+                   <Col md={2} className='p-0'>
                         <AdminSidebar></AdminSidebar>
                     </Col>
                     <Col md ={10}>
-                        <AdminNav></AdminNav>
-                        <VoucherRender></VoucherRender>
+                        <AdminNav title={'Voucher Management'}></AdminNav>
+                        {/* <VoucherRender></VoucherRender> */}
                     </Col>
                 </Row>
             </Container>

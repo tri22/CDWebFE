@@ -11,6 +11,10 @@ const orderApi={
 
     getAllOrder:()=>{
         return axiosInstance.get(`/order/all`)
-    }
+    },
+
+    updateOrder:(orderId,data)=>{
+        return axiosInstance.put(`order/update/${orderId}`,data)
+    },
 }
 export default orderApi;
