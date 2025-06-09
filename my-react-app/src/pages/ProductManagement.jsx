@@ -6,6 +6,7 @@ import productApi from "../api/productApi";
 import { FaEdit } from "react-icons/fa";
 import { MdDelete } from "react-icons/md";
 import PaginationCom from "../components/PaginationCom";
+import { toast } from "react-toastify";
 
 const ProductManagement = () => {
     const [productList, setProductList] = useState([])
@@ -23,14 +24,27 @@ const ProductManagement = () => {
 
 
     useEffect(() => {
-        const fetchProduct = async () => {
-            const response = await productApi.getAllProduct()
-            const data = response.data
-            console.log(data)
-            setProductList(data)
-        }
+
         fetchProduct()
     }, [])
+
+    const fetchProduct = async () => {
+        const response = await productApi.getAllProduct()
+        const data = response.data
+        console.log(data)
+        setProductList(data)
+    }
+
+    const deleteProduct = async (id) => {
+        if (!window.confirm("Are you sure you want to delete this product?")) return;
+        try {
+            const response = await productApi.deleteProduct(id);
+            await fetchProduct();
+            toast.success("Delete success!");
+        } catch (error) {
+            toast.error("Failed to delete this product:", error);
+        }
+    }
 
     const ProductRender = ({ data }) => {
         return (
@@ -60,10 +74,8 @@ const ProductManagement = () => {
                                     <td>{row.description}</td>
                                     <td>{row.rating}</td>
                                     <td>
-                                        <td>
-                                            <Button className="me-2"><FaEdit /></Button>
-                                            <Button><MdDelete /></Button>
-                                        </td>
+                                        <Button className="me-2"><FaEdit /></Button>
+                                        <Button onClick={() => deleteProduct(row.id)}><MdDelete /></Button>
                                     </td>
                                 </tr>
                             ))}
