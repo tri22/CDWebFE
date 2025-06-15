@@ -12,6 +12,13 @@ const adminApi = {
         return axiosInstance.get('/vouchers/all')
     },
 
+    addVoucher:(data)=>{
+        return axiosInstance.post('/vouchers/add',data)
+    },
+
+    updateVoucher:(id,data)=>{
+        return axiosInstance.put(`/vouchers/update/${id}`,data)
+    },
     
 }
 export default adminApi;
