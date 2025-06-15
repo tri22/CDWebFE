@@ -113,7 +113,6 @@ const OrderManagement = () => {
               <th>DATE</th>
               <th>QUANTITY</th>
               <th>PAYMENT</th>
-              <th>STATUS</th>
               <th></th>
             </tr>
           </thead>
@@ -124,7 +123,6 @@ const OrderManagement = () => {
                 <td>${row.totalPrice}</td>
                 <td>{row.orderDate}</td>
                 <td>{row.totalQuantity}</td>
-                <td>{row.paymentMethod}</td>
                 <td>
                   <span
                     className={`badge rounded-pill px-3 py-2 ${row.status === "Complete"
