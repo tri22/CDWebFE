@@ -46,7 +46,7 @@ const ProductManagement = () => {
         }
     }
 
-    const ProductRender = ({ data }) => {
+    const TableRender = ({ data }) => {
         return (
             <div className="container mt-3">
                 <div className="table-responsive rounded border bg-white shadow-sm">
@@ -95,7 +95,7 @@ const ProductManagement = () => {
                     </Col>
                     <Col md={10} style={{ minHeight: "100vh" }}>
                         <AdminNav title={"Product Management"}></AdminNav>
-                        <ProductRender data={currentProductList}></ProductRender>
+                        <TableRender data={currentProductList}></TableRender>
                         <PaginationCom currentPage={currentPage} onPageChange={handlePageChange} totalPages={totalPages}></PaginationCom>
                     </Col>
                 </Row>
