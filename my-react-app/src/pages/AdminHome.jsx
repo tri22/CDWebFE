@@ -1,8 +1,16 @@
+<<<<<<< HEAD
+import React, { useEffect } from 'react';
+
+import { useAuth } from '../api/AuthContext';
+import { Col, Row, Card, Form, Container } from 'react-bootstrap';
+import { FaUsers, FaBox, FaChartLine, FaClock, FaArrowUp, FaArrowDown } from 'react-icons/fa';
+=======
 import React, { useEffect, useState } from 'react';
 
 import { useAuth } from '../api/AuthContext';
 import { Col, Row, Card, Form, Container } from 'react-bootstrap';
 import { FaBan, FaBox, FaChartLine, FaClock, FaArrowUp, FaArrowDown } from 'react-icons/fa';
+>>>>>>> main
 import AdminSidebar from '../components/AdminSidebar';
 import AdminNav from '../components/AdminNav';
 import {
@@ -16,6 +24,10 @@ import {
     Area,
     AreaChart,
 } from 'recharts';
+<<<<<<< HEAD
+const Home = () => {
+    const { user, isLoggedIn } = useAuth();
+=======
 import orderApi from '../api/orderApi';
 import dayjs from 'dayjs';
 
@@ -29,6 +41,7 @@ const Home = () => {
         weekSale: 0,
         weekCancel: 0,
     });
+>>>>>>> main
 
     useEffect(() => {
         if (isLoggedIn && user) {
@@ -36,6 +49,46 @@ const Home = () => {
         }
     }, [user, isLoggedIn]);
 
+<<<<<<< HEAD
+    const statsData = [
+        {
+            title: 'Total User',
+            value: '40,689',
+            icon: <FaUsers size={32} className="text-white" />,
+            iconBg: 'bg-primary',
+            change: '+8.5%',
+            changeText: 'Up from yesterday',
+            isUp: true,
+        },
+        {
+            title: 'Total Order',
+            value: '10,293',
+            icon: <FaBox size={32} className="text-white" />,
+            iconBg: 'bg-warning',
+            change: '+1.3%',
+            changeText: 'Up from past week',
+            isUp: true,
+        },
+        {
+            title: 'Total Sales',
+            value: '$89,000',
+            icon: <FaChartLine size={32} className="text-white" />,
+            iconBg: 'bg-success',
+            change: '-4.3%',
+            changeText: 'Down from yesterday',
+            isUp: false,
+        },
+        {
+            title: 'Total Pending',
+            value: '2040',
+            icon: <FaClock size={32} className="text-white" />,
+            iconBg: 'bg-danger',
+            change: '+1.8%',
+            changeText: 'Up from yesterday',
+            isUp: true,
+        },
+    ];
+=======
     useEffect(() => {
         fetchInfo()
         weeklyRevenue();
@@ -120,10 +173,39 @@ const Home = () => {
 
 
 
+>>>>>>> main
 
     const DashboardStats = () => {
         return (
             <Row className="g-4 my-4">
+<<<<<<< HEAD
+                {statsData.map((stat, idx) => (
+                    <Col key={idx} md={6} lg={3} className='m-0'>
+                        <Card className="shadow-sm border-0 rounded-4 h-100">
+                            <Card.Body className="d-flex flex-column gap-3">
+                                <div className="d-flex justify-content-between align-items-center">
+                                    <div className="text-muted fw-semibold">{stat.title}</div>
+                                    <div className={`p-2 rounded-3 d-flex align-items-center justify-content-center ${stat.iconBg}`}>
+                                        {stat.icon}
+                                    </div>
+                                </div>
+                                <h3 className="fw-bold mb-0">{stat.value}</h3>
+                                <div className="d-flex align-items-center gap-2">
+                                    {stat.isUp ? (
+                                        <FaArrowUp className="text-success" />
+                                    ) : (
+                                        <FaArrowDown className="text-danger" />
+                                    )}
+                                    <span className={`fw-semibold ${stat.isUp ? 'text-success' : 'text-danger'}`}>
+                                        {stat.change}
+                                    </span>
+                                    <span className="text-muted small">{stat.changeText}</span>
+                                </div>
+                            </Card.Body>
+                        </Card>
+                    </Col>
+                ))}
+=======
                 <Col md={6} lg={3} className='m-0'>
                     <Card className="shadow-sm border-0 rounded-4 h-100">
                         <Card.Body className="d-flex flex-column gap-3">
@@ -196,10 +278,19 @@ const Home = () => {
                         </Card.Body>
                     </Card>
                 </Col>
+>>>>>>> main
             </Row>
         );
     };
 
+<<<<<<< HEAD
+    const data = Array.from({ length: 40 }, (_, i) => ({
+        name: `${(i + 1) * 1500}`,
+        value: Math.floor(30 + Math.random() * 70), // từ 30% đến 100%
+    }));
+
+=======
+>>>>>>> main
     const SalesChart = () => {
         return (
             <Card className="shadow-sm border-0 rounded-4 p-5 mt-4">
@@ -208,6 +299,13 @@ const Home = () => {
                         <h5 className="fw-bold mb-0">Sales Details</h5>
                     </Col>
                     <Col xs="auto">
+<<<<<<< HEAD
+                        <Form.Select size="sm">
+                            <option>October</option>
+                            <option>September</option>
+                            <option>August</option>
+                        </Form.Select>
+=======
                         <Form.Select
                             size="sm"
                             value={time}
@@ -218,11 +316,16 @@ const Home = () => {
                             <option value="This year">This Year</option>
                         </Form.Select>
 
+>>>>>>> main
                     </Col>
                 </Row>
 
                 <ResponsiveContainer width="100%" height={300}>
+<<<<<<< HEAD
+                    <AreaChart data={data}>
+=======
                     <AreaChart data={chartData}>
+>>>>>>> main
                         <defs>
                             <linearGradient id="colorBlue" x1="0" y1="0" x2="0" y2="1">
                                 <stop offset="5%" stopColor="#4e7cf3" stopOpacity={0.4} />
@@ -231,10 +334,18 @@ const Home = () => {
                         </defs>
                         <XAxis dataKey="name" tick={{ fontSize: 12 }} />
                         <YAxis
+<<<<<<< HEAD
+                            domain={[0, 100]}
+                            tickFormatter={(val) => `${val}%`}
+                            tick={{ fontSize: 12 }}
+                        />
+                        <Tooltip formatter={(val) => `${val.toFixed(2)}%`} />
+=======
                             tickFormatter={(val) => `$${val}`}
                             tick={{ fontSize: 12 }}
                         />
                         <Tooltip formatter={(val) => `$${val.toFixed(2)}`} />
+>>>>>>> main
                         <CartesianGrid strokeDasharray="3 3" vertical={false} />
                         <Area
                             type="monotone"
@@ -252,6 +363,15 @@ const Home = () => {
     };
 
     return (
+<<<<<<< HEAD
+        <div style={{backgroundColor:'#F5F6FA'}}>
+            <Container fluid>
+                <Row>
+                    <Col md={2} className='ps-0'>
+                        <AdminSidebar ></AdminSidebar>
+                    </Col>
+                    <Col md={10}>
+=======
         <div style={{ backgroundColor: '#F5F6FA' }}>
             <Container fluid>
                 <Row>
@@ -259,6 +379,7 @@ const Home = () => {
                         <AdminSidebar ></AdminSidebar>
                     </Col>
                     <Col md={10} style={{ minHeight: "100vh" }}>
+>>>>>>> main
                         <div>
                             <div>
                                 <AdminNav user={user} title={"Dashboard"}></AdminNav>

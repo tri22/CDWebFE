@@ -2,26 +2,53 @@
     margin-top: 80px;
 
     .order-id {
-        font-size: 30px;
+        font-size: 26px;
         font-weight: 600;
+        margin-bottom: 10px;
     }
 
     .order-status {
-        padding: 4px 20px;
+        padding: 4px 16px;
         border-radius: 20px;
         display: inline-block;
-        color: #000;
-        background-color: lightgray;
-        margin-bottom: 10px !important;
+        font-size: 14px;
+        background-color: #f0f0f0;
+        font-weight: 500;
+        margin-bottom: 10px;
     }
 
     .order-items {
-        padding: 30px;
-        border: 1px solid lightgray;
-        border-radius: 20px;
+        padding: 20px;
+        border: 1px solid #ddd;
+        border-radius: 12px;
+        background-color: #fafafa;
+
+        .card {
+            border: none;
+            border-radius: 12px;
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.05);
+
+            img {
+                width: 80px;
+                height: auto;
+                border-radius: 8px;
+                object-fit: cover;
+            }
+
+            .product-info {
+                p {
+                    margin: 0;
+                }
+
+                strong {
+                    font-size: 16px;
+                }
+            }
+        }
 
         .form-control {
             border: none;
+            background-color: #f9f9f9;
         }
     }
 
@@ -29,7 +56,63 @@
         margin-top: 30px;
 
         h5 {
-            font-size: 30px;
+            font-size: 24px;
+            margin-bottom: 15px;
+        }
+
+        p {
+            margin: 5px 0;
+        }
+    }
+
+    @media (max-width: 768px) {
+        .order-items {
+            padding: 15px;
+
+            .card-body {
+                flex-direction: column;
+                align-items: flex-start !important;
+
+                .d-flex {
+                    flex-direction: column;
+                    gap: 10px;
+                }
+
+                .product-info {
+                    margin-left: 0 !important;
+                }
+
+                .btn {
+                    width: 100%;
+                }
+
+                .input-group {
+                    width: 100% !important;
+                }
+            }
+        }
+
+        .order-summary {
+            background-color: #fff;
+            border: 1px solid #ddd;
+            border-radius: 12px;
+            padding: 20px;
+            margin-top: 20px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+
+            h5 {
+                font-size: 20px;
+                margin-bottom: 15px;
+            }
+
+            p {
+                margin: 6px 0;
+                font-size: 16px;
+
+                &.fs-5 {
+                    font-size: 18px;
+                }
+            }
         }
     }
 }

@@ -6,24 +6,48 @@ import '../assets/styles/ProductDetail.scss';
 import ProductCard from '../components/ProductCard';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
-import axios from 'axios';
-import { API_PRODUCTS } from '../utils/Config';
+import productApi from '../api/productApi';
+import cartApi from '../api/cartApi';
+import { toast } from 'react-toastify';
+import { formatPrice } from '../utils/Data';
 
 const ProductDetail = () => {
     const { id } = useParams();
     const [product, setProduct] = useState(null);
     const [relatedProducts, setRelatedProducts] = useState([]);
+
     useEffect(() => {
-        axios.get(`${API_PRODUCTS}/${id}`)
+        // Lấy chi tiết sản phẩm theo ID
+        productApi.getProduct(id)
             .then(res => setProduct(res.data))
             .catch(err => console.error('Error fetching product:', err));
 
-        axios.get(API_PRODUCTS)
-            .then(res => setRelatedProducts(res.data.filter(p => p.id !== parseInt(id)).slice(0, 4)))
+        // Lấy danh sách sản phẩm liên quan
+        productApi.getAllProduct()
+            .then(res => {
+                const filtered = res.data.filter(p => p.id !== parseInt(id)).slice(0, 4);
+                setRelatedProducts(filtered);
+            })
             .catch(err => console.error('Error fetching related products:', err));
     }, [id]);
+
     if (!product) return <p className="text-center mt-5">Loading...</p>;
 
+    const addToCartHandler = async () => {
+        console.log("cliked");
+        const productData = {
+            productId: id,
+            quantity: 1,
+        }
+        try {
+            const response = await cartApi.addToCart(productData)
+            const message = response.data.message;
+            toast.success(message); // hiển thị thông báo từ backend
+        }
+        catch {
+            alert("Error while adding this product!");
+        }
+    };
     return (
         <div>
             <Header></Header>
@@ -58,13 +82,13 @@ const ProductDetail = () => {
                             <span className="text-muted ms-2">({product.rating} stars)</span>
                         </div>
                         <p>
-                            <span className="text-danger fw-bold">${product.price.toFixed(2)}</span>
+                            <span className="text-danger fw-bold">{formatPrice(product.price)}</span>
                         </p>
                         <p className="text-muted">{product.description}</p>
 
                         <div className="d-flex align-items-center mb-3">
                             <Form.Control type="number" defaultValue={1} style={{ width: '80px' }} />
-                            <Button variant="dark" className="ms-3">
+                            <Button variant="dark" className="ms-3" onClick={addToCartHandler} >
                                 <BsCart3 className="me-2" />
                                 Add to cart
                             </Button>
@@ -103,7 +127,7 @@ const ProductDetail = () => {
                             <ProductCard
                                 img={product.image}
                                 name={product.name}
-                                price={`$${product.price}`}
+                                price={`${formatPrice(product.price)}`}
                                 rating={product.rating}
                                 id={product.id}
                             />

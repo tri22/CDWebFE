@@ -1,13 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { Container, Row, Col, Form, Button } from 'react-bootstrap';
-import axios from 'axios';
-
 import '../assets/styles/Shop.scss';
 import ProductCard from '../components/ProductCard';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 import Slider from '../components/Slider';
-import { API_PRODUCTS } from '../utils/Config';
+import productApi from '../api/productApi';
+import { formatPrice } from '../utils/Data';
 
 const Shop = () => {
     const [products, setProducts] = useState([]);
@@ -19,11 +18,11 @@ const Shop = () => {
     const [priceLimits, setPriceLimits] = useState([0, 0]);
 
     const productsPerPage = 9;
-
     useEffect(() => {
-        axios.get(API_PRODUCTS)
+        productApi.getAllProduct()
             .then(({ data }) => {
                 setProducts(data);
+
                 setFilteredProducts(data);
 
                 if (data.length) {
@@ -85,20 +84,24 @@ const Shop = () => {
             <Header />
             <Slider />
             <Container className="my-5">
-                <Row className="m-4">
-                    <Col md={6}>
-                        <p>Showing {start + 1}–{Math.min(start + productsPerPage, filteredProducts.length)} of {filteredProducts.length} results</p>
+                <Row className="align-items-center gy-2 mb-4">
+                    <Col xs={12} md={6}>
+                        <p className="mb-0 text-center text-md-start">
+                            Showing {start + 1}–{Math.min(start + productsPerPage, filteredProducts.length)} of {filteredProducts.length} results
+                        </p>
                     </Col>
-                    <Col md={6} className="text-end d-flex justify-content-end align-items-center gap-3">
-                        <Form.Select className="w-auto">
-                            <option>Sort by popularity</option>
-                            <option>Sort by price</option>
-                        </Form.Select>
+                    <Col xs={12} md={6}>
+                        <div className="d-flex justify-content-center justify-content-md-end">
+                            <Form.Select className="w-auto">
+                                <option>Sort by popularity</option>
+                                <option>Sort by price</option>
+                            </Form.Select>
+                        </div>
                     </Col>
                 </Row>
 
                 <Row>
-                    <Col md={3}>
+                    <Col xs={12} md={4} lg={3} className="mb-4">
                         <h6 className="fw-bold mb-3">Category</h6>
                         {renderFilterList(countBy('category'), setSelectedCategory, selectedCategory)}
 
@@ -112,7 +115,8 @@ const Shop = () => {
                             value={priceRange[1]}
                             onChange={handlePriceChange}
                         />
-                        <p>Price ${priceLimits[0]} - ${priceRange[1]}</p>
+
+                        <p>{formatPrice(priceLimits[0])} - {formatPrice(priceRange[1])}</p>
 
                         <Button variant="dark" size="sm" onClick={handleFilter}>Filter</Button>
                     </Col>
@@ -125,7 +129,7 @@ const Shop = () => {
                                         id={id}
                                         img={image}
                                         name={name}
-                                        price={`$${price}`}
+                                        price={`${formatPrice(price)}`}
                                         rating={rating}
                                     />
                                 </Col>

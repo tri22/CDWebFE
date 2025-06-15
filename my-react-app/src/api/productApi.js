@@ -1,14 +1,17 @@
 import axiosInstance from "./axiosInstance";
 
-const productApi={
-    getAllProduct:()=>{
+const productApi = {
+    getAllProduct: () => {
         return axiosInstance.get("/products")
     },
-    deleteProduct:(productId)=>{
+    getProduct: (productId) => {
+        return axiosInstance.get(`/products/${productId}`)
+    },
+    deleteProduct: (productId) => {
         return axiosInstance.delete(`/products/delete/${productId}`)
     },
-    updateProduct:(productId,data)=>{
-        return axiosInstance.put(`products/update/${productId}`,data)
+    updateProduct: (productId, data) => {
+        return axiosInstance.put(`products/update/${productId}`, data)
     }
 }
 export default productApi;
