@@ -1,158 +1,187 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Container, Row, Col, Card, Table, Button, Form, InputGroup } from 'react-bootstrap';
 import { Pencil, Trash, Check } from 'react-bootstrap-icons';
 import Footer from '../components/Footer';
 import Header from '../components/Header';
 import '../assets/styles/OrderDetail.scss';
-
-const sampleOrderDetail = {
-    id: 1,
-    status: 'no-paid',
-    user: {
-        fullName: 'Nguyen Van A',
-        email: 'a@gmail.com',
-        phone: '0901234567',
-        birthday: '1995-06-15',
-        address: '123 ABC Street',
-    },
-    totalPrice: 50,
-    totalQuantity: 3,
-    orderDate: '2024-05-10',
-    shippingFee: 3,
-    note: 'Deliver during working hours',
-    paymentMethod: { name: 'Cash on Delivery' },
-    details: [
-        {
-            id: 1,
-            product: {
-                name: 'Sofa Da Iris',
-                price: 20,
-                category: 'Sofa',
-                color: 'Blue',
-                image: 'https://jangin.vn/wp-content/uploads/2021/12/iris-2024-22222.jpg',
-            },
-            quantity: 1,
-        },
-        {
-            id: 2,
-            product: {
-                name: 'Sofa Da Iris',
-                price: 15,
-                category: 'Sofa',
-                color: 'Black',
-                image: 'https://jangin.vn/wp-content/uploads/2021/12/iris-2024-22222.jpg',
-            },
-            quantity: 2,
-        },
-    ],
-};
+import orderApi from '../api/orderApi';
+import { toast } from 'react-toastify';
+import { useParams } from 'react-router-dom'; // thêm vào nếu chưa có
+import { formatPrice } from '../utils/Data';
 
 export default function OrderDetail() {
-    const [order, setOrder] = useState(sampleOrderDetail);
+    const [order, setOrder] = useState(null);
     const [editingNote, setEditingNote] = useState(false);
+    const [note, setNote] = useState('');
     const [editingUser, setEditingUser] = useState(false);
-    const [note, setNote] = useState(order.note);
-    const [user, setUser] = useState(order.user);
+    const [user, setUser] = useState({
+        username: '',
+        fullName: '',
+        birthday: '',
+        address: '',
+        email: '',
+        phone: ''
+    });
+    // const [loadingPayment, setLoadingPayment] = useState(false);
 
-    const handleQuantityChange = (id, delta) => {
-        const newDetails = order.details.map((item) => {
-            if (item.id === id) {
-                const newQty = Math.max(1, item.quantity + delta);
-                return { ...item, quantity: newQty };
+    const { id } = useParams();
+
+    useEffect(() => {
+        const fetchOrder = async () => {
+            try {
+                const response = await orderApi.getOrderById(id);
+                const result = response.data.result;
+
+                setOrder(result);
+                setNote(result.note || '');
+
+                setUser({
+                    username: result.userResponse.username || '',
+                    fullName: result.userResponse.fullName || '',
+                    birthday: result.userResponse.birthday || '',
+                    address: result.userResponse.address || '',
+                    email: result.userResponse.email || '',
+                    phone: result.userResponse.phone || ''
+                });
+            } catch (error) {
+                toast.error("Không thể tải thông tin đơn hàng");
             }
-            return item;
-        });
+        };
+        fetchOrder();
+    }, [id]);
 
-        const totalQuantity = newDetails.reduce((sum, item) => sum + item.quantity, 0);
-        const totalPrice = newDetails.reduce((sum, item) => sum + item.quantity * item.product.price, 0);
+    // const handleCheckout = async () => {
+    //     if (!order) {
+    //         toast.error("Không tìm thấy thông tin đơn hàng");
+    //         return;
+    //     }
 
-        setOrder({ ...order, details: newDetails, totalPrice, totalQuantity });
-    };
+    //     setLoadingPayment(true);
+    //     try {
+    //         // Kiểm tra dữ liệu trước khi gửi
+    //         if (!order.id || !order.totalPrice) {
+    //             throw new Error("Dữ liệu đơn hàng không hợp lệ: Thiếu orderId hoặc totalPrice");
+    //         }
 
-    const handleDeleteItem = (id) => {
-        const newDetails = order.details.filter(item => item.id !== id);
-        const totalQuantity = newDetails.reduce((sum, item) => sum + item.quantity, 0);
-        const totalPrice = newDetails.reduce((sum, item) => sum + item.quantity * item.product.price, 0);
-        setOrder({ ...order, details: newDetails, totalPrice, totalQuantity });
-    };
+    //         // Gửi yêu cầu tạo URL thanh toán VNPay
+    //         const paymentData = {
+    //             orderId: order.id,
+    //             amount: order.totalPrice, // Đảm bảo totalPrice là VND
+    //             orderInfo: `Thanh toán đơn hàng #${order.id}`,
+    //             returnUrl: `${window.location.origin}/payment-result`
+    //         };
+
+    //         console.log("Gửi yêu cầu thanh toán:", paymentData); // Debug dữ liệu gửi đi
+
+    //         const response = await orderApi.createVNPayPayment(paymentData);
+    //         console.log("Phản hồi từ server:", response); // Debug phản hồi
+
+    //         const paymentUrl = response.data?.paymentUrl;
+
+    //         if (paymentUrl) {
+    //             window.location.href = paymentUrl;
+    //         } else {
+    //             toast.error("Không nhận được URL thanh toán từ server");
+    //         }
+    //     } catch (error) {
+    //         console.error("Lỗi thanh toán VNPay:", error.response || error.message || error);
+    //         toast.error(error.response?.data?.message || "Lỗi khi xử lý thanh toán VNPay");
+    //     } finally {
+    //         setLoadingPayment(false);
+    //     }
+    // };
 
     const renderActionButtons = () => {
-        if (order.status === 'no-paid') {
+        if (order.status === 'NO_PAID') {
             return (
                 <>
-                    <Button variant="success" className="me-2">Checkout</Button>
+                    <Button
+                        variant="success"
+                        className="me-2"
+                    // onClick={handleCheckout}
+                    // disabled={loadingPayment}
+                    >
+                        {/* {loadingPayment ? 'Đang xử lý...' : 'Checkout'} */}
+                        checkout
+                    </Button>
                     <Button variant="danger">Cancel Order</Button>
                 </>
             );
         }
-        if (order.status === 'on-shipping') {
+        if (order.status === 'ON_SHIPPING') {
             return <Button variant="danger">Cancel Order</Button>;
         }
         return null;
     };
+
+    const handleSave = async () => {
+        try {
+            const updatedData = {
+                note: note,
+                user: {
+                    fullName: user.fullName,
+                    birthday: user.birthday,
+                    address: user.address,
+                    email: user.email,
+                    phone: user.phone,
+                },
+            };
+            await orderApi.updateOrder(id, updatedData);
+            toast.success("Cập nhật đơn hàng thành công");
+            setEditingNote(false);
+            setEditingUser(false);
+        } catch (error) {
+            toast.error("Cập nhật thất bại");
+        }
+    };
+
+    if (!order) return <p>Đang tải đơn hàng...</p>;
 
     return (
         <div>
             <Header />
             <Container className="py-4 order-detail-container">
                 <Row>
-                    {/* Left Side */}
                     <Col md={8}>
                         <h4 className='order-id'>Order ID: #{order.id}</h4>
                         <p>Order Date: {order.orderDate}</p>
+                        <p>Note: {order.note}</p>
+                        <p>Payment Method: {order.paymentMethod}</p>
+                        <p>Shipping Fee: {formatPrice(order.shippingFee)}</p>
                         <div className='order-items'>
                             <h5><strong>Order Items</strong></h5>
                             <p className='order-status'>{order.status}</p>
                             {order.details.map((item) => (
                                 <Card key={item.id} className="mb-3">
-                                    <Card.Body className="d-flex align-items-center justify-content-between">
+                                    <Card.Body className="d-flex flex-wrap justify-content-between align-items-center gap-3">
                                         <div className='d-flex'>
                                             <img src={item.product.image} alt="product" width={100} />
-                                            <div className='d-flex flex-column'>
-                                                <p>{item.product.category}</p>
+                                            <div className='product-info d-flex flex-column ms-3'>
+                                                <p>{item.product.category.name}</p>
                                                 <p><strong>{item.product.name}</strong></p>
                                                 <p>Color: {item.product.color}</p>
-
                                             </div>
                                         </div>
-                                        <div className='d-flex align-items-center'>
-                                            <div className="ms-3 flex-grow-1 d-flex">
-                                                <p className='mx-3 align-content-center'>${item.product.price}</p>
-                                                <InputGroup className="" style={{ width: '120px', marginRight: "20px" }}>
-                                                    <Button variant="" onClick={() => handleQuantityChange(item.id, -1)}>-</Button>
-                                                    <Form.Control readOnly className='text-center' value={item.quantity} />
-                                                    <Button variant="" onClick={() => handleQuantityChange(item.id, 1)}>+</Button>
-                                                </InputGroup>
+                                        <div className="d-flex align-items-center gap-3 flex-wrap">
+                                            <div className="ms-3 flex-grow-1">
+                                                <p className='mb-1'>Quantity: {item.quantity}</p>
+                                                <p className='mb-0'><strong>Total: {formatPrice(item.product.price * item.quantity)}</strong></p>
                                             </div>
-                                            <Button variant="outline-danger" className='d-flex align-items-center' onClick={() => handleDeleteItem(item.id)}>
-                                                <p><strong>${(item.product.price * item.quantity).toFixed(2)}</strong></p>
-                                                <Trash />
-                                            </Button>
                                         </div>
                                     </Card.Body>
                                 </Card>
                             ))}
                         </div>
-
-                        <div className='order-summary'>
-                            <h5><strong>Order Summary</strong></h5>
-                            <p><strong>Subtotal:</strong> ${(order.totalPrice - order.shippingFee + 1).toFixed(2)}</p>
-                            <p><strong>Total Items:</strong> {order.totalQuantity}</p>
-                            <p><strong>Order Total:</strong> ${(order.totalPrice).toFixed(2)}</p>
-                            <p><strong>Discount:</strong> -$1.00</p>
-                            <p><strong>New Customer:</strong> Yes</p>
-                            <p><strong>Shipping Fee:</strong> ${order.shippingFee.toFixed(2)}</p>
-                            <p><strong>Total:</strong> ${(order.totalPrice).toFixed(2)}</p>
-                        </div>
                     </Col>
 
-                    {/* Right Side */}
                     <Col md={4}>
-                        {/* Notes */}
                         <Card className="mb-3">
                             <Card.Header>
                                 Notes
-                                <span className="float-end" onClick={() => setEditingNote(!editingNote)} style={{ cursor: 'pointer' }}>
+                                <span
+                                    className="float-end"
+                                    onClick={editingNote ? handleSave : () => setEditingNote(true)}
+                                    style={{ cursor: 'pointer' }}>
                                     {editingNote ? <Check /> : <Pencil />}
                                 </span>
                             </Card.Header>
@@ -167,15 +196,25 @@ export default function OrderDetail() {
                             </Card.Body>
                         </Card>
 
-                        {/* Customer Info */}
                         <Card className="mb-3">
                             <Card.Header>
-                                Customer
-                                <span className="float-end" onClick={() => setEditingUser(!editingUser)} style={{ cursor: 'pointer' }}>
+                                Customer Info
+                                <span
+                                    className="float-end"
+                                    onClick={editingUser ? handleSave : () => setEditingUser(true)}
+                                    style={{ cursor: 'pointer' }}>
                                     {editingUser ? <Check /> : <Pencil />}
                                 </span>
                             </Card.Header>
                             <Card.Body>
+                                <Form.Group>
+                                    <Form.Label>Username</Form.Label>
+                                    <Form.Control
+                                        disabled={true}
+                                        value={user.username}
+                                        onChange={(e) => setUser({ ...user, username: e.target.value })}
+                                    />
+                                </Form.Group>
                                 <Form.Group className="mb-2">
                                     <Form.Label>Full Name</Form.Label>
                                     <Form.Control
@@ -204,6 +243,7 @@ export default function OrderDetail() {
                                 <Form.Group className="mb-2">
                                     <Form.Label>Email</Form.Label>
                                     <Form.Control
+                                        type="email"
                                         disabled={!editingUser}
                                         value={user.email}
                                         onChange={(e) => setUser({ ...user, email: e.target.value })}
@@ -220,9 +260,19 @@ export default function OrderDetail() {
                             </Card.Body>
                         </Card>
 
-                        {/* Actions */}
                         <div className="text-center">
                             {renderActionButtons()}
+                        </div>
+
+                        <div className='order-summary card mt-3 p-3'>
+                            <h5><strong>Order Summary</strong></h5>
+                            <p><strong>Subtotal:</strong> {formatPrice(order.totalPrice - order.shippingFee + 1)}</p>
+                            <p><strong>Total Items:</strong> {order.totalQuantity}</p>
+                            <p><strong>Order Total:</strong> {formatPrice(order.totalPrice)}</p>
+                            <p><strong>Discount:</strong> -formatPrice(1.00)</p>
+                            <p><strong>New Customer:</strong> Yes</p>
+                            <p><strong>Shipping Fee:</strong> {formatPrice(order.shippingFee)}</p>
+                            <p className="fw-bold fs-5"><strong>Total:</strong> {formatPrice(order.totalPrice)}</p>
                         </div>
                     </Col>
                 </Row>

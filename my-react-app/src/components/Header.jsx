@@ -26,6 +26,11 @@ const Header = () => {
         navigate("/login"); // Optional: chuyển hướng sau khi logout
     };
 
+    const goToProfile = () => {
+        resetAuth(); // Gọi đúng hàm resetAuth
+        navigate("/Profile"); // Optional: chuyển hướng sau khi logout
+    };
+
     return (
         <div id='header'>
             <Navbar expand="lg" variant="light" className='fixed-top shadow-sm py-3'>
@@ -62,11 +67,17 @@ const Header = () => {
                                 </Dropdown.Toggle>
                                 {isLoggedIn ? (
                                     <Dropdown.Menu>
-                                        <Dropdown.Item as={Link} to="/profile">
+                                        <Dropdown.Item as={Link} to="/Profile">
+                                            {/* Hiển thị thông tin người dùng */}
                                             Profile
                                         </Dropdown.Item>
+                                        <Dropdown.Item as={Link} to="/AdminHome">
+                                            {/* Hiển thị thông tin người dùng */}
+                                            Admin
+                                        </Dropdown.Item>                            
                                         <Dropdown.Item as={Link} to="/order">
                                             Order
+
                                         </Dropdown.Item>
                                         <Dropdown.Item onClick={logout}>
                                             Logout

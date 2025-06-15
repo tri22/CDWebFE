@@ -12,10 +12,10 @@ const ProductCard = ({ id, img, name, price, rating }) => {
         navigate(`/product/${id}`);
     };
 
-    const addToCartlHandler = async () => {
+    const addToCartHandler = async () => {
         const productData = {
             productId: id,
-            quantity: 1
+            quantity: 1,
         }
         try {
             const response = await cartApi.addToCart(productData)
@@ -28,36 +28,37 @@ const ProductCard = ({ id, img, name, price, rating }) => {
     };
 
     return (
-        <div className="product-card p-2 bg-light" onClick={viewDetailHandler}>
-            <img src={img} alt={name} className="img-fluid mb-2" />
-            <div className="text-center">
+        <div className="product-card p-3 bg-light d-flex flex-column h-100">
+            <div className="img-container" onClick={viewDetailHandler}>
+                <img src={img} alt={name} className="img-fluid " />
+            </div>
+            <div className="product-info text-center mt-3 flex-grow-1 d-flex flex-column justify-content-between">
                 <div className="stars mb-1">
                     {'★'.repeat(rating)}
                     {'☆'.repeat(5 - rating)}
                 </div>
                 <div className="fw-bold mb-1">{name}</div>
                 <div className="price fw-bold">{price}</div>
-                <div className="d-flex justify-content-around">
+
+                <div className="d-flex flex-column flex-sm-row justify-content-center gap-2 mt-3">
                     <Button
-                        className=" mt-3 "
                         onClick={(e) => {
                             e.stopPropagation();
-                            addToCartlHandler();
+                            addToCartHandler();
                         }}
-                        style={{ alignSelf: 'center' }}
-                        variant="outline-dark"
+                        variant="dark"
+                        className="flex-fill"
                     >
                         ADD TO CART
                     </Button>
 
                     <Button
-                        className=" mt-3 "
                         onClick={(e) => {
                             e.stopPropagation();
                             console.log("buy now");
                         }}
-                        style={{ alignSelf: 'center' }}
-                        variant="outline-dark"
+                        variant="dark"
+                        className="flex-fill"
                     >
                         BUY NOW
                     </Button>

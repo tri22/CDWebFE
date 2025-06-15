@@ -2,7 +2,7 @@ import { Container, Row, Col, Form, Button } from "react-bootstrap";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 import '../assets/styles/Contact.scss'; // import file CSS tùy chỉnh
-
+import Slider from '../components/Slider';
 export default function Contact() {
 
 
@@ -47,8 +47,8 @@ export default function Contact() {
     return (
         <div className="">
             <Header />
+            <Slider/>
             <div  className=" ">
-                <img src="/img/dishes.png" alt="dishes" className="img-fluid w-100" />
                 <ContactInfo />
                 <div className="px-5 mx-5">
                     <ContactForm />

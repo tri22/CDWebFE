@@ -5,10 +5,17 @@ const userApi ={
         return axiosInstance.post(`/users`,data)
     },
 
-    updateUser:(data)=>{
-        return axiosInstance.put(`/users/"/update/${userId}`,data)
+    updateUser:(userId,data)=>{
+        return axiosInstance.put(`/users/update/${userId}`,data)
     },
 
+    getAllUser:()=>{
+        return axiosInstance.get(`/users/all`)
+    },
+
+    deleteUser:(userId)=>{
+        return axiosInstance.delete(`/users/delete/${userId}`)
+    },
   
 }
 export default userApi;

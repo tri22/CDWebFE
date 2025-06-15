@@ -21,6 +21,14 @@ import Login from './pages/Login.jsx';
 import { AuthProvider } from './api/AuthContext.jsx'
 import Order from './pages/Order.jsx';
 import OrderDetail from './pages/OrderDetail.jsx';
+import Profile from './pages/Profile.jsx';
+import AdminHome from './pages/AdminHome.jsx'
+import OrderManagement from './pages/OrderManagement.jsx'
+import UserManagement from './pages/UserManagement.jsx'
+import ProductManagement from './pages/ProductManagement.jsx'
+import ProductStock from './pages/ProductStock.jsx'
+import VoucherManagement from './pages/VoucherManagement.jsx'
+import PaymentResult from './pages/PaymentResult.jsx';
 
 function App() {
     return (
@@ -29,16 +37,26 @@ function App() {
                 <>
                     <Routes>
                         <Route path="/" element={<Home />} />
-                        <Route path="/shop" element={<Shop />} />
-                        <Route path="/product/:id" element={<ProductDetail />} />
                         <Route path="/About" element={<About />} />
                         <Route path="/Blog" element={<Blog />} />
                         <Route path="/blogDetail" element={<BlogDetail />} />
-                        <Route path="/contact" element={<Contact />} />
                         <Route path="/cart" element={<Cart />} />
+                        <Route path="/contact" element={<Contact />} />
                         <Route path="/login" element={<Login />} />
                         <Route path="/order" element={<Order />} />
                         <Route path="/order/:id" element={<OrderDetail />} />
+                        <Route path="/payment-result" element={<PaymentResult />} />
+                        <Route path="/product/:id" element={<ProductDetail />} />
+                        <Route path="/Profile" element={<Profile />} />
+                        <Route path="/shop" element={<Shop />} />
+
+                        {/* Admin pages */}
+                        <Route path="/AdminHome" element={<AdminHome />} />
+                        <Route path="/OrderManagement" element={<OrderManagement />} />
+                        <Route path="/ProductManagement" element={<ProductManagement />} />
+                        <Route path="/ProductStock" element={<ProductStock />} />
+                        <Route path="/UserManagement" element={<UserManagement />} />
+                        <Route path="/VoucherManagement" element={<VoucherManagement />} />
                         <Route path="*" element={<Navigate to="/" replace />} />
                     </Routes>
                     <ToastContainer position="top-right" autoClose={3000} />
