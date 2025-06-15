@@ -16,10 +16,6 @@ const orderApi = {
         return axiosInstance.delete(`/order/delete/${id}`)
     },
 
-    getAllOrder: () => {
-        return axiosInstance.get(`/order/all`)
-    },
-
     getOrderByUserId: (userId) => {
         return axiosInstance.get(`/order/get-order/${userId}`)
     },
@@ -31,5 +27,37 @@ const orderApi = {
     createVNPayPayment: (data) => axiosInstance.post('/api/payment/vnpay/create', data),
 
     verifyVNPayPayment: (data) => axiosInstance.get('/api/payment/vnpay/return', { data }),
+
+    getAllOrder: () => {
+        return axiosInstance.get(`/order/all`)
+    },
+
+    bestSellingProduct: (date) => {
+        return axiosInstance.get(`order/week-best-selling/${date}`)
+    },
+
+    weekTotalOrder: (date) => {
+        return axiosInstance.get(`order/week-total/${date}`)
+    },
+
+    weekTotalRevenue: (date) => {
+        return axiosInstance.get(`order/week-sale/${date}`)
+    },
+
+    weekCancelledOrder: (date) => {
+        return axiosInstance.get(`order/week-cancelled/${date}`)
+    },
+
+    getWeeklySales: (date) => {
+        return axiosInstance.get(`order/revenue/weekly/${date}`)
+    },
+
+    getMonthlySales: (date) => {
+        return axiosInstance.get(`order/revenue/monthly/${date}`)
+    },
+
+    getYearlySales: (date) => {
+        return axiosInstance.get(`order/revenue/yearly/${date}`)
+    }
 }
 export default orderApi;
