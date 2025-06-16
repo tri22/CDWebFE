@@ -44,8 +44,10 @@ const VoucherManagement = () => {
             const response = await adminApi.getAllVoucher();
             setVoucher(response.data.result);
         } catch (err) {
-            toast.error("Error loading vouchers");
-            console.error(err);
+            if (error.response) {
+                const errMessage = error.response.data?.message || 'Đã xảy ra lỗi';
+                toast.error(errMessage);
+            }
         }
     };
 
@@ -79,7 +81,9 @@ const VoucherManagement = () => {
             setEditMode(false);
             setEditingId(null);
             fetchVoucher();
+
         } catch (error) {
+
             if (error.response) {
                 const errMessage = error.response.data?.message || 'Đã xảy ra lỗi';
                 toast.error(errMessage);

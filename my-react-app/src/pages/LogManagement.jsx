@@ -8,6 +8,7 @@ import { FaArrowDown } from "react-icons/fa";
 import { GrPowerReset } from "react-icons/gr";
 import { useTranslation } from 'react-i18next';
 
+
 const LogManagement = () => {
     const [record, setRecord] = useState([])
     const { t, i18n } = useTranslation();
@@ -28,7 +29,9 @@ const LogManagement = () => {
             console.log(response.data.result)
             setRecord(response.data.result)
         } catch (err) {
+
             console.error("Error loading data", err);
+
 
         }
 
