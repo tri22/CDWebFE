@@ -79,9 +79,11 @@ const VoucherManagement = () => {
             setEditMode(false);
             setEditingId(null);
             fetchVoucher();
-        } catch (err) {
-            toast.error("Failed to save voucher.");
-            console.error("Error saving data", err);
+        } catch (error) {
+            if (error.response) {
+                const errMessage = error.response.data?.message || 'Đã xảy ra lỗi';
+                toast.error(errMessage);
+            }
         }
     };
 

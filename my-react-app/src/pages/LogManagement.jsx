@@ -29,12 +29,10 @@ const LogManagement = () => {
             setRecord(response.data.result)
         } catch (err) {
             console.error("Error loading data", err);
-            
+
         }
 
     }
-
-
 
     const handlePageChange = (pageNumber) => {
         setCurrentPage(pageNumber);
@@ -91,6 +89,13 @@ const LogManagement = () => {
     };
 
     const TableRender = ({ data }) => {
+        const safeParse = (jsonStr) => {
+            try {
+                return JSON.stringify(JSON.parse(jsonStr), null, 2);
+            } catch (e) {
+                return jsonStr; // Nếu không parse được thì hiển thị chuỗi gốc
+            }
+        };
         return (
             <div className="container mt-3">
                 <div className="table-responsive rounded border bg-white shadow-sm">
@@ -115,12 +120,12 @@ const LogManagement = () => {
                                     <td>{row.action}</td>
                                     <td>
                                         <pre style={{ textAlign: 'left' }}>
-                                            {JSON.stringify(JSON.parse(row.dataIn), null, 2)}
+                                            {safeParse(row.dataIn)}
                                         </pre>
                                     </td>
                                     <td>
                                         <pre style={{ textAlign: 'left' }}>
-                                            {JSON.stringify(JSON.parse(row.dataOut), null, 2)}
+                                            {safeParse(row.dataOut)}
                                         </pre>
                                     </td>
                                     <td>{row.date}</td>

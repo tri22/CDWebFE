@@ -151,7 +151,7 @@ const UserManagement = () => {
                                         </div>
                                         <div className="modal-footer">
                                             <Button variant="secondary" onClick={() => setShowModal(false)}>{t('userAdmin.cancel')}</Button>
-                                            <Button variant="primary" onClick={handleUpdateRole}>{t('userAdmin  .update')}</Button>
+                                            <Button variant="primary" onClick={handleUpdateRole}>{t('userAdmin.update')}</Button>
 
                                         </div>
                                     </div>

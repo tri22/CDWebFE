@@ -16,7 +16,7 @@ const Header = () => {
     const navigate = useNavigate();
     const location = useLocation();
     const currentPath = location.pathname;
-    const { user, isLoggedIn, resetAuth } = useAuth();
+    const { role, isLoggedIn, resetAuth } = useAuth();
 
     const isActive = (path) => currentPath === path;
 
@@ -92,7 +92,11 @@ const Header = () => {
                                 {isLoggedIn ? (
                                     <Dropdown.Menu>
                                         <Dropdown.Item as={Link} to="/Profile">{t('profile')}</Dropdown.Item>
-                                        <Dropdown.Item as={Link} to="/AdminHome">{t('admin')}</Dropdown.Item>
+                                        {role === "ADMIN" ? (
+                                            <Dropdown.Item as={Link} to="/AdminHome">
+                                                {t('admin')}
+                                            </Dropdown.Item>
+                                        ) : null}
                                         <Dropdown.Item as={Link} to="/order">{t('order')}</Dropdown.Item>
                                         <Dropdown.Item onClick={logout}>{t('logout')}</Dropdown.Item>
                                     </Dropdown.Menu>
