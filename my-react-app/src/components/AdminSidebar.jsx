@@ -31,7 +31,9 @@ const AdminSidebar = () => {
           className={`nav-item-custom d-flex align-items-center gap-2 py-2 px-3 rounded ${currentPath === item.link ? 'bg-blue-100 text-blue-600 fw-bold' : 'text-dark'}`}
         >
           <span className="text-lg py-2">{item.icon}</span>
-          <span>{item.label}</span>
+
+          <span>{t(`adminTitle.${item.key}`)}</span> {/* dịch từ file translation */}
+
         </Nav.Link>
       ))}
     </div>

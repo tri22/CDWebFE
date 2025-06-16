@@ -86,11 +86,13 @@ const UserManagement = () => {
                     <table className="table table-hover align-middle mb-0 text-center">
                         <thead className="table-light">
                             <tr>
-                                <th>NAME</th>
-                                <th>EMAIL</th>
-                                <th>PHONE</th>
-                                <th>BIRTHDAY</th>
-                                <th>ROLE</th>
+
+                                <th>{t('userAdmin.name')}</th>
+                                <th>{t('userAdmin.email')}</th>
+                                <th>{t('userAdmin.phone')}</th>
+                                <th>{t('userAdmin.birthday')}</th>
+                                <th>{t('userAdmin.role')}</th>
+
                                 <th></th>
                             </tr>
                         </thead>
@@ -124,7 +126,9 @@ const UserManagement = () => {
                         <AdminSidebar></AdminSidebar>
                     </Col>
                     <Col md={10} style={{ minHeight: "100vh" }}>
-                        <AdminNav title={'User Management'}></AdminNav>
+
+                        <AdminNav title={t('userAdmin.title')} />
+
                         <UserRender data={currentUserList}></UserRender>
                         <PaginationCom currentPage={currentPage} onPageChange={handlePageChange} totalPages={totalPages}></PaginationCom>
                         {showModal && (
@@ -132,23 +136,21 @@ const UserManagement = () => {
                                 <div className="modal-dialog">
                                     <div className="modal-content">
                                         <div className="modal-header">
-                                            <h5 className="modal-title">Edit User Role</h5>
+
+                                            <h5 className="modal-title">{t('userAdmin.editUserRole')}</h5>
                                             <button type="button" className="btn-close" onClick={() => setShowModal(false)}></button>
                                         </div>
                                         <div className="modal-body">
-                                            <label className="form-label">Select Role</label>
-                                            <select
-                                                className="form-select"
-                                                value={newRole}
-                                                onChange={(e) => setNewRole(e.target.value)}
-                                            >
-                                                <option value="ADMIN">ADMIN</option>
-                                                <option value="USER">USER</option>
+                                            <label className="form-label">{t('userAdmin.selectRole')}</label>
+                                            <select className="form-select" value={newRole} onChange={(e) => setNewRole(e.target.value)}>
+                                                <option value="ADMIN">{t('userAdmin.admin')}</option>
+                                                <option value="USER">{t('userAdmin.user')}</option>
                                             </select>
                                         </div>
                                         <div className="modal-footer">
-                                            <Button variant="secondary" onClick={() => setShowModal(false)}>Cancel</Button>
-                                            <Button variant="primary" onClick={handleUpdateRole}>Update</Button>
+                                            <Button variant="secondary" onClick={() => setShowModal(false)}>{t('userAdmin.cancel')}</Button>
+                                            <Button variant="primary" onClick={handleUpdateRole}>{t('userAdmin  .update')}</Button>
+
                                         </div>
                                     </div>
                                 </div>

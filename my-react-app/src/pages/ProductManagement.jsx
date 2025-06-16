@@ -88,12 +88,14 @@ const ProductManagement = () => {
                     <table className="table table-hover align-middle mb-0 text-center">
                         <thead className="table-light">
                             <tr>
-                                <th>NAME</th>
-                                <th>PRICE</th>
-                                <th>CATEGORY</th>
-                                <th>IMAGE</th>
-                                <th>DESCRIPTION</th>
-                                <th>RATING</th>
+
+                                <th>{t("productAdmin.name")}</th>
+                                <th>{t("productAdmin.price")}</th>
+                                <th>{t("productAdmin.category")}</th>
+                                <th>{t("productAdmin.image")}</th>
+                                <th>{t("productAdmin.description")}</th>
+                                <th>{t("productAdmin.rating")}</th>
+
                                 <th></th>
                             </tr>
                         </thead>
@@ -101,7 +103,9 @@ const ProductManagement = () => {
                             {data.map((row, index) => (
                                 <tr key={index}>
                                     <td className="fw-semibold">{row.name}</td>
-                                    <td>{formatPrice(row.price)}</td>
+
+                                    <td>{t("currency", { value: row.price })}</td>
+
                                     <td>{row.category.name}</td>
                                     <td>
                                         <img src={row.image} alt="product" style={{ height: "50px", objectFit: "cover" }} />
@@ -133,7 +137,9 @@ const ProductManagement = () => {
                         <AdminSidebar />
                     </Col>
                     <Col md={10} style={{ minHeight: "100vh" }}>
-                        <AdminNav title={"Product Management"} />
+
+                        <AdminNav title={t("productAdmin.title")} />
+
                         <TableRender data={currentProductList} />
                         <PaginationCom
                             currentPage={currentPage}

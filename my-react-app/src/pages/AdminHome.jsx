@@ -1,22 +1,19 @@
 import React, { useEffect, useState } from 'react';
 import { useAuth } from '../api/AuthContext';
 import { Col, Row, Card, Form, Container } from 'react-bootstrap';
-import { FaBan, FaBox, FaChartLine, FaClock, FaArrowUp, FaArrowDown } from 'react-icons/fa';
-import AdminSidebar from '../components/AdminSidebar';
-import AdminNav from '../components/AdminNav';
+
 import {
-    LineChart,
-    Line,
-    XAxis,
-    YAxis,
-    Tooltip,
-    ResponsiveContainer,
-    CartesianGrid,
-    Area,
-    AreaChart,
+    FaBan, FaBox, FaChartLine, FaArrowUp, FaArrowDown,
+} from 'react-icons/fa';
+import {
+    AreaChart, Area, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid,
 } from 'recharts';
 import orderApi from '../api/orderApi';
 import dayjs from 'dayjs';
+import { useTranslation } from 'react-i18next';
+import AdminSidebar from '../components/AdminSidebar';
+import AdminNav from '../components/AdminNav';
+
 
 const Home = () => {
     const { user, isLoggedIn } = useAuth();
@@ -120,135 +117,44 @@ const Home = () => {
 
 
 
-    const DashboardStats = () => {
-        return (
-            <Row className="g-4 my-4">
-                <Col md={6} lg={3} className='m-0'>
-                    <Card className="shadow-sm border-0 rounded-4 h-100">
-                        <Card.Body className="d-flex flex-column gap-3">
-                            <div className="d-flex justify-content-between align-items-center">
-                                <div className="fw-bold mb-0">Total Order</div>
-                                <div className="p-2 rounded-3 d-flex align-items-center justify-content-center bg-warning">
-                                    <FaBox size={32} className="text-white" />
-                                </div>
-                            </div>
-                            <h3 className="fw-bold mb-0">{dashboardData.weekOrder}</h3>
-                            <div className="d-flex align-items-center gap-2">
-                                <FaArrowUp className="text-success" />
-                                <span className="fw-semibold text-success">+1.3%</span>
-                                <span className="text-muted small">Up from past week</span>
-                            </div>
-                        </Card.Body>
-                    </Card>
+
+
+    const SalesChart = () => (
+        <Card className="shadow-sm border-0 rounded-4 p-5 mt-4">
+            <Row className="align-items-center mb-3">
+                <Col>
+                    <h5 className="fw-bold mb-0">{t("adminHome.salesDetails")}</h5>
+
                 </Col>
+            <ResponsiveContainer width="100%" height={300}>
+                <AreaChart data={chartData}>
+                    <defs>
+                        <linearGradient id="colorBlue" x1="0" y1="0" x2="0" y2="1">
+                            <stop offset="5%" stopColor="#4e7cf3" stopOpacity={0.4} />
+                            <stop offset="95%" stopColor="#4e7cf3" stopOpacity={0} />
+                        </linearGradient>
+                    </defs>
+                    <XAxis dataKey="name" tick={{ fontSize: 12 }} />
+                    <YAxis
+                        tickFormatter={(val) => t("currency", { value: val })}
+                        tick={{ fontSize: 12 }}
+                    />
+                    <Tooltip formatter={(val) => t("currency", { value: val.toFixed(2) })} />
+                    <CartesianGrid strokeDasharray="3 3" vertical={false} />
+                    <Area
+                        type="monotone"
+                        dataKey="value"
+                        stroke="#4e7cf3"
+                        fillOpacity={1}
+                        fill="url(#colorBlue)"
+                        dot={{ r: 3 }}
+                        activeDot={{ r: 6 }}
+                    />
+                </AreaChart>
+            </ResponsiveContainer>
+        </Card>
+    );
 
-                <Col md={6} lg={3} className='m-0'>
-                    <Card className="shadow-sm border-0 rounded-4 h-100">
-                        <Card.Body className="d-flex flex-column gap-3">
-                            <div className="d-flex justify-content-between align-items-center">
-                                <div className="fw-bold mb-0">Total Sales</div>
-                                <div className="p-2 rounded-3 d-flex align-items-center justify-content-center bg-success">
-                                    <FaChartLine size={32} className="text-white" />
-                                </div>
-                            </div>
-                            <h3 className="fw-bold mb-0">${dashboardData.weekSale}</h3>
-                            <div className="d-flex align-items-center gap-2">
-                                <FaArrowDown className="text-danger" />
-                                <span className="fw-semibold text-danger">-4.3%</span>
-                                <span className="text-muted small">Down from past week</span>
-                            </div>
-                        </Card.Body>
-                    </Card>
-                </Col>
-
-                <Col md={6} lg={3} className='m-0'>
-                    <Card className="shadow-sm border-0 rounded-4 h-100">
-                        <Card.Body className="d-flex flex-column gap-3">
-                            <div className="d-flex justify-content-between align-items-center">
-                                <div className="fw-bold mb-0">Best week's selling</div>
-                            </div>
-                            <div className="p-2 rounded-3 d-flex align-items-center justify-content-center">
-                                <img src={dashboardData.bestSellingObject?.image || "Loading..."} alt="product" style={{ height: "80px", width: "100%", objectFit: "cover" }} />
-                            </div>
-                            <h4 className="fw-bold mb-0 ">
-                                {dashboardData.bestSellingObject?.name || "Loading..."}
-                            </h4>
-                        </Card.Body>
-                    </Card>
-                </Col>
-
-                <Col md={6} lg={3} className='m-0'>
-                    <Card className="shadow-sm border-0 rounded-4 h-100">
-                        <Card.Body className="d-flex flex-column gap-3">
-                            <div className="d-flex justify-content-between align-items-center">
-                                <div className="fw-bold mb-0">Cancelled Orders</div>
-                                <div className="p-2 rounded-3 d-flex align-items-center justify-content-center bg-danger">
-                                    <FaBan size={32} className="text-white" />
-                                </div>
-                            </div>
-                            <h3 className="fw-bold mb-0">{dashboardData.weekCancel}</h3>
-                            <div className="d-flex align-items-center gap-2">
-                                <FaArrowUp className="text-success" />
-                                <span className="fw-semibold text-success">+8.5%</span>
-                                <span className="text-muted small">Up from past week</span>
-                            </div>
-                        </Card.Body>
-                    </Card>
-                </Col>
-            </Row >
-        );
-    };
-
-    const SalesChart = () => {
-        return (
-            <Card className="shadow-sm border-0 rounded-4 p-5 mt-4">
-                <Row className="align-items-center mb-3">
-                    <Col>
-                        <h5 className="fw-bold mb-0">Sales Details</h5>
-                    </Col>
-                    <Col xs="auto">
-                        <Form.Select
-                            size="sm"
-                            value={time}
-                            onChange={(e) => selectTime(e.target.value)}
-                        >
-                            <option value="This Week">This Week</option>
-                            <option value="This month">This Month</option>
-                            <option value="This year">This Year</option>
-                        </Form.Select>
-
-                    </Col >
-                </Row >
-
-                <ResponsiveContainer width="100%" height={300}>
-                    <AreaChart data={chartData}>
-                        <defs>
-                            <linearGradient id="colorBlue" x1="0" y1="0" x2="0" y2="1">
-                                <stop offset="5%" stopColor="#4e7cf3" stopOpacity={0.4} />
-                                <stop offset="95%" stopColor="#4e7cf3" stopOpacity={0} />
-                            </linearGradient>
-                        </defs>
-                        <XAxis dataKey="name" tick={{ fontSize: 12 }} />
-                        <YAxis
-                            tickFormatter={(val) => `$${val}`}
-                            tick={{ fontSize: 12 }}
-                        />
-                        <Tooltip formatter={(val) => `$${val.toFixed(2)}`} />
-                        <CartesianGrid strokeDasharray="3 3" vertical={false} />
-                        <Area
-                            type="monotone"
-                            dataKey="value"
-                            stroke="#4e7cf3"
-                            fillOpacity={1}
-                            fill="url(#colorBlue)"
-                            dot={{ r: 3 }}
-                            activeDot={{ r: 6 }}
-                        />
-                    </AreaChart>
-                </ResponsiveContainer>
-            </Card >
-        );
-    };
 
     return (
         <div style={{ backgroundColor: '#F5F6FA' }}>
@@ -258,13 +164,11 @@ const Home = () => {
                         <AdminSidebar ></AdminSidebar>
                     </Col>
                     <Col md={10} style={{ minHeight: "100vh" }}>
-                        <div>
-                            <div>
-                                <AdminNav user={user} title={"Dashboard"}></AdminNav>
-                                <DashboardStats></DashboardStats>
-                            </div>
-                            <SalesChart />
-                        </div>
+
+                        <AdminNav user={user} title={t("adminTitle.dashboard")} />
+                        <DashboardStats />
+                        <SalesChart />
+
                     </Col>
                 </Row >
             </Container>

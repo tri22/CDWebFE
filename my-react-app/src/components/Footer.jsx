@@ -12,7 +12,7 @@ const Footer = () => {
     return (
         <div id="footer">
             <Container>
-                <h3 className='footer-title'>Soudemy</h3>
+                <h3 className='footer-title'>Furnix</h3>
 
                 <Row className="gy-4">
                     <Col xs={12} md={6} lg={3} className='first'>
