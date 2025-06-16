@@ -19,6 +19,14 @@ const adminApi = {
     updateVoucher:(id,data)=>{
         return axiosInstance.put(`/vouchers/update/${id}`,data)
     },
+
+    deleteVoucher:(id)=>{
+        return axiosInstance.delete(`/vouchers/delete/${id}`)
+    },
+
+    getAllLog:()=>{
+        return axiosInstance.get('/log/all')
+    }
     
 }
 export default adminApi;
