@@ -21,8 +21,8 @@ const Slider = () => {
                         />
                         <Carousel.Caption>
                             <div>
-                                <h3>ALL FOR YOUR HOME</h3>
-                                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Quidem officiis quasi aperiam neque dicta inventore explicabo fugit deserunt debitis a aliquid impedit odit libero, nulla delectus corporis ratione, id repellendus.</p>
+                                <h3></h3>
+                                <p></p>
                             </div>
                             <Button
                                 variant="primary"

@@ -88,11 +88,11 @@ const UserManagement = () => {
                     <table className="table table-hover align-middle mb-0 text-center">
                         <thead className="table-light">
                             <tr>
-                                <th>{t('user.name')}</th>
-                                <th>{t('user.email')}</th>
-                                <th>{t('user.phone')}</th>
-                                <th>{t('user.birthday')}</th>
-                                <th>{t('user.role')}</th>
+                                <th>{t('userAdmin.name')}</th>
+                                <th>{t('userAdmin.email')}</th>
+                                <th>{t('userAdmin.phone')}</th>
+                                <th>{t('userAdmin.birthday')}</th>
+                                <th>{t('userAdmin.role')}</th>
                                 <th></th>
                             </tr>
                         </thead>
@@ -126,7 +126,7 @@ const UserManagement = () => {
                         <AdminSidebar></AdminSidebar>
                     </Col>
                     <Col md={10} style={{ minHeight: "100vh" }}>
-                        <AdminNav title={t('user.title')} />
+                        <AdminNav title={t('userAdmin.title')} />
                         <UserRender data={currentUserList}></UserRender>
                         <PaginationCom currentPage={currentPage} onPageChange={handlePageChange} totalPages={totalPages}></PaginationCom>
                         {showModal && (
@@ -134,19 +134,19 @@ const UserManagement = () => {
                                 <div className="modal-dialog">
                                     <div className="modal-content">
                                         <div className="modal-header">
-                                            <h5 className="modal-title">{t('user.editUserRole')}</h5>
+                                            <h5 className="modal-title">{t('userAdmin.editUserRole')}</h5>
                                             <button type="button" className="btn-close" onClick={() => setShowModal(false)}></button>
                                         </div>
                                         <div className="modal-body">
-                                            <label className="form-label">{t('user.selectRole')}</label>
+                                            <label className="form-label">{t('userAdmin.selectRole')}</label>
                                             <select className="form-select" value={newRole} onChange={(e) => setNewRole(e.target.value)}>
-                                                <option value="ADMIN">{t('user.admin')}</option>
-                                                <option value="USER">{t('user.user')}</option>
+                                                <option value="ADMIN">{t('userAdmin.admin')}</option>
+                                                <option value="USER">{t('userAdmin.user')}</option>
                                             </select>
                                         </div>
                                         <div className="modal-footer">
-                                            <Button variant="secondary" onClick={() => setShowModal(false)}>{t('user.cancel')}</Button>
-                                            <Button variant="primary" onClick={handleUpdateRole}>{t('user.update')}</Button>
+                                            <Button variant="secondary" onClick={() => setShowModal(false)}>{t('userAdmin.cancel')}</Button>
+                                            <Button variant="primary" onClick={handleUpdateRole}>{t('userAdmin  .update')}</Button>
                                         </div>
                                     </div>
                                 </div>

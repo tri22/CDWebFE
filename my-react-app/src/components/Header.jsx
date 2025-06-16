@@ -63,6 +63,16 @@ const Header = () => {
                             </Nav.Link>
                         </Nav>
                         <div className="d-flex align-items-center gap-3">
+                            {/* Dropdown chọn ngôn ngữ */}
+                            <Dropdown>
+                                <Dropdown.Toggle variant="outline-dark" id="dropdown-language">
+                                    {i18n.language === 'en' ? 'English' : 'Tiếng Việt'}
+                                </Dropdown.Toggle>
+                                <Dropdown.Menu>
+                                    <Dropdown.Item onClick={() => changeLanguage('en')}>English</Dropdown.Item>
+                                    <Dropdown.Item onClick={() => changeLanguage('vi')}>Tiếng Việt</Dropdown.Item>
+                                </Dropdown.Menu>
+                            </Dropdown>
                             <div className="search-box d-flex align-items-center gap-2">
                                 <InputGroup className="d-none d-lg-flex search-input-group">
                                     <Form.Control className='text-dark' placeholder={t('search')} />
@@ -94,16 +104,7 @@ const Header = () => {
                                     </Dropdown.Menu>
                                 )}
                             </Dropdown>
-                            {/* Dropdown chọn ngôn ngữ */}
-                            <Dropdown>
-                                <Dropdown.Toggle variant="outline-dark" id="dropdown-language">
-                                    {i18n.language === 'en' ? 'English' : 'Tiếng Việt'}
-                                </Dropdown.Toggle>
-                                <Dropdown.Menu>
-                                    <Dropdown.Item onClick={() => changeLanguage('en')}>English</Dropdown.Item>
-                                    <Dropdown.Item onClick={() => changeLanguage('vi')}>Tiếng Việt</Dropdown.Item>
-                                </Dropdown.Menu>
-                            </Dropdown>
+
                         </div>
                     </Navbar.Collapse>
                 </Container>

@@ -70,7 +70,7 @@ const OrderManagement = () => {
         <Card className="shadow-sm border-0 bg-white text-center p-2">
           <div className="d-flex flex-row align-items-center gap-2">
             <CiFilter size={20} />
-            <span className="fw-semibold">{t("order.filter")}</span>
+            <span className="fw-semibold">{t("orderAdmin.filter")}</span>
           </div>
         </Card>
       </Col>
@@ -78,7 +78,7 @@ const OrderManagement = () => {
         <Col key={idx} md="2" className="p-0 me-1">
           <Card className="shadow-sm border-0 bg-white text-center p-2">
             <div className="d-flex flex-row align-items-center gap-2">
-              <span className="fw-semibold">{t(`order.${item.value.toLowerCase()}`)}</span>
+              <span className="fw-semibold">{t(`orderAdmin.${item.value.toLowerCase()}`)}</span>
               <FaArrowDown className="text-danger" size={14} />
             </div>
           </Card>
@@ -88,7 +88,7 @@ const OrderManagement = () => {
         <Card className="shadow-sm border-0 bg-white text-center p-2">
           <div className="d-flex flex-row align-items-center gap-2">
             <GrPowerReset size={18} />
-            <span className="fw-semibold">{t("order.reset")}</span>
+            <span className="fw-semibold">{t("orderAdmin.reset")}</span>
           </div>
         </Card>
       </Col>
@@ -101,18 +101,18 @@ const OrderManagement = () => {
         <table className="table table-hover align-middle mb-0 text-center">
           <thead className="table-light">
             <tr>
-              <th>{t("order.username")}</th>
-              <th>{t("order.totalValue")}</th>
-              <th>{t("order.date")}</th>
-              <th>{t("order.quantity")}</th>
-              <th>{t("order.status")}</th>
+              <th>{t("orderAdmin.username")}</th>
+              <th>{t("orderAdmin.totalValue")}</th>
+              <th>{t("orderAdmin.date")}</th>
+              <th>{t("orderAdmin.quantity")}</th>
+              <th>{t("orderAdmin.status")}</th>
               <th></th>
             </tr>
           </thead>
           <tbody>
             {orderData.map((row, index) => (
               <tr key={index}>
-                <td className="fw-semibold">{row.username}</td>
+                <td className="fw-semibold">{row.userResponse.username}</td>
                 <td>{t("currency", { value: row.totalPrice })}</td>
                 <td>{row.orderDate}</td>
                 <td>{row.totalQuantity}</td>
@@ -148,7 +148,7 @@ const OrderManagement = () => {
             <AdminSidebar />
           </Col>
           <Col md={10} style={{ minHeight: "100vh" }}>
-            <AdminNav title="Order Management" />
+            <AdminNav title={t("orderAdmin.title")} />
             <Filter filterData={filterData} />
             <OrderRender orderData={currentOrderList} />
             <PaginationCom
@@ -161,26 +161,26 @@ const OrderManagement = () => {
                 <div className="modal-dialog">
                   <div className="modal-content">
                     <div className="modal-header">
-                      <h5 className="modal-title">{t("order.editStatus")}</h5>
+                      <h5 className="modal-title">{t("orderAdmin.editStatus")}</h5>
                       <button type="button" className="btn-close" onClick={() => setShowModal(false)}></button>
                     </div>
                     <div className="modal-body">
-                      <label className="form-label">{t("order.selectStatus")}</label>
+                      <label className="form-label">{t("orderAdmin.selectStatus")}</label>
                       <select
                         className="form-select"
                         value={newStatus}
                         onChange={(e) => setNewStatus(e.target.value)}
                       >
-                        <option value="CANCEL">{t("order.statusCancel")}</option>
-                        <option value="COMPLETE">{t("order.statusComplete")}</option>
+                        <option value="CANCEL">{t("orderAdmin.statusCancel")}</option>
+                        <option value="COMPLETE">{t("orderAdmin.statusComplete")}</option>
                       </select>
                     </div>
                     <div className="modal-footer">
                       <Button variant="secondary" onClick={() => setShowModal(false)}>
-                        {t("order.cancel")}
+                        {t("orderAdmin.cancel")}
                       </Button>
                       <Button variant="primary" onClick={handleUpdateStatus}>
-                        {t("order.update")}
+                        {t("orderAdmin.update")}
                       </Button>
                     </div>
                   </div>

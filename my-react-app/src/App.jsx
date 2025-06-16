@@ -11,7 +11,6 @@ import 'swiper/css/autoplay';
 // Thêm vào đầu file App.js
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import './i18n';
 import Home from './pages/Home.jsx';
 import Blog from './pages/Blog.jsx'
 import BlogDetail from './pages/BlogDetail.jsx';
