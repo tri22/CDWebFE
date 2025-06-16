@@ -4,38 +4,24 @@ import { Col, Row, Card, Form, Container } from 'react-bootstrap';
 import { FaBan, FaBox, FaChartLine, FaClock, FaArrowUp, FaArrowDown } from 'react-icons/fa';
 import AdminSidebar from '../components/AdminSidebar';
 import AdminNav from '../components/AdminNav';
-
 import {
-    FaBan,
-    FaBox,
-    FaChartLine,
-    FaArrowUp,
-    FaArrowDown,
-} from 'react-icons/fa';
-import {
-    AreaChart,
-    Area,
+    LineChart,
+    Line,
     XAxis,
     YAxis,
     Tooltip,
     ResponsiveContainer,
     CartesianGrid,
+    Area,
+    AreaChart,
 } from 'recharts';
 import orderApi from '../api/orderApi';
 import dayjs from 'dayjs';
 
-import { useAuth } from '../api/AuthContext';
-import { useTranslation } from 'react-i18next';
-import orderApi from '../api/orderApi';
-import AdminSidebar from '../components/AdminSidebar';
-import AdminNav from '../components/AdminNav';
-
 const Home = () => {
-    const { t, i18n } = useTranslation();
     const { user, isLoggedIn } = useAuth();
-
     const [chartData, setChartData] = useState([]);
-    const [timeRange, setTimeRange] = useState("This Week");
+    const [time, setTime] = useState("This Week");
     const [dashboardData, setDashboardData] = useState({
         bestSellingObject: null,
         weekOrder: 0,
@@ -45,150 +31,93 @@ const Home = () => {
 
     useEffect(() => {
         if (isLoggedIn && user) {
-            console.log("User info:", user);
+            console.log("Thông tin user:", user);
         }
     }, [user, isLoggedIn]);
 
     useEffect(() => {
-        fetchDashboardInfo();
-        fetchChartData(timeRange);
+        fetchInfo()
+        weeklyRevenue();
     }, []);
 
     useEffect(() => {
-        fetchChartData(timeRange);
-    }, [timeRange]);
+        if (time) {
+            selectTime(time);
+        }
+    }, [time]);
 
-    const fetchDashboardInfo = async () => {
+
+    useEffect(() => {
+        if (dashboardData.bestSellingObject) {
+            console.log("✅ Đã cập nhật:", dashboardData.bestSellingObject);
+        }
+    }, [dashboardData.bestSellingObject]);
+
+    const fetchInfo = async () => {
         try {
-            const today = dayjs().format('YYYY-MM-DD');
+            const formattedDate = dayjs().format('YYYY-MM-DD');
 
             const [product, order, sale, cancel] = await Promise.all([
-                orderApi.bestSellingProduct(today),
-                orderApi.weekTotalOrder(today),
-                orderApi.weekTotalRevenue(today),
-                orderApi.weekCancelledOrder(today),
+                orderApi.bestSellingProduct(formattedDate),
+                orderApi.weekTotalOrder(formattedDate),
+                orderApi.weekTotalRevenue(formattedDate),
+                orderApi.weekCancelledOrder(formattedDate),
             ]);
 
+            console.log(product.data.result)
             setDashboardData({
                 bestSellingObject: product.data.result,
                 weekOrder: order.data.result,
                 weekSale: sale.data.result,
                 weekCancel: cancel.data.result,
             });
+
+
         } catch (err) {
-            console.error("Error fetching dashboard info:", err);
+            console.log("Error while fetching data:", err);
         }
     };
 
-    const fetchChartData = async (range) => {
+
+    const weeklyRevenue = async () => {
         const today = dayjs().format("YYYY-MM-DD");
-        let apiFn;
+        orderApi.getWeeklySales(today)
+            .then(res => {
+                const transformed = res.data.result.map(item => ({
+                    name: item.label, // Mon, Tue...
+                    value: item.value
+                }));
+                setChartData(transformed);
+            })
+            .catch(err => {
+                console.error("Failed to load chart data:", err);
+            });
+    }
 
-        switch (range) {
-            case "This Week":
-                apiFn = orderApi.getWeeklySales;
-                break;
-            case "This month":
-                apiFn = orderApi.getMonthlySales;
-                break;
-            case "This year":
-                apiFn = orderApi.getYearlySales;
-                break;
-            default:
-                return;
-        }
+    const selectTime = async (value) => {
+        setTime(value);
+        const today = dayjs().format("YYYY-MM-DD")
+        let apiFn = null;
 
-        try {
-            const res = await apiFn(today);
-            const transformed = res.data.result.map(item => ({
-                name: item.label,
-                value: item.value,
-            }));
-            setChartData(transformed);
-        } catch (err) {
-            console.error("Error loading chart data:", err);
+        if (value === "This Week") apiFn = orderApi.getWeeklySales;
+        else if (value === "This month") apiFn = orderApi.getMonthlySales;
+        else if (value === "This year") apiFn = orderApi.getYearlySales;
+
+        if (apiFn) {
+            try {
+                const res = await apiFn(today);
+                const transformed = res.data.result.map(item => ({
+                    name: item.label,
+                    value: item.value,
+                }));
+                setChartData(transformed);
+            } catch (err) {
+                console.error("Failed to load chart data:", err);
+            }
         }
     };
 
-    const DashboardStats = () => (
-        <Row className="g-4 my-4">
-            <StatCard
-                title={t("adminHome.totalOrder")}
-                value={dashboardData.weekOrder}
-                icon={<FaBox size={32} className="text-white" />}
-                iconBg="bg-warning"
-                trend="up"
-                trendValue="+1.3%"
-                trendNote={t("adminHome.upFromLastWeek")}
-            />
 
-            <StatCard
-                title={t("adminHome.totalSales")}
-                value={t("currency", { value: dashboardData.weekSale })}
-                icon={<FaChartLine size={32} className="text-white" />}
-                iconBg="bg-success"
-                trend="down"
-                trendValue="-4.3%"
-                trendNote={t("adminHome.downFromLastWeek")}
-            />
-
-            <Col md={6} lg={3}>
-                <Card className="shadow-sm border-0 rounded-4 h-100">
-                    <Card.Body className="d-flex flex-column gap-3">
-                        <div className="fw-bold mb-0">{t("adminHome.bestSelling")}</div>
-                        <div className="p-2 rounded-3 d-flex align-items-center justify-content-center">
-                            <img
-                                src={dashboardData.bestSellingObject?.image || ''}
-                                alt="product imgage"
-                                style={{ height: "80px", width: "100%", objectFit: "cover" }}
-                            />
-                        </div>
-                        <h4 className="fw-bold mb-0">
-                            {dashboardData.bestSellingObject?.name || t("adminHome.loading")}
-                        </h4>
-                    </Card.Body>
-                </Card>
-            </Col>
-
-            <StatCard
-                title={t("adminHome.cancelledOrders")}
-                value={dashboardData.weekCancel}
-                icon={<FaBan size={32} className="text-white" />}
-                iconBg="bg-danger"
-                trend="up"
-                trendValue="+8.5%"
-                trendNote={t("adminHome.upFromLastWeek")}
-            />
-        </Row>
-    );
-
-    const StatCard = ({ title, value, icon, iconBg, trend, trendValue, trendNote }) => (
-        <Col md={6} lg={3}>
-            <Card className="shadow-sm border-0 rounded-4 h-100">
-                <Card.Body className="d-flex flex-column gap-3">
-                    <div className="d-flex justify-content-between align-items-center">
-                        <div className="fw-bold mb-0">{title}</div>
-                        <div className={`p-2 rounded-3 d-flex align-items-center justify-content-center ${iconBg}`}>
-                            {icon}
-                        </div>
-                    </div>
-                    <h3 className="fw-bold mb-0">{value}</h3>
-                    <div className="d-flex align-items-center gap-2">
-                        {trend === 'up' ? <FaArrowUp className="text-success" /> : <FaArrowDown className="text-danger" />}
-                        <span className={`fw-semibold ${trend === 'up' ? 'text-success' : 'text-danger'}`}>{trendValue}</span>
-                        <span className="text-muted small">{trendNote}</span>
-                    </div>
-                </Card.Body>
-            </Card>
-        </Col>
-    );
-
-
-    const SalesChart = () => (
-        <Card className="shadow-sm border-0 rounded-4 p-5 mt-4">
-            <Row className="align-items-center mb-3">
-                <Col>
-                    <h5 className="fw-bold mb-0">{t("adminHome.salesDetails")}</h5>
 
 
     const DashboardStats = () => {
@@ -247,44 +176,28 @@ const Home = () => {
                         </Card.Body>
                     </Card>
                 </Col>
-                <Col xs="auto">
-                    <Form.Select
-                        size="sm"
-                        value={timeRange}
-                        onChange={(e) => setTimeRange(e.target.value)}
-                    >
-                        <option value="This Week">{t("adminHome.thisWeek")}</option>
-                        <option value="This month">{t("adminHome.thisMonth")}</option>
-                        <option value="This year">{t("adminHome.thisYear")}</option>
-                    </Form.Select>
-                </Col>
-            </Row>
 
-            <ResponsiveContainer width="100%" height={300}>
-                <AreaChart data={chartData}>
-                    <defs>
-                        <linearGradient id="colorBlue" x1="0" y1="0" x2="0" y2="1">
-                            <stop offset="5%" stopColor="#4e7cf3" stopOpacity={0.4} />
-                            <stop offset="95%" stopColor="#4e7cf3" stopOpacity={0} />
-                        </linearGradient>
-                    </defs>
-                    <XAxis dataKey="name" tick={{ fontSize: 12 }} />
-                    <YAxis tickFormatter={(val) => t("currency", { value: val})} tick={{ fontSize: 12 }} />
-                    <Tooltip formatter={(val) => t("currency", { value: val.toFixed(2) })} />
-                    <CartesianGrid strokeDasharray="3 3" vertical={false} />
-                    <Area
-                        type="monotone"
-                        dataKey="value"
-                        stroke="#4e7cf3"
-                        fillOpacity={1}
-                        fill="url(#colorBlue)"
-                        dot={{ r: 3 }}
-                        activeDot={{ r: 6 }}
-                    />
-                </AreaChart>
-            </ResponsiveContainer>
-        </Card>
-    );
+                <Col md={6} lg={3} className='m-0'>
+                    <Card className="shadow-sm border-0 rounded-4 h-100">
+                        <Card.Body className="d-flex flex-column gap-3">
+                            <div className="d-flex justify-content-between align-items-center">
+                                <div className="fw-bold mb-0">Cancelled Orders</div>
+                                <div className="p-2 rounded-3 d-flex align-items-center justify-content-center bg-danger">
+                                    <FaBan size={32} className="text-white" />
+                                </div>
+                            </div>
+                            <h3 className="fw-bold mb-0">{dashboardData.weekCancel}</h3>
+                            <div className="d-flex align-items-center gap-2">
+                                <FaArrowUp className="text-success" />
+                                <span className="fw-semibold text-success">+8.5%</span>
+                                <span className="text-muted small">Up from past week</span>
+                            </div>
+                        </Card.Body>
+                    </Card>
+                </Col>
+            </Row >
+        );
+    };
 
     const SalesChart = () => {
         return (
@@ -303,8 +216,10 @@ const Home = () => {
                             <option value="This month">This Month</option>
                             <option value="This year">This Year</option>
                         </Form.Select>
-                    </Col>
-                </Row>
+
+                    </Col >
+                </Row >
+
                 <ResponsiveContainer width="100%" height={300}>
                     <AreaChart data={chartData}>
                         <defs>
@@ -335,22 +250,27 @@ const Home = () => {
         );
     };
 
-
     return (
         <div style={{ backgroundColor: '#F5F6FA' }}>
             <Container fluid>
                 <Row>
                     <Col md={2} className="p-0" style={{ minHeight: "100vh" }}>
-                        <AdminSidebar />
+                        <AdminSidebar ></AdminSidebar>
                     </Col>
                     <Col md={10} style={{ minHeight: "100vh" }}>
-                        <AdminNav user={user} title="title.dashboard" />
-                        <DashboardStats />
-                        <SalesChart />
+                        <div>
+                            <div>
+                                <AdminNav user={user} title={"Dashboard"}></AdminNav>
+                                <DashboardStats></DashboardStats>
+                            </div>
+                            <SalesChart />
+                        </div>
                     </Col>
-                </Row>
+                </Row >
             </Container>
+
         </div>
+
     );
 };
 

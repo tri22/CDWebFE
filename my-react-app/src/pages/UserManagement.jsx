@@ -7,11 +7,9 @@ import { FaEdit } from "react-icons/fa";
 import { MdDelete } from "react-icons/md";
 import PaginationCom from "../components/PaginationCom";
 import { toast } from "react-toastify";
-import { useTranslation } from "react-i18next";
 
 
 const UserManagement = () => {
-    const { t } = useTranslation();
     const [UserList, SetUserList] = useState([])
     const [currentPage, setCurrentPage] = useState(1);
     const itemPerPage = 10;
@@ -88,11 +86,11 @@ const UserManagement = () => {
                     <table className="table table-hover align-middle mb-0 text-center">
                         <thead className="table-light">
                             <tr>
-                                <th>{t('user.name')}</th>
-                                <th>{t('user.email')}</th>
-                                <th>{t('user.phone')}</th>
-                                <th>{t('user.birthday')}</th>
-                                <th>{t('user.role')}</th>
+                                <th>NAME</th>
+                                <th>EMAIL</th>
+                                <th>PHONE</th>
+                                <th>BIRTHDAY</th>
+                                <th>ROLE</th>
                                 <th></th>
                             </tr>
                         </thead>
@@ -126,7 +124,7 @@ const UserManagement = () => {
                         <AdminSidebar></AdminSidebar>
                     </Col>
                     <Col md={10} style={{ minHeight: "100vh" }}>
-                        <AdminNav title={t('user.title')} />
+                        <AdminNav title={'User Management'}></AdminNav>
                         <UserRender data={currentUserList}></UserRender>
                         <PaginationCom currentPage={currentPage} onPageChange={handlePageChange} totalPages={totalPages}></PaginationCom>
                         {showModal && (
@@ -134,19 +132,23 @@ const UserManagement = () => {
                                 <div className="modal-dialog">
                                     <div className="modal-content">
                                         <div className="modal-header">
-                                            <h5 className="modal-title">{t('user.editUserRole')}</h5>
+                                            <h5 className="modal-title">Edit User Role</h5>
                                             <button type="button" className="btn-close" onClick={() => setShowModal(false)}></button>
                                         </div>
                                         <div className="modal-body">
-                                            <label className="form-label">{t('user.selectRole')}</label>
-                                            <select className="form-select" value={newRole} onChange={(e) => setNewRole(e.target.value)}>
-                                                <option value="ADMIN">{t('user.admin')}</option>
-                                                <option value="USER">{t('user.user')}</option>
+                                            <label className="form-label">Select Role</label>
+                                            <select
+                                                className="form-select"
+                                                value={newRole}
+                                                onChange={(e) => setNewRole(e.target.value)}
+                                            >
+                                                <option value="ADMIN">ADMIN</option>
+                                                <option value="USER">USER</option>
                                             </select>
                                         </div>
                                         <div className="modal-footer">
-                                            <Button variant="secondary" onClick={() => setShowModal(false)}>{t('user.cancel')}</Button>
-                                            <Button variant="primary" onClick={handleUpdateRole}>{t('user.update')}</Button>
+                                            <Button variant="secondary" onClick={() => setShowModal(false)}>Cancel</Button>
+                                            <Button variant="primary" onClick={handleUpdateRole}>Update</Button>
                                         </div>
                                     </div>
                                 </div>
