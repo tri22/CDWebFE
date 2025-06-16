@@ -44,8 +44,10 @@ const VoucherManagement = () => {
             const response = await adminApi.getAllVoucher();
             setVoucher(response.data.result);
         } catch (err) {
-            toast.error("Error loading vouchers");
-            console.error(err);
+            if (error.response) {
+                const errMessage = error.response.data?.message || 'Đã xảy ra lỗi';
+                toast.error(errMessage);
+            }
         }
     };
 
@@ -80,8 +82,10 @@ const VoucherManagement = () => {
             setEditingId(null);
             fetchVoucher();
         } catch (err) {
-            toast.error("Failed to save voucher.");
-            console.error("Error saving data", err);
+            if (error.response) {
+                const errMessage = error.response.data?.message || 'Đã xảy ra lỗi';
+                toast.error(errMessage);
+            }
         }
     };
 
