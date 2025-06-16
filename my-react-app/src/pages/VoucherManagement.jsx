@@ -11,8 +11,10 @@ import { useEffect, useState } from "react";
 import adminApi from "../api/adminApi";
 import PaginationCom from "../components/PaginationCom";
 import { toast } from "react-toastify";
+import { useTranslation } from "react-i18next";
 
 const VoucherManagement = () => {
+    const { t } = useTranslation()
     const [voucher, setVoucher] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
     const [itemPerPage, setItemPerPage] = useState(5);
