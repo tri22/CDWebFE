@@ -8,6 +8,7 @@ import { useEffect, useState } from "react";
 import orderApi from "../api/orderApi";
 import PaginationCom from "../components/PaginationCom";
 import { toast } from "react-toastify";
+
 import { useTranslation } from "react-i18next";
 
 const OrderManagement = () => {
@@ -37,10 +38,7 @@ const OrderManagement = () => {
     }
   };
 
-  const handlePageChange = (pageNumber) => {
-    setCurrentPage(pageNumber);
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  };
+
 
   const handleEditClick = (id, status) => {
     setSelectedOrderId(id);
@@ -182,6 +180,7 @@ const OrderManagement = () => {
                       <Button variant="primary" onClick={handleUpdateStatus}>
                         {t("orderAdmin.update")}
                       </Button>
+
                     </div>
                   </div>
                 </div>

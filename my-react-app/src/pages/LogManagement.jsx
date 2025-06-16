@@ -8,6 +8,7 @@ import { FaArrowDown } from "react-icons/fa";
 import { GrPowerReset } from "react-icons/gr";
 import { useTranslation } from 'react-i18next';
 import { toast } from "react-toastify";
+
 const LogManagement = () => {
     const [record, setRecord] = useState([])
     const { t, i18n } = useTranslation();

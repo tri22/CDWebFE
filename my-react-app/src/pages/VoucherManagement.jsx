@@ -11,11 +11,8 @@ import { useEffect, useState } from "react";
 import adminApi from "../api/adminApi";
 import PaginationCom from "../components/PaginationCom";
 import { toast } from "react-toastify";
-import { useTranslation } from "react-i18next";
-
 
 const VoucherManagement = () => {
-    const { t } = useTranslation();
     const [voucher, setVoucher] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
     const [itemPerPage, setItemPerPage] = useState(5);
@@ -90,6 +87,7 @@ const VoucherManagement = () => {
         }
     };
 
+
     const deleteVoucher = async (id) => {
         if (!window.confirm("Are you sure you want to delete this voucher?")) return;
         try {
@@ -103,6 +101,7 @@ const VoucherManagement = () => {
             }
         }
     }
+
 
 
     const handlePageChange = (pageNumber) => {
@@ -124,7 +123,9 @@ const VoucherManagement = () => {
                     <Card className="shadow-sm border-0 bg-white p-2">
                         <Dropdown>
                             <Dropdown.Toggle variant="light" size="sm" className="fw-semibold border-0 p-0">
+
                                 {t('voucherAdmin.itemsPerPage')}
+
                             </Dropdown.Toggle>
                             <Dropdown.Menu>
                                 {options.map((val) => (
@@ -140,7 +141,9 @@ const VoucherManagement = () => {
                 <Col md="1" className="p-0 me-1">
                     <Card className="shadow-sm border-0 bg-white text-center p-2" style={{ cursor: "pointer" }}>
                         <div className="d-flex flex-row align-items-center gap-2">
+
                             <span className="fw-semibold">{t('voucherAdmin.code')}</span>
+
                             <FaArrowDown className="text-danger" size={14} />
                         </div>
                     </Card>
@@ -152,7 +155,9 @@ const VoucherManagement = () => {
                         style={{ cursor: "pointer" }}>
                         <div className="d-flex flex-row align-items-center gap-2">
                             <MdAddBox size={18} />
+
                             <span className="fw-semibold">{t('voucherAdmin.add')}</span>
+
                         </div>
                     </Card>
                 </Col>
@@ -167,10 +172,12 @@ const VoucherManagement = () => {
                     <table className="table table-hover align-middle mb-0 text-center">
                         <thead className="table-light">
                             <tr>
+
                                 <th>{t('voucherAdmin.code')}</th>
                                 <th>{t('voucherAdmin.description')}</th>
                                 <th>{t('voucherAdmin.quantity')}</th>
                                 <th>{t('voucherAdmin.discount')}</th>
+
                                 <th></th>
                             </tr>
                         </thead>
@@ -185,7 +192,7 @@ const VoucherManagement = () => {
                                         <Button className="me-2" onClick={() => handleEditVoucher(row)}>
                                             <FaEdit />
                                         </Button>
-                                        <Button onClick={() => deleteVoucher(row.id)}><MdDelete /></Button>
+                                        <Button onClick={() => deleteProduct(row.id)}><MdDelete /></Button>
                                     </td>
                                 </tr>
                             ))}
@@ -207,7 +214,9 @@ const VoucherManagement = () => {
                         <AdminSidebar />
                     </Col>
                     <Col md={10} style={{ minHeight: "100vh" }}>
+
                         <AdminNav title={'voucherAdmin.title'} />
+
                         <Filter setItemsPerPage={setItemPerPage} />
                         <VoucherRender data={currentList} />
                         {showModal && (
@@ -215,6 +224,7 @@ const VoucherManagement = () => {
                                 <div className="modal-dialog">
                                     <div className="modal-content">
                                         <div className="modal-header">
+
                                             <h5 className="modal-title">
                                                 {editMode ? t('voucherAdmin.editVoucher') : t('voucherAdmin.addVoucher')}
                                             </h5>
@@ -222,20 +232,25 @@ const VoucherManagement = () => {
                                         </div>
                                         <div className="modal-body">
                                             <label>{t('voucherAdmin.code')}</label>
+
                                             <input
                                                 className="form-control mb-2"
                                                 value={formData.code}
                                                 onChange={(e) => setFormData({ ...formData, code: e.target.value })}
                                             />
 
+
                                             <label>{t('voucherAdmin.description')}</label>
+
                                             <input
                                                 className="form-control mb-2"
                                                 value={formData.description}
                                                 onChange={(e) => setFormData({ ...formData, description: e.target.value })}
                                             />
 
+
                                             <label>{t('voucherAdmin.quantity')}</label>
+
                                             <input
                                                 type="number"
                                                 className="form-control mb-2"
@@ -243,7 +258,9 @@ const VoucherManagement = () => {
                                                 onChange={(e) => setFormData({ ...formData, quantity: e.target.value })}
                                             />
 
+
                                             <label>{t('voucherAdmin.discount')} (%)</label>
+
                                             <input
                                                 type="number"
                                                 className="form-control mb-2"
@@ -252,8 +269,10 @@ const VoucherManagement = () => {
                                             />
                                         </div>
                                         <div className="modal-footer">
+
                                             <Button variant="secondary" onClick={() => setShowModal(false)}>{t('voucherAdmin.cancel')}</Button>
                                             <Button variant="primary" onClick={handleSaveVoucher}>{t('voucherAdmin.save')}</Button>
+
                                         </div>
                                     </div>
                                 </div>
