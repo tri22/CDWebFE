@@ -1,47 +1,62 @@
 import axiosInstance from "./axiosInstance";
 
-const orderApi={
-    createOrder:(data)=>{
-        return axiosInstance.post(`/order/create`,data)
+const orderApi = {
+    // createOrder: (data) => {
+    //     return axiosInstance.post(`/order/create`, data)
+    // },
+    getOrderById: (orderId) => {
+        return axiosInstance.get(`/order/${orderId}`)
     },
 
-    cancelOrder:(id)=>{
+    createOrderFromCart: (data) => {
+        return axiosInstance.post(`/order/from-cart`, data);
+    },
+
+    cancelOrder: (id) => {
         return axiosInstance.delete(`/order/delete/${id}`)
     },
 
-    getAllOrder:()=>{
+    getOrderByUserId: (userId) => {
+        return axiosInstance.get(`/order/get-order/${userId}`)
+    },
+
+    updateOrder: (orderId, data) => {
+        return axiosInstance.put(`/order/update/${orderId}`, data)
+    },
+
+    createVNPayPayment: (data) => axiosInstance.post('/api/payment/vnpay/create', data),
+
+    verifyVNPayPayment: (data) => axiosInstance.get('/api/payment/vnpay/return', { data }),
+
+    getAllOrder: () => {
         return axiosInstance.get(`/order/all`)
     },
 
-    updateOrder:(orderId,data)=>{
-        return axiosInstance.put(`order/update/${orderId}`,data)
-    },
-
-    bestSellingProduct:(date)=>{
+    bestSellingProduct: (date) => {
         return axiosInstance.get(`order/week-best-selling/${date}`)
     },
 
-    weekTotalOrder:(date)=>{
+    weekTotalOrder: (date) => {
         return axiosInstance.get(`order/week-total/${date}`)
     },
 
-    weekTotalRevenue:(date)=>{
+    weekTotalRevenue: (date) => {
         return axiosInstance.get(`order/week-sale/${date}`)
     },
 
-    weekCancelledOrder:(date)=>{
+    weekCancelledOrder: (date) => {
         return axiosInstance.get(`order/week-cancelled/${date}`)
     },
 
-    getWeeklySales:(date)=>{
+    getWeeklySales: (date) => {
         return axiosInstance.get(`order/revenue/weekly/${date}`)
     },
 
-    getMonthlySales:(date)=>{
+    getMonthlySales: (date) => {
         return axiosInstance.get(`order/revenue/monthly/${date}`)
     },
 
-    getYearlySales:(date)=>{
+    getYearlySales: (date) => {
         return axiosInstance.get(`order/revenue/yearly/${date}`)
     }
 }

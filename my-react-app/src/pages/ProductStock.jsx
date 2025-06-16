@@ -111,6 +111,7 @@ const ProductStock = () => {
                             ) : (
                                 <>
                                     <IoIosListBox size={18} />
+
                                     <span className="fw-semibold">{t("stock.records")}</span>
                                 </>
                             )}

@@ -3,7 +3,6 @@ import { API_BASE_URL } from "./ipConstant";
 
 const axiosInstance = axios.create({
     baseURL: API_BASE_URL,
-    //   timeout: 30000, // Thời gian chờ 10 giây
     headers: {
         "Content-Type": "application/json",
     },

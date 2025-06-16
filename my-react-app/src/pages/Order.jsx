@@ -1,260 +1,153 @@
-import React, { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 import { Container, Row, Col, Card, Button, Nav, Badge } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
-import LocationPinIcon from '@mui/icons-material/LocationPin';
 import '../assets/styles/Order.scss';
-// Sample order data
-const sampleOrders = [
-    {
-        id: 1,
-        status: 'on-shipping',
-        user: { fullName: 'John Doe', email: 'john@example.com' },
-        note: 'Deliver during working hours',
-        shippingAddress: '123 Street, City',
-        paymentMethod: { name: 'Cash on Delivery' },
-        totalPrice: 500000,
-        totalQuantity: 3,
-        orderDate: '2024-05-10',
-        shippingFee: 30000,
-        products: [
-            {
-                id: 'p1',
-                name: 'Product A',
-                price: 150000,
-                quantity: 1,
-                color: 'Red',
-                image: 'https://jangin.vn/wp-content/uploads/2021/12/iris-2024-22222.jpg',
-            },
-            {
-                id: 'p2',
-                name: 'Product B',
-                price: 350000,
-                quantity: 2,
-                color: 'Blue',
-                image: 'https://jangin.vn/wp-content/uploads/2021/12/iris-2024-22222.jpg',
-            },
-        ],
-    },
-    {
-        id: 2,
-        status: 'on-shipping',
-        user: { fullName: 'John Doe', email: 'john@example.com' },
-        note: 'Deliver during working hours',
-        shippingAddress: '123 Street, City',
-        paymentMethod: { name: 'Cash on Delivery' },
-        totalPrice: 500000,
-        totalQuantity: 3,
-        orderDate: '2024-05-10',
-        shippingFee: 30000,
-        products: [
-            {
-                id: 'p1',
-                name: 'Product A',
-                price: 150000,
-                quantity: 1,
-                color: 'Red',
-                image: 'https://jangin.vn/wp-content/uploads/2021/12/iris-2024-22222.jpg',
-            },
-            {
-                id: 'p2',
-                name: 'Product B',
-                price: 350000,
-                quantity: 2,
-                color: 'Blue',
-                image: 'https://jangin.vn/wp-content/uploads/2021/12/iris-2024-22222.jpg',
-            },
-        ],
-    },
-    {
-        id: 3,
-        status: 'arrived',
-        user: { fullName: 'Jane Smith', email: 'jane@example.com' },
-        note: 'Leave at the door',
-        shippingAddress: '456 Avenue, City',
-        paymentMethod: { name: 'Bank Transfer' },
-        totalPrice: 750000,
-        totalQuantity: 5,
-        orderDate: '2024-05-11',
-        shippingFee: 40000,
-        products: [
-            {
-                id: 'p3',
-                name: 'Product C',
-                price: 250000,
-                quantity: 2,
-                color: 'Green',
-                image: 'https://jangin.vn/wp-content/uploads/2021/12/iris-2024-22222.jpg',
-            },
-            {
-                id: 'p4',
-                name: 'Product D',
-                price: 500000,
-                quantity: 3,
-                color: 'Black',
-                image: 'https://jangin.vn/wp-content/uploads/2021/12/iris-2024-22222.jpg',
-            },
-        ],
-    },
-    {
-        id: 4,
-        status: 'arrived',
-        user: { fullName: 'Jane Smith', email: 'jane@example.com' },
-        note: 'Leave at the door',
-        shippingAddress: '456 Avenue, City',
-        paymentMethod: { name: 'Bank Transfer' },
-        totalPrice: 750000,
-        totalQuantity: 5,
-        orderDate: '2024-05-11',
-        shippingFee: 40000,
-        products: [
-            {
-                id: 'p3',
-                name: 'Product C',
-                price: 250000,
-                quantity: 2,
-                color: 'Green',
-                image: 'https://jangin.vn/wp-content/uploads/2021/12/iris-2024-22222.jpg',
-            },
-            {
-                id: 'p4',
-                name: 'Product D',
-                price: 500000,
-                quantity: 3,
-                color: 'Black',
-                image: 'https://jangin.vn/wp-content/uploads/2021/12/iris-2024-22222.jpg',
-            },
-        ],
-    },
-    {
-        id: 5,
-        status: 'arrived',
-        user: { fullName: 'Jane Smith', email: 'jane@example.com' },
-        note: 'Leave at the door',
-        shippingAddress: '456 Avenue, City',
-        paymentMethod: { name: 'Bank Transfer' },
-        totalPrice: 750000,
-        totalQuantity: 5,
-        orderDate: '2024-05-11',
-        shippingFee: 40000,
-        products: [
-            {
-                id: 'p3',
-                name: 'Product C',
-                price: 250000,
-                quantity: 2,
-                color: 'Green',
-                image: 'https://jangin.vn/wp-content/uploads/2021/12/iris-2024-22222.jpg',
-            },
-            {
-                id: 'p4',
-                name: 'Product D',
-                price: 500000,
-                quantity: 3,
-                color: 'Black',
-                image: 'https://jangin.vn/wp-content/uploads/2021/12/iris-2024-22222.jpg',
-            },
-        ],
-    },
-];
+import orderApi from '../api/orderApi';
+import { formatPrice } from '../utils/Data';
+import { toast } from 'react-toastify';
+
+// Hàm lấy userId từ localStorage
+const getUserIdFromStorage = () => {
+    try {
+        const userData = localStorage.getItem('user');
+        if (userData) {
+            const parsed = JSON.parse(userData);
+            return parsed?.result?.id || null;
+        }
+        return null;
+    } catch (error) {
+        console.error("Lỗi khi lấy userId:", error);
+        return null;
+    }
+};
+
+const statusMap = {
+    'no-paid': 'NO_PAID',
+    'paid': 'PAID',
+    'on-shipping': 'SHIPPING',
+    'canceled': 'CANCELLED',
+};
 
 export default function Order() {
-    const [activeTab, setActiveTab] = useState('on-shipping');
+    const [orders, setOrders] = useState([]);
+    const [activeTab, setActiveTab] = useState('no-paid');
 
-    const filteredOrders = sampleOrders.filter((order) => order.status === activeTab);
+    // Lấy dữ liệu đơn hàng từ server
+    useEffect(() => {
+        const fetchOrders = async () => {
+            const userId = getUserIdFromStorage();
+            if (!userId) {
+                toast.error("Không tìm thấy thông tin người dùng!");
+                return;
+            }
 
+            try {
+                const response = await orderApi.getOrderByUserId(userId);
+                const fetchedOrders = response.data?.result || [];
+                setOrders(fetchedOrders);
+            } catch (error) {
+                console.error("Lỗi khi lấy đơn hàng:", error);
+                toast.error("Không thể tải đơn hàng.");
+            }
+        };
+
+        fetchOrders();
+    }, []);
+
+    // Lọc đơn hàng theo tab đang chọn
+    const filteredOrders = orders.filter(order => order.status === statusMap[activeTab]);
+    // Đếm số lượng đơn theo từng trạng thái
     const orderCounts = {
-        'no-paid': sampleOrders.filter(o => o.status === 'no-paid').length,
-        'on-shipping': sampleOrders.filter(o => o.status === 'on-shipping').length,
-        'arrived': sampleOrders.filter(o => o.status === 'arrived').length,
-        'canceled': sampleOrders.filter(o => o.status === 'canceled').length,
+        'no-paid': orders.filter(o => o.status === 'NO_PAID').length,
+        'on-shipping': orders.filter(o => o.status === 'SHIPPING').length,
+        'paid': orders.filter(o => o.status === 'PAID').length,
+        'canceled': orders.filter(o => o.status === 'CANCELLED').length,
     };
 
     return (
         <div>
             <Header />
-            {/* <Header /> */}
             <Container className="my-4 orders-container">
                 <h2 className="mb-3 fw-bold">My Orders</h2>
 
-                {/* Navbar */}
+                {/* Tabs theo trạng thái */}
                 <Nav variant="tabs" activeKey={activeTab} onSelect={(k) => setActiveTab(k)}>
-                    <Nav.Item>
-                        <Nav.Link eventKey="no-paid">
-                            No paid <Badge>{orderCounts['no-paid']}</Badge>
-                        </Nav.Link>
-                    </Nav.Item>
-                    <Nav.Item>
-                        <Nav.Link eventKey="on-shipping">
-                            On Shipping <Badge>{orderCounts['on-shipping']}</Badge>
-                        </Nav.Link>
-                    </Nav.Item>
-                    <Nav.Item>
-                        <Nav.Link eventKey="arrived">
-                            Arrived <Badge>{orderCounts['arrived']}</Badge>
-                        </Nav.Link>
-                    </Nav.Item>
-                    <Nav.Item>
-                        <Nav.Link eventKey="canceled">
-                            Canceled <Badge>{orderCounts['canceled']}</Badge>
-                        </Nav.Link>
-                    </Nav.Item>
+                    {Object.keys(orderCounts).map(key => (
+                        <Nav.Item key={key}>
+                            <Nav.Link eventKey={key}>
+                                {key.charAt(0).toUpperCase() + key.slice(1)}{' '}
+                                <Badge className="ms-1">{orderCounts[key]}</Badge>
+                            </Nav.Link>
+                        </Nav.Item>
+                    ))}
                 </Nav>
 
-                {/* Order List */}
+                {/* Danh sách đơn hàng */}
                 <Row className="mt-4" xs={1} md={2}>
-                    {filteredOrders.map(order => (
-                        <Col key={order.id} className="mb-4">
-                            <Card>
-                                <Card.Body>
+                    {filteredOrders.length === 0 ? (
+                        <p className="mt-3">No Orders</p>
+                    ) : (
+                        filteredOrders.map(order => (
+                            <Col key={order.id} className="mb-4">
+                                <Card>
+                                    <Card.Body>
+                                        {/* Thông tin đơn hàng */}
+                                        <div className="mb-2 order-id">
+                                            <strong>Order ID #{order.id}</strong>
+                                            <span className="text-primary ms-3 order-status">{order.status}</span>
+                                        </div>
+                                        <div className="mb-2"><strong>Order Date:</strong> {order.orderDate}</div>
+                                        <div className="mb-2"><strong>Payment method:</strong> {order.paymentMethod}</div>
+                                        <div className="mb-2"><strong>Note:</strong> {order.note}</div>
+                                        <div className="mb-2"><strong>Shipping Fee:</strong> {formatPrice(order.shippingFee)}</div>
 
-                                    {/* Order ID + Status */}
-                                    <div className="mb-2 order-id">
-                                        <strong>Order ID #{order.id}</strong>
-                                        <span className="text-primary order-status">{order.status}</span>
+                                        {/* Danh sách sản phẩm */}
+                                        {order.details && order.details.length > 0 ? (
+                                            <div className="mb-3 list-product" style={{ maxHeight: '150px', overflowY: 'auto' }}>
+                                                <Row xs={1} md={2}>
+                                                    {order.details.map(item => (
+                                                        <Col key={item.id} className="mb-2 d-flex product-item">
+                                                            <img
+                                                                className="product-img"
+                                                                src={item.product.image}
+                                                                alt={item.product.name}
+                                                                style={{ width: 80, height: 80, marginRight: 10 }}
+                                                            />
+                                                            <div>
+                                                                <div><strong>{item.product.name}</strong></div>
+                                                                <div className="product-price">
+                                                                    {formatPrice(item.product.price)}
+                                                                </div>
+                                                                <div>x{item.quantity}</div>
+                                                                <div style={{ color: item.product.color }}>
+                                                                    {item.product.color}
+                                                                </div>
+                                                            </div>
+                                                        </Col>
+                                                    ))}
+                                                </Row>
+                                            </div>
+                                        ) : (
+                                            <div className="mb-3 text-muted">Don't have products in this orders</div>
+                                        )}
+                                    </Card.Body>
+
+                                    {/* Tổng tiền */}
+                                    <div className="d-flex justify-content-between align-items-center order-total p-3">
+                                        <div>
+                                            <strong>Total: {formatPrice(order.totalPrice)}</strong><br />
+                                            <small>(Items: {order.totalQuantity})</small>
+                                        </div>
+                                        <Link to={`/order/${order.id}`}>
+                                            <Button variant="info">Details</Button>
+                                        </Link>
                                     </div>
-
-                                    {/* Shipping Address */}
-                                    <div className="mb-2 order-address">
-                                        <p >
-                                            <LocationPinIcon />
-                                            {order.shippingAddress}
-                                        </p>
-                                    </div>
-
-                                    {/* Product Scroll */}
-                                    <div className="mb-3 list-product" style={{ maxHeight: '150px', overflowY: 'auto' }}>
-                                        <Row xs={1} md={2}>
-                                            {order.products.map(product => (
-                                                <Col key={product.id} className="mb-2 d-flex product-item">
-                                                    <img className='product-img' src={product.image} alt={product.name} style={{ width: 80, height: 80, marginRight: 10 }} />
-                                                    <div>
-                                                        <div><strong>{product.name}</strong></div>
-                                                        <div className='product-price'>Price: {product.price.toLocaleString()} VND</div>
-                                                        <div>x{product.quantity}</div>
-                                                        <div style={{ color: product.color }}>Color: {product.color}</div>
-                                                    </div>
-                                                </Col>
-                                            ))}
-                                        </Row>
-                                    </div>
-
-                                    {/* Total + Actions */}
-
-                                </Card.Body>
-                                <div className="d-flex justify-content-between align-items-center order-total">
-                                    <div className='d-flex text-center'>
-                                        <strong>Total: ${order.totalPrice.toLocaleString()}</strong><br />
-                                        <small>(Items: {order.totalQuantity})</small>
-                                    </div>
-                                    <Link to={`/order/${order.id}`}>
-                                        <Button variant="info">Details</Button>
-                                    </Link>
-                                </div>
-                            </Card>
-                        </Col>
-                    ))}
+                                </Card>
+                            </Col>
+                        ))
+                    )}
                 </Row>
             </Container>
             <Footer />

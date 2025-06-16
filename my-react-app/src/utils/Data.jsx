@@ -3,9 +3,8 @@ import CurrencyExchangeIcon from '@mui/icons-material/CurrencyExchange';
 import MilitaryTechIcon from '@mui/icons-material/MilitaryTech';
 import PhoneEnabledIcon from '@mui/icons-material/PhoneEnabled';
 
-// Format giá theo định dạng tiền $
 export const formatPrice = (price) => {
-    return `$${price.toLocaleString('en-US', { minimumFractionDigits: 2 })}`;
+    return `${price.toLocaleString('vi-VN')} VND`;
 };
 
 // Danh sách sản phẩm mẫu (có thể tạo thêm nhiều danh sách sản phẩm khác như Sản phẩm nổi bật, Sp chính, Sp sale)
