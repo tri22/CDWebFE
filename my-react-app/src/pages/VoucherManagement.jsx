@@ -11,8 +11,11 @@ import { useEffect, useState } from "react";
 import adminApi from "../api/adminApi";
 import PaginationCom from "../components/PaginationCom";
 import { toast } from "react-toastify";
+import { useTranslation } from "react-i18next";
+
 
 const VoucherManagement = () => {
+    const { t } = useTranslation();
     const [voucher, setVoucher] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
     const [itemPerPage, setItemPerPage] = useState(5);
@@ -83,6 +86,17 @@ const VoucherManagement = () => {
         }
     };
 
+    const deleteVoucher = async (id) => {
+        if (!window.confirm("Are you sure you want to delete this voucher?")) return;
+        try {
+            const response = await adminApi.deleteVoucher(id);
+            await fetchVoucher();
+            toast.success("Delete success!");
+        } catch (error) {
+            toast.error("Failed to delete this voucher:", error);
+        }
+    }
+
 
     const handlePageChange = (pageNumber) => {
         setCurrentPage(pageNumber);
@@ -103,7 +117,7 @@ const VoucherManagement = () => {
                     <Card className="shadow-sm border-0 bg-white p-2">
                         <Dropdown>
                             <Dropdown.Toggle variant="light" size="sm" className="fw-semibold border-0 p-0">
-                                Items/Page
+                                {t('voucher.itemsPerPage')}
                             </Dropdown.Toggle>
                             <Dropdown.Menu>
                                 {options.map((val) => (
@@ -119,7 +133,7 @@ const VoucherManagement = () => {
                 <Col md="1" className="p-0 me-1">
                     <Card className="shadow-sm border-0 bg-white text-center p-2" style={{ cursor: "pointer" }}>
                         <div className="d-flex flex-row align-items-center gap-2">
-                            <span className="fw-semibold">Code</span>
+                            <span className="fw-semibold">{t('voucher.code')}</span>
                             <FaArrowDown className="text-danger" size={14} />
                         </div>
                     </Card>
@@ -131,7 +145,7 @@ const VoucherManagement = () => {
                         style={{ cursor: "pointer" }}>
                         <div className="d-flex flex-row align-items-center gap-2">
                             <MdAddBox size={18} />
-                            <span className="fw-semibold">Add</span>
+                            <span className="fw-semibold">{t('voucher.add')}</span>
                         </div>
                     </Card>
                 </Col>
@@ -146,10 +160,10 @@ const VoucherManagement = () => {
                     <table className="table table-hover align-middle mb-0 text-center">
                         <thead className="table-light">
                             <tr>
-                                <th>CODE</th>
-                                <th>DESCRIPTION</th>
-                                <th>QUANTITY</th>
-                                <th>DISCOUNT</th>
+                                <th>{t('voucher.code')}</th>
+                                <th>{t('voucher.description')}</th>
+                                <th>{t('voucher.quantity')}</th>
+                                <th>{t('voucher.discount')}</th>
                                 <th></th>
                             </tr>
                         </thead>
@@ -164,7 +178,7 @@ const VoucherManagement = () => {
                                         <Button className="me-2" onClick={() => handleEditVoucher(row)}>
                                             <FaEdit />
                                         </Button>
-                                        <Button onClick={() => deleteProduct(row.id)}><MdDelete /></Button>
+                                        <Button onClick={() => deleteVoucher(row.id)}><MdDelete /></Button>
                                     </td>
                                 </tr>
                             ))}
@@ -186,7 +200,7 @@ const VoucherManagement = () => {
                         <AdminSidebar />
                     </Col>
                     <Col md={10} style={{ minHeight: "100vh" }}>
-                        <AdminNav title={'Voucher Management'} />
+                        <AdminNav title={'voucher.title'} />
                         <Filter setItemsPerPage={setItemPerPage} />
                         <VoucherRender data={currentList} />
                         {showModal && (
@@ -194,25 +208,27 @@ const VoucherManagement = () => {
                                 <div className="modal-dialog">
                                     <div className="modal-content">
                                         <div className="modal-header">
-                                            <h5 className="modal-title">Add New Voucher</h5>
+                                            <h5 className="modal-title">
+                                                {editMode ? t('voucher.editVoucher') : t('voucher.addVoucher')}
+                                            </h5>
                                             <button type="button" className="btn-close" onClick={() => setShowModal(false)}></button>
                                         </div>
                                         <div className="modal-body">
-                                            <label>CODE</label>
+                                            <label>{t('voucher.code')}</label>
                                             <input
                                                 className="form-control mb-2"
                                                 value={formData.code}
                                                 onChange={(e) => setFormData({ ...formData, code: e.target.value })}
                                             />
 
-                                            <label>DESCRIPTION</label>
+                                            <label>{t('voucher.description')}</label>
                                             <input
                                                 className="form-control mb-2"
                                                 value={formData.description}
                                                 onChange={(e) => setFormData({ ...formData, description: e.target.value })}
                                             />
 
-                                            <label>QUANTITY</label>
+                                            <label>{t('voucher.quantity')}</label>
                                             <input
                                                 type="number"
                                                 className="form-control mb-2"
@@ -220,7 +236,7 @@ const VoucherManagement = () => {
                                                 onChange={(e) => setFormData({ ...formData, quantity: e.target.value })}
                                             />
 
-                                            <label>DISCOUNT (%)</label>
+                                            <label>{t('voucher.discount')} (%)</label>
                                             <input
                                                 type="number"
                                                 className="form-control mb-2"
@@ -229,8 +245,8 @@ const VoucherManagement = () => {
                                             />
                                         </div>
                                         <div className="modal-footer">
-                                            <Button variant="secondary" onClick={() => setShowModal(false)}>Cancel</Button>
-                                            <Button variant="primary" onClick={handleSaveVoucher}>Save</Button>
+                                            <Button variant="secondary" onClick={() => setShowModal(false)}>{t('voucher.cancel')}</Button>
+                                            <Button variant="primary" onClick={handleSaveVoucher}>{t('voucher.save')}</Button>
                                         </div>
                                     </div>
                                 </div>
