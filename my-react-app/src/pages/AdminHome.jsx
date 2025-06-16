@@ -42,20 +42,21 @@ const Home = () => {
 
     const fetchDashboardInfo = async () => {
         try {
-            const today = dayjs().format('YYYY-MM-DD');
-
+            // const today = dayjs().format('YYYY-MM-DD');
+            const today = '2025-06-14';
             const [product, order, sale, cancel] = await Promise.all([
                 orderApi.bestSellingProduct(today),
                 orderApi.weekTotalOrder(today),
                 orderApi.weekTotalRevenue(today),
-                orderApi.weekCancelledOrder(today),
+                // orderApi.weekCancelledOrder(today),
             ]);
+
 
             setDashboardData({
                 bestSellingObject: product.data.result,
                 weekOrder: order.data.result,
                 weekSale: sale.data.result,
-                weekCancel: cancel.data.result,
+                // weekCancel: cancel.data.result,
             });
         } catch (err) {
             console.error("Error fetching dashboard info:", err);

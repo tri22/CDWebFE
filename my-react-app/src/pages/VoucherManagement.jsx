@@ -81,7 +81,9 @@ const VoucherManagement = () => {
             setEditMode(false);
             setEditingId(null);
             fetchVoucher();
-        } catch (err) {
+
+        } catch (error) {
+
             if (error.response) {
                 const errMessage = error.response.data?.message || 'Đã xảy ra lỗi';
                 toast.error(errMessage);
