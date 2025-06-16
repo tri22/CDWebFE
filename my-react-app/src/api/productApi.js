@@ -11,7 +11,7 @@ const productApi = {
         return axiosInstance.delete(`/products/delete/${productId}`)
     },
     updateProduct: (productId, data) => {
-        return axiosInstance.put(`products/update/${productId}`, data)
+        return axiosInstance.put(`products/${productId}`, data)
     }
 }
 export default productApi;

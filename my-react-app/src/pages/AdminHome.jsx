@@ -1,9 +1,6 @@
-
-import React, { useEffect } from 'react';
-
+import React, { useEffect, useState } from 'react';
 import { useAuth } from '../api/AuthContext';
 import { Col, Row, Card, Form, Container } from 'react-bootstrap';
-import React, { useEffect, useState } from 'react';
 import { FaBan, FaBox, FaChartLine, FaClock, FaArrowUp, FaArrowDown } from 'react-icons/fa';
 import AdminSidebar from '../components/AdminSidebar';
 import AdminNav from '../components/AdminNav';
@@ -24,7 +21,7 @@ import {
     ResponsiveContainer,
     CartesianGrid,
 } from 'recharts';
-
+import orderApi from '../api/orderApi';
 import dayjs from 'dayjs';
 
 import { useAuth } from '../api/AuthContext';
@@ -46,13 +43,11 @@ const Home = () => {
         weekCancel: 0,
     });
 
-
     useEffect(() => {
         if (isLoggedIn && user) {
             console.log("User info:", user);
         }
     }, [user, isLoggedIn]);
-
 
     useEffect(() => {
         fetchDashboardInfo();
@@ -265,7 +260,6 @@ const Home = () => {
                 </Col>
             </Row>
 
-
             <ResponsiveContainer width="100%" height={300}>
                 <AreaChart data={chartData}>
                     <defs>
@@ -292,7 +286,6 @@ const Home = () => {
         </Card>
     );
 
-
     const SalesChart = () => {
         return (
             <Card className="shadow-sm border-0 rounded-4 p-5 mt-4">
@@ -301,7 +294,6 @@ const Home = () => {
                         <h5 className="fw-bold mb-0">Sales Details</h5>
                     </Col>
                     <Col xs="auto">
-
                         <Form.Select
                             size="sm"
                             value={time}
@@ -311,14 +303,10 @@ const Home = () => {
                             <option value="This month">This Month</option>
                             <option value="This year">This Year</option>
                         </Form.Select>
-
                     </Col>
                 </Row>
-
                 <ResponsiveContainer width="100%" height={300}>
-
                     <AreaChart data={chartData}>
-
                         <defs>
                             <linearGradient id="colorBlue" x1="0" y1="0" x2="0" y2="1">
                                 <stop offset="5%" stopColor="#4e7cf3" stopOpacity={0.4} />
@@ -327,12 +315,10 @@ const Home = () => {
                         </defs>
                         <XAxis dataKey="name" tick={{ fontSize: 12 }} />
                         <YAxis
-
                             tickFormatter={(val) => `$${val}`}
                             tick={{ fontSize: 12 }}
                         />
                         <Tooltip formatter={(val) => `$${val.toFixed(2)}`} />
-
                         <CartesianGrid strokeDasharray="3 3" vertical={false} />
                         <Area
                             type="monotone"
@@ -345,7 +331,7 @@ const Home = () => {
                         />
                     </AreaChart>
                 </ResponsiveContainer>
-            </Card>
+            </Card >
         );
     };
 

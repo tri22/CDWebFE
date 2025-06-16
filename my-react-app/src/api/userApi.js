@@ -1,21 +1,21 @@
 import axiosInstance from './axiosInstance'
 
-const userApi ={
-    register :(data)=>{
-        return axiosInstance.post(`/users`,data)
+const userApi = {
+    register: (data) => {
+        return axiosInstance.post(`/users`, data)
     },
 
-    updateUser:(userId,data)=>{
-        return axiosInstance.put(`/users/update/${userId}`,data)
+    updateUser: (userId, data) => {
+        return axiosInstance.put(`/users/update/${userId}`, data)
     },
 
-    getAllUser:()=>{
+    getAllUser: () => {
         return axiosInstance.get(`/users/all`)
     },
 
-    deleteUser:(userId)=>{
+    deleteUser: (userId) => {
         return axiosInstance.delete(`/users/delete/${userId}`)
     },
-  
+
 }
 export default userApi;
