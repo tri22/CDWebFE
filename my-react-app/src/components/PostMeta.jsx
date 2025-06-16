@@ -1,26 +1,27 @@
 // PostMeta.jsx
+import { useTranslation } from "react-i18next";
 import { FaHeart, FaComment } from "react-icons/fa";
 
 const PostMeta = ({ date, categories, author, likes, comments }) => {
+    const { t } = useTranslation(); // Khởi tạo hook
     return (
         <div style={styles.postMeta}>
             <span>{date}</span>
             <span style={styles.divider}>|</span>
             {categories.map((category, index) => (
-            <span>{category}</span>
+                <span key={index}>{t(category)}</span> // Dịch category
             ))}
             <span style={styles.divider}>|</span>
             <span>{author}</span>
             <span style={styles.divider}>|</span>
             <span style={styles.iconText}>
-                <FaHeart></FaHeart> {likes}
+                <FaHeart /> {likes}
             </span>
             <span style={styles.divider}>|</span>
             <span style={styles.iconText}>
-                <FaComment></FaComment>{comments}
+                <FaComment /> {comments}
             </span>
         </div>
-
     );
 };
 const styles = {

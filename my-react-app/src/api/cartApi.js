@@ -9,7 +9,7 @@ const cartApi = {
     removeCartItem: (productId) => {
         return axiosInstance.delete(`/cart/delete-item/${productId}`)
     },
-    
+
     clearCart: () => {
         return axiosInstance.delete('/cart/clear');
     },

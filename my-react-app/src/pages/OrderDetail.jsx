@@ -22,7 +22,6 @@ export default function OrderDetail() {
         email: '',
         phone: ''
     });
-    // const [loadingPayment, setLoadingPayment] = useState(false);
 
     const { id } = useParams();
 
@@ -50,59 +49,25 @@ export default function OrderDetail() {
         fetchOrder();
     }, [id]);
 
-    // const handleCheckout = async () => {
-    //     if (!order) {
-    //         toast.error("Không tìm thấy thông tin đơn hàng");
-    //         return;
-    //     }
-
-    //     setLoadingPayment(true);
-    //     try {
-    //         // Kiểm tra dữ liệu trước khi gửi
-    //         if (!order.id || !order.totalPrice) {
-    //             throw new Error("Dữ liệu đơn hàng không hợp lệ: Thiếu orderId hoặc totalPrice");
-    //         }
-
-    //         // Gửi yêu cầu tạo URL thanh toán VNPay
-    //         const paymentData = {
-    //             orderId: order.id,
-    //             amount: order.totalPrice, // Đảm bảo totalPrice là VND
-    //             orderInfo: `Thanh toán đơn hàng #${order.id}`,
-    //             returnUrl: `${window.location.origin}/payment-result`
-    //         };
-
-    //         console.log("Gửi yêu cầu thanh toán:", paymentData); // Debug dữ liệu gửi đi
-
-    //         const response = await orderApi.createVNPayPayment(paymentData);
-    //         console.log("Phản hồi từ server:", response); // Debug phản hồi
-
-    //         const paymentUrl = response.data?.paymentUrl;
-
-    //         if (paymentUrl) {
-    //             window.location.href = paymentUrl;
-    //         } else {
-    //             toast.error("Không nhận được URL thanh toán từ server");
-    //         }
-    //     } catch (error) {
-    //         console.error("Lỗi thanh toán VNPay:", error.response || error.message || error);
-    //         toast.error(error.response?.data?.message || "Lỗi khi xử lý thanh toán VNPay");
-    //     } finally {
-    //         setLoadingPayment(false);
-    //     }
-    // };
+    const handleCheckout = async () => {
+        try {
+            const response = await orderApi.createVNPayPayment(id, order.totalPrice);
+            if (response.data.code === 'ok') {
+                window.location.href = response.data.paymentUrl; // Chuyển hướng đến URL thanh toán VNPay
+            } else {
+                toast.error("Không thể tạo URL thanh toán");
+            }
+        } catch (error) {
+            toast.error("Lỗi khi thực hiện thanh toán");
+        }
+    };
 
     const renderActionButtons = () => {
         if (order.status === 'NO_PAID') {
             return (
                 <>
-                    <Button
-                        variant="success"
-                        className="me-2"
-                    // onClick={handleCheckout}
-                    // disabled={loadingPayment}
-                    >
-                        {/* {loadingPayment ? 'Đang xử lý...' : 'Checkout'} */}
-                        checkout
+                    <Button variant="success" className="me-2" onClick={handleCheckout}>
+                        Checkout
                     </Button>
                     <Button variant="danger">Cancel Order</Button>
                 </>

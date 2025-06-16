@@ -28,6 +28,7 @@ const statusMap = {
     'paid': 'PAID',
     'on-shipping': 'SHIPPING',
     'canceled': 'CANCELLED',
+    'failed': 'FAILED',
 };
 
 export default function Order() {
@@ -64,6 +65,7 @@ export default function Order() {
         'on-shipping': orders.filter(o => o.status === 'SHIPPING').length,
         'paid': orders.filter(o => o.status === 'PAID').length,
         'canceled': orders.filter(o => o.status === 'CANCELLED').length,
+        'failed': orders.filter(o => o.status === 'FAILED').length,
     };
 
     return (

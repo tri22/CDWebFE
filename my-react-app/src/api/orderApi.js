@@ -4,6 +4,11 @@ const orderApi = {
     // createOrder: (data) => {
     //     return axiosInstance.post(`/order/create`, data)
     // },
+    createVNPayPayment: (orderId, amount) => {
+        return axiosInstance.get(`/payment/vnpay`, {
+            params: { orderId, amount }
+        });
+    },
     getOrderById: (orderId) => {
         return axiosInstance.get(`/order/${orderId}`)
     },
@@ -23,10 +28,6 @@ const orderApi = {
     updateOrder: (orderId, data) => {
         return axiosInstance.put(`/order/update/${orderId}`, data)
     },
-
-    createVNPayPayment: (data) => axiosInstance.post('/api/payment/vnpay/create', data),
-
-    verifyVNPayPayment: (data) => axiosInstance.get('/api/payment/vnpay/return', { data }),
 
     getAllOrder: () => {
         return axiosInstance.get(`/order/all`)

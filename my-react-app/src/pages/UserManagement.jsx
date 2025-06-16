@@ -58,8 +58,8 @@ const UserManagement = () => {
 
     const handleUpdateRole = async () => {
         try {
-            const updateData={
-                role:newRole
+            const updateData = {
+                role: newRole
             }
             await userApi.updateUser(selectedUserId, updateData);
             toast.success("Updated role successfully!");
@@ -71,7 +71,7 @@ const UserManagement = () => {
     };
 
 
-    const handleEditClick = (id,role) => {
+    const handleEditClick = (id, role) => {
         console.log(id)
         setSelectedUserId(id);
         setNewRole(role); // role hiện tại

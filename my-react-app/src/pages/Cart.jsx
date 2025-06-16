@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
+import { useTranslation } from 'react-i18next'; // Import useTranslation
 import { useLocation, useNavigate } from 'react-router-dom';
-
 import { Container, Row, Col, Table, Button, Form } from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
 import Footer from "../components/Footer";
@@ -12,6 +12,7 @@ import orderApi from "../api/orderApi";
 import { formatPrice } from "../utils/Data";
 
 const Cart = () => {
+    const { t } = useTranslation(); // Khởi tạo hook useTranslation
     const navigate = useNavigate();
     const [cart, setCart] = useState([]);
 
@@ -20,7 +21,7 @@ const Cart = () => {
         const fetchCart = async () => {
             try {
                 const response = await cartApi.getCart();
-                const data = response.data; // 👈 dữ liệu thật nằm ở đây
+                const data = response.data;
                 const transformed = (data.items || []).map(item => ({
                     id: item.id,
                     name: item.product.name,
@@ -30,13 +31,10 @@ const Cart = () => {
                     productId: item.product.id
                 }));
                 setCart(transformed);
-
-                setCart(transformed);
             } catch (error) {
                 console.error("Lỗi khi lấy giỏ hàng:", error);
             }
         };
-
         fetchCart();
     }, []);
 
@@ -53,15 +51,9 @@ const Cart = () => {
             return updatedCart;
         });
 
-        // Lấy item mới nhất sau khi setCart để truyền vào API
         const currentItem = cart.find(item => item.id === id);
         const updatedQuantity = Math.max(1, currentItem.quantity + delta);
-
-        const itemData = {
-            quantity: updatedQuantity,
-            cartItemId: id
-        };
-
+        const itemData = { quantity: updatedQuantity, cartItemId: id };
         try {
             const response = await cartApi.updateItemQuantity(itemData);
             toast.success(response.data.message);
@@ -79,23 +71,20 @@ const Cart = () => {
     };
 
     const handleOrder = async () => {
-        const paymentMethodId = 2; // Cần phải thay thế lại thành dữ liệu từ Database
+        const paymentMethodId = 2;
         const shippingFee = 10000;
-
         const orderData = {
-            note: "Giao hàng nhanh", // 👈 Có thể cho người dùng nhập
+            note: "Giao hàng nhanh",
             paymentMethodId: paymentMethodId,
             shippingFee: shippingFee,
         };
-
         try {
             const response = await orderApi.createOrderFromCart(orderData);
             const createdOrder = response.data;
-
             console.log("Đã lưu đơn hàng:", createdOrder);
-            await cartApi.clearCart(); // Xoá giỏ hàng
+            await cartApi.clearCart();
             toast.success("Đặt hàng thành công!");
-            navigate('/order'); // Chuyển đến trang đơn hàng
+            navigate('/order');
         } catch (error) {
             toast.error("Đặt hàng thất bại!");
             console.error(error);
@@ -103,22 +92,22 @@ const Cart = () => {
     };
 
     const subtotal = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
-    const cartTotal = subtotal; // giả định phí ship 35
+    const cartTotal = subtotal;
 
     return (
         <div>
             <Header></Header>
             <Container className="mb-5" style={{ marginTop: '100px' }}>
-                <h4>Cart ({cart.length} item)</h4>
+                <h4>{t('cart_title', { count: cart.length })}</h4>
                 <Table responsive bordered className="align-middle mt-4">
                     <thead className="table-dark">
                         <tr className="text-uppercase text-center">
                             <th></th>
-                            <th>Photo</th>
-                            <th>Product</th>
-                            <th>Price</th>
-                            <th>Quantity</th>
-                            <th>Subtotal</th>
+                            <th>{t('photo')}</th>
+                            <th>{t('product')}</th>
+                            <th>{t('price')}</th>
+                            <th>{t('quantity')}</th>
+                            <th>{t('subtotal')}</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -144,30 +133,28 @@ const Cart = () => {
                         ))}
                     </tbody>
                 </Table>
-
                 <Row className="mt-4">
                     <Col md={6} className="d-flex gap-2">
-                        <Form.Control placeholder="Coupon code" />
-                        <Button variant="dark">Apply Coupon</Button>
+                        <Form.Control placeholder={t('coupon_code')} />
+                        <Button variant="dark">{t('apply_coupon')}</Button>
                     </Col>
                     <Col md={6} className="text-end">
-                        <Button variant="dark">Update Cart</Button>
+                        <Button variant="dark">{t('update_cart')}</Button>
                     </Col>
                 </Row>
-
                 <Row className="mt-5">
                     <Col md={{ span: 4, offset: 8 }}>
                         <div className="p-4 bg-dark text-white rounded">
-                            <h5>Cart totals</h5>
+                            <h5>{t('cart_totals')}</h5>
                             <div className="d-flex justify-content-between mt-3">
-                                <span>Subtotal</span>
+                                <span>{t('subtotal')}</span>
                                 <span>{formatPrice(subtotal)}</span>
                             </div>
                             <div className="d-flex justify-content-between">
-                                <span>Cart totals</span>
+                                <span>{t('cart_totals')}</span>
                                 <span>{formatPrice(cartTotal)}</span>
                             </div>
-                            <Button className="w-100 mt-3" variant="outline-light" onClick={handleOrder}>Proceed to Checkout</Button>
+                            <Button className="w-100 mt-3" variant="outline-light" onClick={handleOrder}>{t('proceed_checkout')}</Button>
                         </div>
                     </Col>
                 </Row>

@@ -9,8 +9,10 @@ import PaginationCom from "../components/PaginationCom.jsx";
 import PostMeta from "../components/PostMeta.jsx";
 import { AiOutlineHome } from "react-icons/ai";
 import '../assets/styles/Blog.scss'
+import { useTranslation } from "react-i18next";
 
 const Blog = () => {
+    const { t } = useTranslation();
     const categories = [
         { name: "Ceiling", count: 25 },
         { name: "Floor", count: 25 },
@@ -23,63 +25,59 @@ const Blog = () => {
     const blogs = [
         {
             id: 1,
-            title: "New modern sofa is here",
+            title: "blog.title_1", // Thay bằng khóa
             image: "/image/product/product1.png",
-            description:
-                "Donec vitae felis eget nunc aliquet lacinia. Vestibulum a est at dui luctus volutpat.",
+            description: "blog.description_1", // Thay bằng khóa
             meta: {
                 date: "Sep 26, 2022",
-                categories: ["Newest", "sofa and chair", "wooden"],
+                categories: ["category.newest", "category.sofa_and_chair", "category.wooden"], // Thay bằng khóa
                 author: "soroush norozy",
                 likes: 5,
                 comments: 3,
             },
-            content: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam convallis, elit a aliquet cursus, nisi lacus dapibus urna, ut tincidunt nisl urna ut sapien. Curabitur quis semper nibh. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae; Integer nec facilisis lacus. Sed hendrerit, mauris eget dignissim sodales, nunc est mattis justo, vel varius orci sem a nisi. Maecenas eu risus eu magna vehicula tincidunt."
+            content: "blog.content_1", // Thay bằng khóa
         },
         {
             id: 2,
-            title: "Bài viết thứ 2",
+            title: "blog.title_2",
             image: "/image/product/product2.png",
-            description: "Phần mô tả tiếp theo cho bài viết 2...",
+            description: "blog.description_2",
             meta: {
                 date: "May 15, 2025",
-                categories: ["Design", "minimal", "interior"],
+                categories: ["category.design", "category.minimal", "category.interior"],
                 author: "Nguyễn Văn A",
                 likes: 10,
                 comments: 2,
             },
-            content: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam convallis, elit a aliquet cursus, nisi lacus dapibus urna, ut tincidunt nisl urna ut sapien. Curabitur quis semper nibh. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae; Integer nec facilisis lacus. Sed hendrerit, mauris eget dignissim sodales, nunc est mattis justo, vel varius orci sem a nisi. Maecenas eu risus eu magna vehicula tincidunt."
-
+            content: "blog.content_2",
         },
         {
             id: 3,
-            title: "Bài viết thứ 3",
+            title: "blog.title_3",
             image: "/image/product/product2.png",
-            description: "Mô tả bài viết thứ 3...",
+            description: "blog.description_3",
             meta: {
                 date: "May 16, 2025",
-                categories: ["Modern", "interior"],
+                categories: ["category.modern", "category.interior"],
                 author: "Trần Thị B",
                 likes: 15,
                 comments: 5,
             },
-            content: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam convallis, elit a aliquet cursus, nisi lacus dapibus urna, ut tincidunt nisl urna ut sapien. Curabitur quis semper nibh. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae; Integer nec facilisis lacus. Sed hendrerit, mauris eget dignissim sodales, nunc est mattis justo, vel varius orci sem a nisi. Maecenas eu risus eu magna vehicula tincidunt."
-
+            content: "blog.content_3",
         },
         {
             id: 4,
-            title: "Bài viết thứ 4",
+            title: "blog.title_4",
             image: "/image/product/product2.png",
-            description: "Mô tả bài viết thứ 4...",
+            description: "blog.description_4",
             meta: {
                 date: "May 17, 2025",
-                categories: ["Architecture", "wooden"],
+                categories: ["category.architecture", "category.wooden"],
                 author: "Lê Văn C",
                 likes: 20,
                 comments: 7,
             },
-            content: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam convallis, elit a aliquet cursus, nisi lacus dapibus urna, ut tincidunt nisl urna ut sapien. Curabitur quis semper nibh. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae; Integer nec facilisis lacus. Sed hendrerit, mauris eget dignissim sodales, nunc est mattis justo, vel varius orci sem a nisi. Maecenas eu risus eu magna vehicula tincidunt."
-
+            content: "blog.content_4",
         },
     ];
 
@@ -124,42 +122,37 @@ const Blog = () => {
         }
     }, [selectedBlog]);
 
-
-
     return (
         <>
             <Header />
             <Container className="pt-5 mb-5" style={{ marginTop: "100px" }}>
                 <Row>
-                    {/* Nội dung chính bên trái */}
                     <Col md={8}>
-
                         {(() => {
                             if (selectedBlog) {
                                 return (
                                     <div>
-                                        <Breadcrumb className="mb-4 ">
+                                        <Breadcrumb className="mb-4">
                                             <Breadcrumb.Item
                                                 onClick={() => navigate('/')}
                                                 linkAs="span"
                                                 style={{ cursor: 'pointer', display: 'flex', alignItems: 'center' }}
                                             >
-                                                <AiOutlineHome className="me-1 mb-1" /> Trang chủ
+                                                <AiOutlineHome className="me-1 mb-1" />
+                                                {t('home')} {/* Thay "Trang chủ" bằng khóa */}
                                             </Breadcrumb.Item>
-
+                                            17:24
                                             <Breadcrumb.Item
                                                 onClick={() => setSelectedBlog(null)}
                                                 linkAs="span"
                                                 style={{ cursor: 'pointer' }}
                                             >
-                                                Blog
+                                                {t('blog')} {/* Thay "Blog" bằng khóa */}
                                             </Breadcrumb.Item>
-
                                             <Breadcrumb.Item active className="text-capitalize">
                                                 {selectedBlog.title}
                                             </Breadcrumb.Item>
                                         </Breadcrumb>
-
                                         <div className="my-5">
                                             <img
                                                 src={selectedBlog.image}
@@ -173,7 +166,6 @@ const Blog = () => {
                                                     backgroundColor: "#f8f9fa",
                                                 }}
                                             />
-
                                             <PostMeta {...selectedBlog.meta} />
                                             <p className="mb-3" style={styles.title}>{selectedBlog.title}</p>
                                             <p style={styles.description}>{selectedBlog.description}</p>
@@ -182,7 +174,6 @@ const Blog = () => {
                                     </div>
                                 );
                             }
-
                             if (showCreateForm) {
                                 return (
                                     <div className="mb-4">
@@ -191,44 +182,36 @@ const Blog = () => {
                                                 <div className="mb-3">
                                                     <input
                                                         type="text"
-                                                        placeholder="Tiêu đề"
+                                                        placeholder={t('title')} // Thay "Tiêu đề"
                                                         className="form-control"
                                                         value={newPost.title}
-                                                        onChange={(e) =>
-                                                            setNewPost({ ...newPost, title: e.target.value })
-                                                        }
+                                                        onChange={(e) => setNewPost({ ...newPost, title: e.target.value })}
                                                     />
                                                 </div>
                                                 <div className="mb-3">
                                                     <input
                                                         type="text"
-                                                        placeholder="Link ảnh"
+                                                        placeholder={t('image_link')} // Thay "Link ảnh"
                                                         className="form-control"
                                                         value={newPost.image}
-                                                        onChange={(e) =>
-                                                            setNewPost({ ...newPost, image: e.target.value })
-                                                        }
+                                                        onChange={(e) => setNewPost({ ...newPost, image: e.target.value })}
                                                     />
                                                 </div>
                                                 <div className="mb-3">
                                                     <textarea
-                                                        placeholder="Mô tả"
+                                                        placeholder={t('description')} // Thay "Mô tả"
                                                         className="form-control"
                                                         value={newPost.description}
-                                                        onChange={(e) =>
-                                                            setNewPost({ ...newPost, description: e.target.value })
-                                                        }
+                                                        onChange={(e) => setNewPost({ ...newPost, description: e.target.value })}
                                                     />
                                                 </div>
                                                 <div className="mb-3">
                                                     <textarea
                                                         rows={20}
-                                                        placeholder="Nội dung"
+                                                        placeholder={t('content')} // Thay "Nội dung"
                                                         className="form-control"
                                                         value={newPost.content}
-                                                        onChange={(e) =>
-                                                            setNewPost({ ...newPost, content: e.target.value })
-                                                        }
+                                                        onChange={(e) => setNewPost({ ...newPost, content: e.target.value })}
                                                     />
                                                 </div>
                                                 <div className="d-flex justify-content-between mt-3">
@@ -243,8 +226,8 @@ const Blog = () => {
                                                                     date: new Date().toLocaleDateString("vi-VN"),
                                                                 },
                                                             };
-                                                            setSelectedBlog(newBlog); // Mở luôn bài vừa đăng
-                                                            blogs.unshift(newBlog); // Cập nhật danh sách bài
+                                                            setSelectedBlog(newBlog);
+                                                            blogs.unshift(newBlog);
                                                             setShowCreateForm(false);
                                                             setNewPost({
                                                                 title: "",
@@ -254,30 +237,27 @@ const Blog = () => {
                                                                 meta: {
                                                                     date: "",
                                                                     categories: [],
-                                                                    author: "Người đăng",
+                                                                    author: t('default_author'), // Thay "Người đăng"
                                                                     likes: 0,
                                                                     comments: 0,
                                                                 },
                                                             });
                                                         }}
                                                     >
-                                                        Đăng bài
+                                                        {t('post_article')} {/* Thay "Đăng bài" */}
                                                     </button>
-
                                                     <button
                                                         className="btn btn-primary px-4"
                                                         onClick={() => setShowCreateForm(!showCreateForm)}
                                                     >
-                                                        Hủy
+                                                        {t('cancel')} {/* Thay "Hủy" */}
                                                     </button>
                                                 </div>
-
                                             </div>
                                         )}
                                     </div>
-                                )
+                                );
                             }
-
                             return (
                                 <>
                                     {currentBlogs.map((blog, index) => (
@@ -287,14 +267,15 @@ const Blog = () => {
                                             onClick={() => setSelectedBlog(blog)}
                                         />
                                     ))}
-                                    <PaginationCom totalPages={totalPages}  currentPage={currentPage} onPageChange={handlePageChange}/>
+                                    <PaginationCom
+                                        totalPages={totalPages}
+                                        currentPage={currentPage}
+                                        onPageChange={handlePageChange}
+                                    />
                                 </>
                             );
                         })()}
-
                     </Col>
-
-                    {/* Sidebar */}
                     <Col md={4} className="mt-1">
                         <Sidebar
                             bestBlog={blogs[1]}
@@ -303,15 +284,14 @@ const Blog = () => {
                         />
                         <div className="px-5">
                             <Button
-                                className=" mt-3 "
+                                className="mt-3"
                                 onClick={() => setShowCreateForm(!showCreateForm)}
                                 style={{ alignSelf: 'center' }}
                                 variant="outline-dark"
                             >
-                                Đăng bài viết
+                                {t('post_article')} {/* Thay "Đăng bài viết" */}
                             </Button>
                         </div>
-
                     </Col>
                 </Row>
             </Container>

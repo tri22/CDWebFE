@@ -8,8 +8,10 @@ import LoginIcon from '@mui/icons-material/Login';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import '../assets/styles/Header.scss';
 import { useAuth } from '../api/AuthContext';
+import { useTranslation } from 'react-i18next';
 
 const Header = () => {
+    const { t, i18n } = useTranslation(); // Hook để dịch và đổi ngôn ngữ
     const [showSearch, setShowSearch] = useState(false);
     const navigate = useNavigate();
     const location = useLocation();
@@ -17,18 +19,23 @@ const Header = () => {
     const { user, isLoggedIn, resetAuth } = useAuth();
 
     const isActive = (path) => currentPath === path;
-    const handleCartClick = async () => {
+
+    const handleCartClick = () => {
         navigate('/cart');
     };
 
     const logout = () => {
-        resetAuth(); // Gọi đúng hàm resetAuth
-        navigate("/login"); // Optional: chuyển hướng sau khi logout
+        resetAuth();
+        navigate('/login');
     };
 
     const goToProfile = () => {
-        resetAuth(); // Gọi đúng hàm resetAuth
-        navigate("/Profile"); // Optional: chuyển hướng sau khi logout
+        navigate('/Profile');
+    };
+
+    // Hàm đổi ngôn ngữ
+    const changeLanguage = (lng) => {
+        i18n.changeLanguage(lng);
     };
 
     return (
@@ -36,30 +43,37 @@ const Header = () => {
             <Navbar expand="lg" variant="light" className='fixed-top shadow-sm py-3'>
                 <Container>
                     <Navbar.Brand as={Link} to="/pages" className="label me-5">Furnix</Navbar.Brand>
-
                     <Navbar.Toggle aria-controls="basic-navbar-nav" className='custom-toggle' />
                     <Navbar.Collapse id="basic-navbar-nav" className="justify-content-between">
                         <Nav className="me-auto">
-                            <Nav.Link as={Link} to="/" className={`nav-item-custom ${isActive("/") ? "active" : ""}`}>Home</Nav.Link>
-                            <Nav.Link as={Link} to="/blog" className={`nav-item-custom ${isActive("/blog") ? "active" : ""}`}>Blog</Nav.Link>
-                            <Nav.Link as={Link} to="/shop" className={`nav-item-custom ${isActive("/shop") ? "active" : ""}`}>Shop</Nav.Link>
-                            <Nav.Link as={Link} to="/contact" className={`nav-item-custom ${isActive("/contact") ? "active" : ""}`}>Contact</Nav.Link>
-                            <Nav.Link as={Link} to="/About" className={`nav-item-custom ${isActive("/About") ? "active" : ""}`}>About Us</Nav.Link>
+                            <Nav.Link as={Link} to="/" className={`nav-item-custom ${isActive('/') ? 'active' : ''}`}>
+                                {t('home')}
+                            </Nav.Link>
+                            <Nav.Link as={Link} to="/blog" className={`nav-item-custom ${isActive('/blog') ? 'active' : ''}`}>
+                                {t('blog')}
+                            </Nav.Link>
+                            <Nav.Link as={Link} to="/shop" className={`nav-item-custom ${isActive('/shop') ? 'active' : ''}`}>
+                                {t('shop')}
+                            </Nav.Link>
+                            <Nav.Link as={Link} to="/contact" className={`nav-item-custom ${isActive('/contact') ? 'active' : ''}`}>
+                                {t('contact.header')}
+                            </Nav.Link>
+                            <Nav.Link as={Link} to="/About" className={`nav-item-custom ${isActive('/About') ? 'active' : ''}`}>
+                                {t('about')}
+                            </Nav.Link>
                         </Nav>
                         <div className="d-flex align-items-center gap-3">
                             <div className="search-box d-flex align-items-center gap-2">
                                 <InputGroup className="d-none d-lg-flex search-input-group">
-                                    <Form.Control className='text-dark' placeholder="Search..." />
+                                    <Form.Control className='text-dark' placeholder={t('search')} />
                                 </InputGroup>
                                 <Button variant="outline-dark" onClick={() => setShowSearch(!showSearch)}>
                                     <SearchIcon />
                                 </Button>
                             </div>
-
                             <Button variant="outline-dark" onClick={handleCartClick}>
                                 <ShoppingCartIcon />
                             </Button>
-
                             <Dropdown>
                                 <Dropdown.Toggle variant="outline-light" id="dropdown-basic" className='btn-menu-dropdown d-flex align-items-center'>
                                     <AccountCircleIcon />
@@ -67,31 +81,28 @@ const Header = () => {
                                 </Dropdown.Toggle>
                                 {isLoggedIn ? (
                                     <Dropdown.Menu>
-                                        <Dropdown.Item as={Link} to="/Profile">
-                                            {/* Hiển thị thông tin người dùng */}
-                                            Profile
-                                        </Dropdown.Item>
-                                        <Dropdown.Item as={Link} to="/AdminHome">
-                                            {/* Hiển thị thông tin người dùng */}
-                                            Admin
-                                        </Dropdown.Item>                            
-                                        <Dropdown.Item as={Link} to="/order">
-                                            Order
-
-                                        </Dropdown.Item>
-                                        <Dropdown.Item onClick={logout}>
-                                            Logout
-                                        </Dropdown.Item>
+                                        <Dropdown.Item as={Link} to="/Profile">{t('profile')}</Dropdown.Item>
+                                        <Dropdown.Item as={Link} to="/AdminHome">{t('admin')}</Dropdown.Item>
+                                        <Dropdown.Item as={Link} to="/order">{t('order')}</Dropdown.Item>
+                                        <Dropdown.Item onClick={logout}>{t('logout')}</Dropdown.Item>
                                     </Dropdown.Menu>
                                 ) : (
                                     <Dropdown.Menu>
                                         <Dropdown.Item as={Link} to="/login">
-                                            <LoginIcon className="me-2" />
-                                            Login
+                                            <LoginIcon className="me-2" /> {t('login')}
                                         </Dropdown.Item>
                                     </Dropdown.Menu>
                                 )}
-
+                            </Dropdown>
+                            {/* Dropdown chọn ngôn ngữ */}
+                            <Dropdown>
+                                <Dropdown.Toggle variant="outline-dark" id="dropdown-language">
+                                    {i18n.language === 'en' ? 'English' : 'Tiếng Việt'}
+                                </Dropdown.Toggle>
+                                <Dropdown.Menu>
+                                    <Dropdown.Item onClick={() => changeLanguage('en')}>English</Dropdown.Item>
+                                    <Dropdown.Item onClick={() => changeLanguage('vi')}>Tiếng Việt</Dropdown.Item>
+                                </Dropdown.Menu>
                             </Dropdown>
                         </div>
                     </Navbar.Collapse>

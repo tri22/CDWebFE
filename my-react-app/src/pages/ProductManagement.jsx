@@ -1,4 +1,4 @@
-import { Col, Container, Row, Button } from "react-bootstrap";
+import { Col, Container, Row, Button, Modal, Form } from "react-bootstrap";
 import AdminSidebar from "../components/AdminSidebar";
 import AdminNav from "../components/AdminNav";
 import { useEffect, useState } from "react";
@@ -9,8 +9,10 @@ import PaginationCom from "../components/PaginationCom";
 import { toast } from "react-toastify";
 
 const ProductManagement = () => {
-    const [productList, setProductList] = useState([])
+    const [productList, setProductList] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
+    const [showModal, setShowModal] = useState(false);
+    const [selectedProduct, setSelectedProduct] = useState(null);
     const itemPerPage = 10;
     const totalPages = Math.ceil(productList.length / itemPerPage);
     const indexOfLast = currentPage * itemPerPage;
@@ -19,32 +21,64 @@ const ProductManagement = () => {
 
     const handlePageChange = (pageNumber) => {
         setCurrentPage(pageNumber);
-        window.scrollTo({ top: 0, behavior: 'smooth' });
+        window.scrollTo({ top: 0, behavior: "smooth" });
     };
 
-
     useEffect(() => {
-
-        fetchProduct()
-    }, [])
+        fetchProduct();
+    }, []);
 
     const fetchProduct = async () => {
-        const response = await productApi.getAllProduct()
-        const data = response.data
-        console.log(data)
-        setProductList(data)
-    }
+        const response = await productApi.getAllProduct();
+        const data = response.data;
+        setProductList(data);
+    };
 
     const deleteProduct = async (id) => {
         if (!window.confirm("Are you sure you want to delete this product?")) return;
         try {
-            const response = await productApi.deleteProduct(id);
+            await productApi.deleteProduct(id);
             await fetchProduct();
             toast.success("Delete success!");
         } catch (error) {
-            toast.error("Failed to delete this product:", error);
+            toast.error("Failed to delete this product: " + error.message);
         }
-    }
+    };
+
+    const updateProduct = async (productData) => {
+        try {
+            const response = await productApi.updateProduct(selectedProduct.id, productData);
+            await fetchProduct();
+            setShowModal(false);
+            toast.success("Update product success!");
+        } catch (error) {
+            toast.error("Failed to update product: " + error.message);
+        }
+    };
+
+    const handleEditClick = (product) => {
+        setSelectedProduct(product);
+        setShowModal(true);
+    };
+
+    const handleModalClose = () => {
+        setShowModal(false);
+        setSelectedProduct(null);
+    };
+
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        const productData = {
+            name: e.target.name.value,
+            price: parseFloat(e.target.price.value),
+            image: e.target.image.value,
+            category: { id: parseInt(e.target.categoryId.value) }, // Giả sử có category ID
+            description: e.target.description.value,
+            color: e.target.color.value,
+            rating: parseInt(e.target.rating.value),
+        };
+        updateProduct(productData);
+    };
 
     const TableRender = ({ data }) => {
         return (
@@ -66,7 +100,7 @@ const ProductManagement = () => {
                             {data.map((row, index) => (
                                 <tr key={index}>
                                     <td className="fw-semibold">{row.name}</td>
-                                    <td>${row.price}</td>
+                                    <td>${formatPrice(row.price)}</td>
                                     <td>{row.category.name}</td>
                                     <td>
                                         <img src={row.image} alt="product" style={{ height: "50px", objectFit: "cover" }} />
@@ -74,8 +108,12 @@ const ProductManagement = () => {
                                     <td>{row.description}</td>
                                     <td>{row.rating}</td>
                                     <td>
-                                        <Button className="me-2"><FaEdit /></Button>
-                                        <Button onClick={() => deleteProduct(row.id)}><MdDelete /></Button>
+                                        <Button className="me-2" onClick={() => handleEditClick(row)}>
+                                            <FaEdit />
+                                        </Button>
+                                        <Button onClick={() => deleteProduct(row.id)}>
+                                            <MdDelete />
+                                        </Button>
                                     </td>
                                 </tr>
                             ))}
@@ -83,24 +121,109 @@ const ProductManagement = () => {
                     </table>
                 </div>
             </div>
-        )
-    }
+        );
+    };
 
     return (
-        <div style={{ backgroundColor: '#F5F6FA', minHeight: "100vh" }}>
+        <div style={{ backgroundColor: "#F5F6FA", minHeight: "100vh" }}>
             <Container fluid>
                 <Row>
-                    <Col md={2} className='p-0' style={{ minHeight: "100vh" }}>
-                        <AdminSidebar></AdminSidebar>
+                    <Col md={2} className="p-0" style={{ minHeight: "100vh" }}>
+                        <AdminSidebar />
                     </Col>
                     <Col md={10} style={{ minHeight: "100vh" }}>
-                        <AdminNav title={"Product Management"}></AdminNav>
-                        <TableRender data={currentProductList}></TableRender>
-                        <PaginationCom currentPage={currentPage} onPageChange={handlePageChange} totalPages={totalPages}></PaginationCom>
+                        <AdminNav title={"Product Management"} />
+                        <TableRender data={currentProductList} />
+                        <PaginationCom
+                            currentPage={currentPage}
+                            onPageChange={handlePageChange}
+                            totalPages={totalPages}
+                        />
                     </Col>
                 </Row>
             </Container>
+
+            {/* Modal for Editing Product */}
+            <Modal show={showModal} onHide={handleModalClose}>
+                <Modal.Header closeButton>
+                    <Modal.Title>Edit Product</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    {selectedProduct && (
+                        <Form onSubmit={handleSubmit}>
+                            <Form.Group className="mb-3">
+                                <Form.Label>Name</Form.Label>
+                                <Form.Control
+                                    type="text"
+                                    name="name"
+                                    defaultValue={selectedProduct.name}
+                                    required
+                                />
+                            </Form.Group>
+                            <Form.Group className="mb-3">
+                                <Form.Label>Price</Form.Label>
+                                <Form.Control
+                                    type="number"
+                                    name="price"
+                                    step="0.01"
+                                    defaultValue={selectedProduct.price}
+                                    required
+                                />
+                            </Form.Group>
+                            <Form.Group className="mb-3">
+                                <Form.Label>Image URL</Form.Label>
+                                <Form.Control
+                                    type="text"
+                                    name="image"
+                                    defaultValue={selectedProduct.image}
+                                    required
+                                />
+                            </Form.Group>
+                            <Form.Group className="mb-3">
+                                <Form.Label>Category ID</Form.Label>
+                                <Form.Control
+                                    type="number"
+                                    name="categoryId"
+                                    defaultValue={selectedProduct.category.id}
+                                    required
+                                />
+                            </Form.Group>
+                            <Form.Group className="mb-3">
+                                <Form.Label>Description</Form.Label>
+                                <Form.Control
+                                    as="textarea"
+                                    name="description"
+                                    defaultValue={selectedProduct.description}
+                                    required
+                                />
+                            </Form.Group>
+                            <Form.Group className="mb-3">
+                                <Form.Label>Color</Form.Label>
+                                <Form.Control
+                                    type="text"
+                                    name="color"
+                                    defaultValue={selectedProduct.color}
+                                    required
+                                />
+                            </Form.Group>
+                            <Form.Group className="mb-3">
+                                <Form.Label>Rating</Form.Label>
+                                <Form.Control
+                                    type="number"
+                                    name="rating"
+                                    defaultValue={selectedProduct.rating}
+                                    required
+                                />
+                            </Form.Group>
+                            <Button variant="primary" type="submit">
+                                Save Changes
+                            </Button>
+                        </Form>
+                    )}
+                </Modal.Body>
+            </Modal>
         </div>
-    )
-}
+    );
+};
+
 export default ProductManagement;
