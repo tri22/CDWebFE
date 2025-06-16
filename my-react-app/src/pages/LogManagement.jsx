@@ -7,7 +7,7 @@ import PaginationCom from "../components/PaginationCom";
 import { FaArrowDown } from "react-icons/fa";
 import { GrPowerReset } from "react-icons/gr";
 import { useTranslation } from 'react-i18next';
-import { toast } from "react-toastify";
+
 
 const LogManagement = () => {
     const [record, setRecord] = useState([])
@@ -29,10 +29,10 @@ const LogManagement = () => {
             console.log(response.data.result)
             setRecord(response.data.result)
         } catch (err) {
-            if (err.response) {
-                const errMessage = error.response.data?.message || 'Đã xảy ra lỗi';
-                toast.error(errMessage);
-            }
+
+            console.error("Error loading data", err);
+            
+
         }
 
     }

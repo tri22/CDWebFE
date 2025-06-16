@@ -28,7 +28,7 @@ import ProductManagement from './pages/ProductManagement.jsx'
 import ProductStock from './pages/ProductStock.jsx'
 import VoucherManagement from './pages/VoucherManagement.jsx'
 import PaymentResult from './pages/PaymentResult.jsx';
-
+import LogManagement from './pages/LogManagement.jsx'
 
 function App() {
     return (
@@ -57,6 +57,7 @@ function App() {
                         <Route path="/ProductStock" element={<ProductStock />} />
                         <Route path="/UserManagement" element={<UserManagement />} />
                         <Route path="/VoucherManagement" element={<VoucherManagement />} />
+                        <Route path="/LogManagement" element={<LogManagement />} />
                         <Route path="*" element={<Navigate to="/" replace />} />
                     </Routes>
                     <ToastContainer position="top-right" autoClose={3000} />

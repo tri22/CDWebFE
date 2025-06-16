@@ -2,14 +2,16 @@ import { Button, Col, Container, Row } from "react-bootstrap";
 import AdminSidebar from "../components/AdminSidebar";
 import AdminNav from "../components/AdminNav";
 import userApi from "../api/userApi";
-import { useEffect, useState } from "react";
+import { use, useEffect, useState } from "react";
 import { FaEdit } from "react-icons/fa";
 import { MdDelete } from "react-icons/md";
 import PaginationCom from "../components/PaginationCom";
 import { toast } from "react-toastify";
+import { useTranslation } from "react-i18next";
 
 
 const UserManagement = () => {
+    const { t } = useTranslation()
     const [UserList, SetUserList] = useState([])
     const [currentPage, setCurrentPage] = useState(1);
     const itemPerPage = 10;

@@ -57,6 +57,11 @@ const OrderManagement = () => {
     }
   };
 
+  const handlePageChange = (pageNumber) => {
+    setCurrentPage(pageNumber);
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
+
   const filterData = [
     { value: "date" },
     { value: "status" },
@@ -115,13 +120,12 @@ const OrderManagement = () => {
                 <td>{row.orderDate}</td>
                 <td>{row.totalQuantity}</td>
                 <td>
-                  <span className={`badge rounded-pill px-3 py-2 ${
-                    row.status === "COMPLETE"
+                  <span className={`badge rounded-pill px-3 py-2 ${row.status === "COMPLETE"
                       ? "bg-success-subtle text-success"
                       : row.status === "PROCESSING"
-                      ? "bg-primary-subtle text-primary"
-                      : "bg-secondary-subtle text-secondary"
-                  }`}>
+                        ? "bg-primary-subtle text-primary"
+                        : "bg-secondary-subtle text-secondary"
+                    }`}>
                     {row.status}
                   </span>
                 </td>
