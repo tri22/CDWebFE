@@ -11,7 +11,7 @@ import 'swiper/css/autoplay';
 // Thêm vào đầu file App.js
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-
+import './i18n';
 import Home from './pages/Home.jsx';
 import Blog from './pages/Blog.jsx'
 import BlogDetail from './pages/BlogDetail.jsx';
@@ -28,7 +28,7 @@ import UserManagement from './pages/UserManagement.jsx'
 import ProductManagement from './pages/ProductManagement.jsx'
 import ProductStock from './pages/ProductStock.jsx'
 import VoucherManagement from './pages/VoucherManagement.jsx'
-
+import LogManagement from './pages/LogManagement.jsx'
 function App() {
     return (
         <Router>
@@ -55,6 +55,7 @@ function App() {
                         <Route path="/ProductManagement" element={<ProductManagement />} />
                         <Route path="/ProductStock" element={<ProductStock />} />
                         <Route path="/VoucherManagement" element={<VoucherManagement />} />
+                        <Route path="/LogManagement" element={<LogManagement />} />
                         <Route path="*" element={<Navigate to="/" replace />} />
                     </Routes>
                     <ToastContainer position="top-right" autoClose={3000} />

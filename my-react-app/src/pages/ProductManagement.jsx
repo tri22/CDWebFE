@@ -7,9 +7,11 @@ import { FaEdit } from "react-icons/fa";
 import { MdDelete } from "react-icons/md";
 import PaginationCom from "../components/PaginationCom";
 import { toast } from "react-toastify";
+import { useTranslation } from "react-i18next";
 
 const ProductManagement = () => {
-    const [productList, setProductList] = useState([])
+    const { t } = useTranslation();
+    const [productList, setProductList] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
     const itemPerPage = 10;
     const totalPages = Math.ceil(productList.length / itemPerPage);
@@ -22,29 +24,26 @@ const ProductManagement = () => {
         window.scrollTo({ top: 0, behavior: 'smooth' });
     };
 
-
     useEffect(() => {
-
-        fetchProduct()
-    }, [])
+        fetchProduct();
+    }, []);
 
     const fetchProduct = async () => {
-        const response = await productApi.getAllProduct()
-        const data = response.data
-        console.log(data)
-        setProductList(data)
-    }
+        const response = await productApi.getAllProduct();
+        const data = response.data;
+        setProductList(data);
+    };
 
     const deleteProduct = async (id) => {
-        if (!window.confirm("Are you sure you want to delete this product?")) return;
+        if (!window.confirm(t("product.confirmDelete"))) return;
         try {
-            const response = await productApi.deleteProduct(id);
+            await productApi.deleteProduct(id);
             await fetchProduct();
-            toast.success("Delete success!");
+            toast.success(t("product.deleteSuccess"));
         } catch (error) {
-            toast.error("Failed to delete this product:", error);
+            toast.error(t("product.deleteFail") + ": " + (error?.message || error));
         }
-    }
+    };
 
     const TableRender = ({ data }) => {
         return (
@@ -53,12 +52,12 @@ const ProductManagement = () => {
                     <table className="table table-hover align-middle mb-0 text-center">
                         <thead className="table-light">
                             <tr>
-                                <th>NAME</th>
-                                <th>PRICE</th>
-                                <th>CATEGORY</th>
-                                <th>IMAGE</th>
-                                <th>DESCRIPTION</th>
-                                <th>RATING</th>
+                                <th>{t("product.name")}</th>
+                                <th>{t("product.price")}</th>
+                                <th>{t("product.category")}</th>
+                                <th>{t("product.image")}</th>
+                                <th>{t("product.description")}</th>
+                                <th>{t("product.rating")}</th>
                                 <th></th>
                             </tr>
                         </thead>
@@ -66,7 +65,7 @@ const ProductManagement = () => {
                             {data.map((row, index) => (
                                 <tr key={index}>
                                     <td className="fw-semibold">{row.name}</td>
-                                    <td>${row.price}</td>
+                                    <td>{t("currency", { value: row.price })}</td>
                                     <td>{row.category.name}</td>
                                     <td>
                                         <img src={row.image} alt="product" style={{ height: "50px", objectFit: "cover" }} />
@@ -83,24 +82,29 @@ const ProductManagement = () => {
                     </table>
                 </div>
             </div>
-        )
-    }
+        );
+    };
 
     return (
         <div style={{ backgroundColor: '#F5F6FA', minHeight: "100vh" }}>
             <Container fluid>
                 <Row>
                     <Col md={2} className='p-0' style={{ minHeight: "100vh" }}>
-                        <AdminSidebar></AdminSidebar>
+                        <AdminSidebar />
                     </Col>
                     <Col md={10} style={{ minHeight: "100vh" }}>
-                        <AdminNav title={"Product Management"}></AdminNav>
-                        <TableRender data={currentProductList}></TableRender>
-                        <PaginationCom currentPage={currentPage} onPageChange={handlePageChange} totalPages={totalPages}></PaginationCom>
+                        <AdminNav title={t("product.title")} />
+                        <TableRender data={currentProductList} />
+                        <PaginationCom
+                            currentPage={currentPage}
+                            onPageChange={handlePageChange}
+                            totalPages={totalPages}
+                        />
                     </Col>
                 </Row>
             </Container>
         </div>
-    )
-}
+    );
+};
+
 export default ProductManagement;

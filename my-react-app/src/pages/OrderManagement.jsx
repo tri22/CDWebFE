@@ -9,8 +9,11 @@ import orderApi from "../api/orderApi";
 import PaginationCom from "../components/PaginationCom";
 import { FaEdit } from "react-icons/fa";
 import { toast } from "react-toastify";
+import { useTranslation } from "react-i18next";
+
 
 const OrderManagement = () => {
+  const { t } = useTranslation();
   const [orderList, setOrderList] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const itemPerPage = 10;
@@ -44,32 +47,32 @@ const OrderManagement = () => {
   }
 
   const handleUpdateStatus = async () => {
-        try {
-            const updateData={
-                status:newStatus
-            }
-            await orderApi.updateOrder(selectedOrderId, updateData);
-            toast.success("Updated status successfully!");
-            setShowModal(false);
-            fetchOrder(); // reload danh sách
-        } catch (error) {
-            toast.error("Failed to fetch users: " + (error?.message || error));
-        }
-    };
+    try {
+      const updateData = {
+        status: newStatus
+      }
+      await orderApi.updateOrder(selectedOrderId, updateData);
+      toast.success("Updated status successfully!");
+      setShowModal(false);
+      fetchOrder(); // reload danh sách
+    } catch (error) {
+      toast.error("Failed to fetch users: " + (error?.message || error));
+    }
+  };
 
 
-    const handleEditClick = (id,status) => {
-        console.log(id)
-        setSelectedOrderId(id);
-        setNewStatus(status); 
-        setShowModal(true);
-    };
+  const handleEditClick = (id, status) => {
+    console.log(id)
+    setSelectedOrderId(id);
+    setNewStatus(status);
+    setShowModal(true);
+  };
 
   const filterData = [
-    { value: "Date" },
-    { value: "Method" },
-    { value: "Status" },
+    { value: "date" },
+    { value: "status" },
   ];
+
 
   const Filter = ({ filterData }) => (
     <Row className="g-3 my-4 mx-2 px-1">
@@ -77,15 +80,15 @@ const OrderManagement = () => {
         <Card className="shadow-sm border-0 bg-white text-center p-2">
           <div className="d-flex flex-row align-items-center gap-2">
             <CiFilter size={20} />
-            <span className="fw-semibold">Filter</span>
+            <span className="fw-semibold">{t("order.filter")}</span>
           </div>
         </Card>
       </Col>
       {filterData.map((item, idx) => (
-        <Col key={idx} md="1" className="p-0 me-1">
+        <Col key={idx} md="2" className="p-0 me-1">
           <Card className="shadow-sm border-0 bg-white text-center p-2">
             <div className="d-flex flex-row align-items-center gap-2">
-              <span className="fw-semibold">{item.value}</span>
+              <span className="fw-semibold">{t(`order.${item.value.toLowerCase()}`)}</span>
               <FaArrowDown className="text-danger" size={14} />
             </div>
           </Card>
@@ -95,7 +98,7 @@ const OrderManagement = () => {
         <Card className="shadow-sm border-0 bg-white text-center p-2">
           <div className="d-flex flex-row align-items-center gap-2">
             <GrPowerReset size={18} />
-            <span className="fw-semibold">Reset</span>
+            <span className="fw-semibold">{t("order.reset")}</span>
           </div>
         </Card>
       </Col>
@@ -108,11 +111,11 @@ const OrderManagement = () => {
         <table className="table table-hover align-middle mb-0 text-center">
           <thead className="table-light">
             <tr>
-              <th>USERNAME</th>
-              <th>TOTAL VALUE</th>
-              <th>DATE</th>
-              <th>QUANTITY</th>
-              <th>PAYMENT</th>
+              <th>{t("order.username")}</th>
+              <th>{t("order.totalValue")}</th>
+              <th>{t("order.date")}</th>
+              <th>{t("order.quantity")}</th>
+              <th>{t("order.status")}</th>
               <th></th>
             </tr>
           </thead>
@@ -120,7 +123,7 @@ const OrderManagement = () => {
             {orderData.map((row, index) => (
               <tr key={index}>
                 <td className="fw-semibold">{row.username}</td>
-                <td>${row.totalPrice}</td>
+                <td>{t("currency", { value: row.totalPrice })}</td>
                 <td>{row.orderDate}</td>
                 <td>{row.totalQuantity}</td>
                 <td>
@@ -163,23 +166,23 @@ const OrderManagement = () => {
                 <div className="modal-dialog">
                   <div className="modal-content">
                     <div className="modal-header">
-                      <h5 className="modal-title">Edit Order Status</h5>
+                      <h5 className="modal-title">{t("order.editStatus")}</h5>
                       <button type="button" className="btn-close" onClick={() => setShowModal(false)}></button>
                     </div>
                     <div className="modal-body">
-                      <label className="form-label">Select Status</label>
+                      <label className="form-label">{t("order.selectStatus")}</label>
                       <select
                         className="form-select"
                         value={newStatus}
                         onChange={(e) => setNewStatus(e.target.value)}
                       >
-                        <option value="CANCEL">CANCEL</option>
-                        <option value="COMPLETE">COMPLETE</option>
+                        <option value="CANCEL">{t("order.statusCancel")}</option>
+                        <option value="COMPLETE">{t("order.statusComplete")}</option>
                       </select>
                     </div>
                     <div className="modal-footer">
-                      <Button variant="secondary" onClick={() => setShowModal(false)}>Cancel</Button>
-                      <Button variant="primary" onClick={handleUpdateStatus}>Update</Button>
+                      <Button variant="secondary" onClick={() => setShowModal(false)}>{t("order.cancel")}</Button>
+                      <Button variant="primary" onClick={handleUpdateStatus}>{t("order.update")}</Button>
                     </div>
                   </div>
                 </div>
