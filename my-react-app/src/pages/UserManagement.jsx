@@ -7,11 +7,9 @@ import { FaEdit } from "react-icons/fa";
 import { MdDelete } from "react-icons/md";
 import PaginationCom from "../components/PaginationCom";
 import { toast } from "react-toastify";
-import { useTranslation } from "react-i18next";
 
 
 const UserManagement = () => {
-    const { t } = useTranslation();
     const [UserList, SetUserList] = useState([])
     const [currentPage, setCurrentPage] = useState(1);
     const itemPerPage = 10;
@@ -88,11 +86,13 @@ const UserManagement = () => {
                     <table className="table table-hover align-middle mb-0 text-center">
                         <thead className="table-light">
                             <tr>
+
                                 <th>{t('userAdmin.name')}</th>
                                 <th>{t('userAdmin.email')}</th>
                                 <th>{t('userAdmin.phone')}</th>
                                 <th>{t('userAdmin.birthday')}</th>
                                 <th>{t('userAdmin.role')}</th>
+
                                 <th></th>
                             </tr>
                         </thead>
@@ -126,7 +126,9 @@ const UserManagement = () => {
                         <AdminSidebar></AdminSidebar>
                     </Col>
                     <Col md={10} style={{ minHeight: "100vh" }}>
+
                         <AdminNav title={t('userAdmin.title')} />
+
                         <UserRender data={currentUserList}></UserRender>
                         <PaginationCom currentPage={currentPage} onPageChange={handlePageChange} totalPages={totalPages}></PaginationCom>
                         {showModal && (
@@ -134,6 +136,7 @@ const UserManagement = () => {
                                 <div className="modal-dialog">
                                     <div className="modal-content">
                                         <div className="modal-header">
+
                                             <h5 className="modal-title">{t('userAdmin.editUserRole')}</h5>
                                             <button type="button" className="btn-close" onClick={() => setShowModal(false)}></button>
                                         </div>
@@ -147,6 +150,7 @@ const UserManagement = () => {
                                         <div className="modal-footer">
                                             <Button variant="secondary" onClick={() => setShowModal(false)}>{t('userAdmin.cancel')}</Button>
                                             <Button variant="primary" onClick={handleUpdateRole}>{t('userAdmin  .update')}</Button>
+
                                         </div>
                                     </div>
                                 </div>

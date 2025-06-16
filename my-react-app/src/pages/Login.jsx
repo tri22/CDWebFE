@@ -5,6 +5,10 @@ import { loginApi } from '../api/authApi';
 import { useAuth } from '../api/AuthContext.jsx';
 
 const LoginPage = () => {
+    const errorMessages = {
+        USERNAME_INVALID: "Tên đăng nhập phải có ít nhất 3 ký tự.",
+        PASSWORD_INVALID: "Mật khẩu phải có ít nhất 8 ký tự.",
+    };
     const [isLogin, setIsLogin] = useState(true);
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
@@ -13,27 +17,46 @@ const LoginPage = () => {
     const [error, setError] = useState('');
     const navigate = useNavigate();
     const { login, role } = useAuth();
+    const [fieldErrors, setFieldErrors] = useState({});
 
     const handleSubmit = async (e) => {
         e.preventDefault();
         setError('');
+        const trimmedUsername = username.trim();
+        const trimmedPassword = password.trim();
+
+        // Kiểm tra phía client trước
+        const newFieldErrors = {};
+        if (trimmedUsername.length < 3) {
+            newFieldErrors.username = "USERNAME_INVALID";
+        }
+        if (trimmedPassword !== 'admin' && trimmedPassword.length < 8) {
+            newFieldErrors.password = "PASSWORD_INVALID";
+        }
+        if (Object.keys(newFieldErrors).length > 0) {
+            setFieldErrors(newFieldErrors); // Gán lỗi để hiển thị
+            return; // Không gọi API nếu chưa hợp lệ
+        }
+
         const userLogin = {
-            username: username.trim(),
-            password: password.trim(),
+            username: trimmedUsername,
+            password: trimmedPassword,
         };
 
-        console.log(userLogin)
         try {
-            const data = await loginApi(userLogin); // Gọi API đăng nhập
+            const data = await loginApi(userLogin);
             if (data.token) {
-                login(data); // Cập nhật role và token ngay lập tức
-                setIsLogin(true)
+                login(data);
+                setIsLogin(true);
             } else {
-                alert("Login failed! Check your username and password.");
+                setError("Username or password is incorrect");
             }
-        } catch (error) {
-            alert("Login failed! Check your username and password.");
-            console.error("Login Error:", error);
+        } catch (err) {
+            if (err.response?.data?.result && typeof err.response.data.result === 'object') {
+                setFieldErrors(err.response.data.result);
+            } else {
+                setError("Login failed!");
+            }
         }
     };
 
@@ -73,17 +96,34 @@ const LoginPage = () => {
                         type="text"
                         placeholder="Username"
                         value={username}
-                        onChange={(e) => setUsername(e.target.value)}
+                        onChange={(e) => {
+                            setUsername(e.target.value);
+                            setFieldErrors((prev) => ({ ...prev, username: null })); // clear lỗi khi nhập lại
+                        }}
                         required
                     />
+                    {fieldErrors.username && (
+                        <p className="error-text">
+                            {errorMessages[fieldErrors.username] || fieldErrors.username}
+                        </p>
+                    )}
                     <div className="password-field">
                         <input
                             type={showPassword ? 'text' : 'password'}
                             placeholder="Password"
                             value={password}
-                            onChange={(e) => setPassword(e.target.value)}
+                            onChange={(e) => {
+                                setPassword(e.target.value);
+                                setFieldErrors((prev) => ({ ...prev, password: null }));
+                            }}
                             required
                         />
+
+                        {fieldErrors.password && (
+                            <p className="error-text">
+                                {errorMessages[fieldErrors.password] || fieldErrors.password}
+                            </p>
+                        )}
                         <span
                             className="toggle-password"
                             onClick={() => setShowPassword(!showPassword)}
