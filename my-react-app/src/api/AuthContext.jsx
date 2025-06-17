@@ -54,8 +54,9 @@ export const AuthProvider = ({ children }) => {
       setIsLoggedIn(true);
       setIsPrivate(false);
       const userInfo = await currentUser();
-      setUser(userInfo);
-      localStorage.setItem("user", JSON.stringify(userInfo)); // optional
+      console.log(userInfo.result)
+      setUser(userInfo.result);
+      localStorage.setItem("user", JSON.stringify(userInfo.result)); // optional
 
     } catch (error) {
       console.error("Error saving token to localStorage:", error);

@@ -48,18 +48,21 @@ const Home = () => {
                 orderApi.bestSellingProduct(today),
                 orderApi.weekTotalOrder(today),
                 orderApi.weekTotalRevenue(today),
-                // orderApi.weekCancelledOrder(today),
+                orderApi.getAllOrder(),
             ]);
 
+            const cancelledOrders = allOrders.data.result.filter(
+                (order) => order.status === 'CANCELLED'
+            ).length;
 
             setDashboardData({
                 bestSellingObject: product.data.result,
                 weekOrder: order.data.result,
                 weekSale: sale.data.result,
-                // weekCancel: cancel.data.result,
+                weekCancel: cancelledOrders,
             });
         } catch (err) {
-            console.error("Error fetching dashboard info:", err);
+            console.error('Error fetching dashboard info:', err);
         }
     };
 

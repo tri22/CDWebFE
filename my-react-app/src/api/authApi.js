@@ -10,6 +10,21 @@ export const loginApi = async ({ username, password }) => {
     }
 };
 
+export const registerApi = async ({ username, password, email }) => {
+    try {
+        const response = await axiosInstance.post("/users", {
+            username,
+            password,
+            email,
+            role: "USER",       // mặc định role là USER
+        });
+        return response.data;
+    } catch (error) {
+        console.error("Register API Error", error);
+        throw error;
+    }
+};
+
 export const introspectApi = async (token) => {
     try {
         const response = await axiosInstance.post("/auth/introspect", token);

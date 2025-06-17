@@ -25,7 +25,7 @@ const adminApi = {
     },
 
     getAllLog:()=>{
-        return axiosInstance.get('/log/all')
+        return axiosInstance.get('/log/all-async')
     }
 }
 export default adminApi;

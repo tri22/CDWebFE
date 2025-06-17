@@ -22,6 +22,9 @@ const ProductDetail = () => {
             .then(res => setProduct(res.data))
             .catch(err => console.error('Error fetching product:', err));
 
+            console.log(id)
+            console.log(product)
+
         // Lấy danh sách sản phẩm liên quan
         productApi.getAllProduct()
             .then(res => {
@@ -53,20 +56,8 @@ const ProductDetail = () => {
             <Header></Header>
             <Container className='py-5 product-detail-page bg-white text-dark '>
                 <Row>
-                    {/* Thumbnail gallery */}
-                    <Col md={1} className="d-flex flex-column gap-3">
-                        {[...Array(4)].map((_, i) => (
-                            <img
-                                key={i}
-                                src={product.image}
-                                alt={`Thumbnail ${i + 1}`}
-                                className="img-fluid border rounded"
-                            />
-                        ))}
-                    </Col>
-
                     {/* Main image */}
-                    <Col md={6}>
+                    <Col md={7}>
                         <img
                             src={product.image}
                             alt={product.name}
