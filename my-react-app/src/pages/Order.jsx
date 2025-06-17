@@ -65,7 +65,7 @@ export default function Order() {
         'on-shipping': orders.filter(o => o.status === 'SHIPPING').length,
         'paid': orders.filter(o => o.status === 'PAID').length,
         'canceled': orders.filter(o => o.status === 'CANCELLED').length,
-        'failed': orders.filter(o => o.status === 'FAILED').length,
+        'complete': orders.filter(o => o.status === 'COMPLETED').length,
     };
 
     return (

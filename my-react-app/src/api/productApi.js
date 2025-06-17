@@ -12,6 +12,9 @@ const productApi = {
     },
     updateProduct: (productId, data) => {
         return axiosInstance.put(`products/${productId}`, data)
+    },
+    createProduct: (data) => {
+        return axiosInstance.post("/products", data);
     }
 }
 export default productApi;

@@ -59,6 +59,10 @@ const orderApi = {
 
     getYearlySales: (date) => {
         return axiosInstance.get(`order/revenue/yearly/${date}`)
-    }
+    },
+
+
+
+
 }
 export default orderApi;
