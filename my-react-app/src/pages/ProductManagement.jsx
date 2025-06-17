@@ -13,6 +13,7 @@ const ProductManagement = () => {
     const [productList, setProductList] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
     const [showModal, setShowModal] = useState(false);
+    const [showAddModal, setShowAddModal] = useState(false);
     const [selectedProduct, setSelectedProduct] = useState(null);
     const itemPerPage = 10;
     const totalPages = Math.ceil(productList.length / itemPerPage);
@@ -42,13 +43,17 @@ const ProductManagement = () => {
             await fetchProduct();
             toast.success("Delete success!");
         } catch (error) {
-            toast.error("Failed to delete this product: " + error.message);
+            if (error.response && error.response.status === 404) {
+                toast.error("Product not found or already deleted.");
+            } else {
+                toast.error("Failed to delete this product: " + error.message);
+            }
         }
     };
 
     const updateProduct = async (productData) => {
         try {
-            const response = await productApi.updateProduct(selectedProduct.id, productData);
+            await productApi.updateProduct(selectedProduct.id, productData);
             await fetchProduct();
             setShowModal(false);
             toast.success("Update product success!");
@@ -69,7 +74,13 @@ const ProductManagement = () => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
+        const categoryId = parseInt(e.target.categoryId.value);
+        if (isNaN(categoryId)) {
+            toast.error("Category ID không hợp lệ!");
+            return;
+        }
         const productData = {
+            id: selectedProduct.id,
             name: e.target.name.value,
             price: parseFloat(e.target.price.value),
             image: e.target.image.value,
@@ -80,6 +91,8 @@ const ProductManagement = () => {
         };
         updateProduct(productData);
     };
+
+    const user = JSON.parse(localStorage.getItem("user")); // hoặc JWT decode
 
     const TableRender = ({ data }) => {
         return (
@@ -134,6 +147,9 @@ const ProductManagement = () => {
                     </Col>
                     <Col md={10} style={{ minHeight: "100vh" }}>
                         <AdminNav title={"Product Management"} />
+                        <Button variant="success" className="mb-3" onClick={() => setShowAddModal(true)}>
+                            Add Product
+                        </Button>
                         <TableRender data={currentProductList} />
                         <PaginationCom
                             currentPage={currentPage}
@@ -221,6 +237,72 @@ const ProductManagement = () => {
                             </Button>
                         </Form>
                     )}
+                </Modal.Body>
+            </Modal>
+
+            <Modal show={showAddModal} onHide={() => setShowAddModal(false)}>
+                <Modal.Header closeButton>
+                    <Modal.Title>Add New Product</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    <Form onSubmit={async (e) => {
+                        e.preventDefault();
+                        const price = parseFloat(e.target.price.value);
+                        const rating = parseInt(e.target.rating.value);
+                        if (price <= 0 || rating > 5 || rating < 0) {
+                            toast.error("Giá hoặc đánh giá không hợp lệ!");
+                            return;
+                        }
+
+                        const productData = {
+                            name: e.target.name.value,
+                            price,
+                            image: e.target.image.value,
+                            category: { id: parseInt(e.target.categoryId.value) },
+                            description: e.target.description.value,
+                            color: e.target.color.value,
+                            rating,
+                        };
+
+                        try {
+                            await productApi.createProduct(productData);
+                            await fetchProduct();
+                            setShowAddModal(false);
+                            toast.success("Product created successfully!");
+                        } catch (error) {
+                            toast.error("Failed to create product: " + error.message);
+                        }
+                    }}>
+                        <Form.Group className="mb-3">
+                            <Form.Label>Name</Form.Label>
+                            <Form.Control type="text" name="name" required />
+                        </Form.Group>
+                        <Form.Group className="mb-3">
+                            <Form.Label>Price</Form.Label>
+                            <Form.Control type="number" name="price" step="0.01" required />
+                        </Form.Group>
+                        <Form.Group className="mb-3">
+                            <Form.Label>Image URL</Form.Label>
+                            <Form.Control type="text" name="image" required />
+                        </Form.Group>
+                        <Form.Group className="mb-3">
+                            <Form.Label>Category ID</Form.Label>
+                            <Form.Control type="number" name="categoryId" required />
+                        </Form.Group>
+                        <Form.Group className="mb-3">
+                            <Form.Label>Description</Form.Label>
+                            <Form.Control as="textarea" name="description" required />
+                        </Form.Group>
+                        <Form.Group className="mb-3">
+                            <Form.Label>Color</Form.Label>
+                            <Form.Control type="text" name="color" required />
+                        </Form.Group>
+                        <Form.Group className="mb-3">
+                            <Form.Label>Rating</Form.Label>
+                            <Form.Control type="number" name="rating" required />
+                        </Form.Group>
+                        <Button type="submit" variant="primary">Add Product</Button>
+                    </Form>
                 </Modal.Body>
             </Modal>
         </div>

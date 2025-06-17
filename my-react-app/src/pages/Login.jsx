@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import '../assets/styles/Login.scss'
-import { loginApi } from '../api/authApi';
+import { loginApi, registerApi } from '../api/authApi';
 import { useAuth } from '../api/AuthContext.jsx';
 
 const LoginPage = () => {
@@ -24,8 +24,8 @@ const LoginPage = () => {
         setError('');
         const trimmedUsername = username.trim();
         const trimmedPassword = password.trim();
+        const trimmedEmail = email.trim();
 
-        // Kiểm tra phía client trước
         const newFieldErrors = {};
         if (trimmedUsername.length < 3) {
             newFieldErrors.username = "USERNAME_INVALID";
@@ -33,29 +33,48 @@ const LoginPage = () => {
         if (trimmedPassword !== 'admin' && trimmedPassword.length < 8) {
             newFieldErrors.password = "PASSWORD_INVALID";
         }
-        if (Object.keys(newFieldErrors).length > 0) {
-            setFieldErrors(newFieldErrors); // Gán lỗi để hiển thị
-            return; // Không gọi API nếu chưa hợp lệ
+        if (!isLogin && !trimmedEmail) {
+            newFieldErrors.email = "Email không được để trống.";
         }
 
-        const userLogin = {
-            username: trimmedUsername,
-            password: trimmedPassword,
-        };
+        if (Object.keys(newFieldErrors).length > 0) {
+            setFieldErrors(newFieldErrors);
+            return;
+        }
 
-        try {
-            const data = await loginApi(userLogin);
-            if (data.token) {
-                login(data);
-                setIsLogin(true);
-            } else {
-                setError("Username or password is incorrect");
+        if (isLogin) {
+            // Xử lý đăng nhập
+            try {
+                const data = await loginApi({ username: trimmedUsername, password: trimmedPassword });
+                if (data.token) {
+                    login(data);
+                    setIsLogin(true);
+                } else {
+                    setError("Username or password is incorrect");
+                }
+            } catch (err) {
+                if (err.response?.data?.result && typeof err.response.data.result === 'object') {
+                    setFieldErrors(err.response.data.result);
+                } else {
+                    setError("Login failed!");
+                }
             }
-        } catch (err) {
-            if (err.response?.data?.result && typeof err.response.data.result === 'object') {
-                setFieldErrors(err.response.data.result);
-            } else {
-                setError("Login failed!");
+        } else {
+            // Xử lý đăng ký
+            try {
+                const data = await registerApi({
+                    username: trimmedUsername,
+                    password: trimmedPassword,
+                    email: trimmedEmail,
+                });
+                alert("Đăng ký thành công! Bạn có thể đăng nhập ngay.");
+                setIsLogin(true); // chuyển về form login
+            } catch (err) {
+                if (err.response?.data?.result && typeof err.response.data.result === 'object') {
+                    setFieldErrors(err.response.data.result);
+                } else {
+                    setError("Đăng ký thất bại!");
+                }
             }
         }
     };
@@ -75,8 +94,6 @@ const LoginPage = () => {
             }
         }
     }, [role, navigate]);
-
-
 
     return (
         <div className='auth-page'>
